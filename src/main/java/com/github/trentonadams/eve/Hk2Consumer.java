@@ -1,4 +1,4 @@
-package com.example;
+package com.github.trentonadams.eve;
 
 import javax.inject.Inject;
 

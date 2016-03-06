@@ -1,6 +1,7 @@
-package com.example;
+package com.github.trentonadams.eve;
 
-import com.example.validation.PassiveValidate;
+import com.github.trentonadams.eve.app.HttpSessionFactory;
+import com.github.trentonadams.eve.validation.PassiveValidate;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.server.mvc.Template;
@@ -8,8 +9,6 @@ import org.glassfish.jersey.server.mvc.Template;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.NotNull;
-import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -32,8 +31,8 @@ import java.util.List;
  *
  * @author Trenton D. Adams
  */
-@Path("/newservice")
-public class NewService
+@Path("/")
+public class MainView
 {
     public static final String message = "HAHAHA";
     protected String name;
@@ -41,7 +40,7 @@ public class NewService
     @Context
     protected HttpServletRequest request;
 
-    public NewService()
+    public MainView()
     {
         name = "my service " + System.currentTimeMillis();
     }
@@ -67,15 +66,14 @@ public class NewService
      * Injects links for all services.
      */
     @InjectLinks(value = {
-        @InjectLink(resource = MyResource.class),
-        @InjectLink(resource = NewService.class)})
+        @InjectLink(resource = MainView.class)})
     private
     List<Link> serviceLinks;
 
     /**
      * A link to this service, which can be used to construct sub-URIs.
      */
-    @InjectLink(resource = NewService.class)
+    @InjectLink(resource = MainView.class)
     private URI serviceUri;
 
     /**
@@ -121,9 +119,8 @@ public class NewService
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Path("/")
     @Template(name = "index.jsp")
-    public NewService getService()
+    public MainView getService()
     {
         return this;
     }
@@ -132,7 +129,7 @@ public class NewService
     @Path("/test")
     @Template(name = "index.jsp")
     @Produces(MediaType.TEXT_HTML)
-    public NewService getTest()
+    public MainView getTest()
     {
         page = "/test.jsp";
         return this;
@@ -141,7 +138,7 @@ public class NewService
     @Path("/test/{pathParam}")
     @Template(name = "index.jsp")
     @Produces(MediaType.TEXT_HTML)
-    public NewService getPathParam()
+    public MainView getPathParam()
     {
         page = "/testpath.jsp";
         return this;

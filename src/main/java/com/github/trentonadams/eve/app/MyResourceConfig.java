@@ -1,15 +1,11 @@
-package com.example;
+package com.github.trentonadams.eve.app;
 
-import org.glassfish.hk2.api.InjectionResolver;
-import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
-import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
-import javax.inject.Singleton;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.ext.Provider;
 
@@ -35,7 +31,7 @@ public class MyResourceConfig extends ResourceConfig
         property("jersey.config.server.tracing.type", "ON_DEMAND");
         //property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         property(ServerProperties.RESOURCE_VALIDATION_IGNORE_ERRORS, true);
-        packages("com.example");
+        packages("com.github.trentonadams.eve");
         register(new AbstractBinder()
         {
             @Override

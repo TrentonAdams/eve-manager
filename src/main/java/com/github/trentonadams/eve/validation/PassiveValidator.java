@@ -1,4 +1,4 @@
-package com.example.validation;
+package com.github.trentonadams.eve.validation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;

@@ -1,5 +1,6 @@
-package com.example;
+package com.github.trentonadams.eve.app;
 
+import com.github.trentonadams.eve.app.MyResourceConfig;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -25,7 +26,7 @@ public class Main
     {
         // create a resource config that scans for JAX-RS resources and providers
         // in com.example package
-        final ResourceConfig rc = new MyResourceConfig().packages("com.example");
+        final ResourceConfig rc = new MyResourceConfig().packages("com.github.trentonadams.eve");
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

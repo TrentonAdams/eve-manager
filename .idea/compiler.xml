@@ -25,8 +25,16 @@
         <processorPath useClasspath="true" />
         <module name="simple-service" />
       </profile>
+      <profile default="false" name="Annotation profile for eve-manufacturing-manager" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="eve-manufacturing-manager" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="eve-manufacturing-manager" target="1.7" />
       <module name="simple-service" target="1.7" />
     </bytecodeTargetLevel>
   </component>

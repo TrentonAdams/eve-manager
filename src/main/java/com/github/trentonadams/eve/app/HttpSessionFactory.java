@@ -1,4 +1,4 @@
-package com.example;
+package com.github.trentonadams.eve.app;
 
 import org.glassfish.hk2.api.Factory;
 

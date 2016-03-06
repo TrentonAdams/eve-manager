@@ -1,4 +1,4 @@
-== simple-service ==
+== eve-manufacturing-manager ==
 Jersey simple-service examples
 
 Download tomcat7, and setup tomcat-users.xml with the following...
