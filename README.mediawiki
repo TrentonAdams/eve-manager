@@ -15,3 +15,13 @@ Alternatively, run the following...
  mvn install
 
 And install the war in target/ manually into your servlet container.
+
+
+== JS Libraries ==
+=== jQuery ===
+ sudo npm install -g jquery
+ rsync -av /usr/lib/node_modules/jquery/dist/ jquery/
+
+=== bootstrap ===
+ sudo npm install -g bootstrap
+ rsync -av /usr/lib/node_modules/bootstrap/dist/ bootstrap/
