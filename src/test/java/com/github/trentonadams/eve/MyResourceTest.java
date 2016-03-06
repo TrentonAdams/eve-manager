@@ -3,8 +3,10 @@ package com.github.trentonadams.eve;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 
 import com.github.trentonadams.eve.app.Main;
+import junit.framework.Assert;
 import org.glassfish.grizzly.http.server.HttpServer;
 
 import org.junit.After;
@@ -48,8 +50,12 @@ public class MyResourceTest
     @Test
     public void testGetIt()
     {
-/*        String responseMsg = target.path("myresource/string").request().get(
+/*      This doesn't work, because the grizzly stuff is pure http, and does
+        not have any servlet stuff integrated.
+
+        String responseMsg = target.path("/").request().accept(
+            MediaType.TEXT_HTML).get(
             String.class);
-        assertEquals("Got it!", responseMsg);*/
+        Assert.assertTrue("Got it!", responseMsg.contains("Jsp example"));*/
     }
 }
