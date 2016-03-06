@@ -5,6 +5,7 @@ import com.github.trentonadams.eve.validation.PassiveValidate;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.server.mvc.Template;
+import org.glassfish.jersey.server.mvc.Viewable;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import java.util.List;
  * @author Trenton D. Adams
  */
 @Path("/")
+@Template(name = "index.jsp")
 public class MainView
 {
     public static final String message = "HAHAHA";
@@ -119,7 +121,6 @@ public class MainView
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Template(name = "index.jsp")
     public MainView getService()
     {
         return this;
@@ -127,7 +128,6 @@ public class MainView
 
     @GET
     @Path("/test")
-    @Template(name = "index.jsp")
     @Produces(MediaType.TEXT_HTML)
     public MainView getTest()
     {
@@ -136,7 +136,6 @@ public class MainView
     }
     @GET
     @Path("/test/{pathParam}")
-    @Template(name = "index.jsp")
     @Produces(MediaType.TEXT_HTML)
     public MainView getPathParam()
     {
