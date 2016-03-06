@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.example</groupId>
-  <artifactId>simple-service</artifactId>
+  <artifactId>eve-manufacturing-manager</artifactId>
   <packaging>war</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>simple-service</name>
+  <name>eve-manufacturing-manager</name>
 
   <properties>
     <jersey.version>2.22.2</jersey.version>
