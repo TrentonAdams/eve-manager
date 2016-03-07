@@ -10,6 +10,7 @@ import org.glassfish.jersey.server.mvc.Viewable;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -33,7 +34,6 @@ import java.util.List;
  * @author Trenton D. Adams
  */
 @Path("/")
-@Template(name = "index.jsp")
 public class MainView
 {
     public static final String message = "HAHAHA";
@@ -121,6 +121,7 @@ public class MainView
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
+    @Template(name = "index.jsp")
     public MainView getService()
     {
         return this;
@@ -129,6 +130,7 @@ public class MainView
     @GET
     @Path("/test")
     @Produces(MediaType.TEXT_HTML)
+    @Template(name = "index.jsp")
     public MainView getTest()
     {
         page = "/test.jsp";
@@ -137,6 +139,7 @@ public class MainView
     @GET
     @Path("/test/{pathParam}")
     @Produces(MediaType.TEXT_HTML)
+    @Template(name = "index.jsp")
     public MainView getPathParam()
     {
         page = "/testpath.jsp";
