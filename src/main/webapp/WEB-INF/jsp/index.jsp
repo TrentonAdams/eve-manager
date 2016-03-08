@@ -106,7 +106,7 @@
       </c:choose>
     </div>
     <!--/span-->
-    <jsp:include page="/WEB-INF/jsp/customize/navigation.jsp"/>
+    <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
     <!--/span-->
   </div>
   <!--/row-->

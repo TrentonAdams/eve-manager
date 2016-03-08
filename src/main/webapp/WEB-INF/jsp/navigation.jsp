@@ -2,15 +2,9 @@
 <div class="col-xs-6 col-sm-3 sidebar-offcanvas"
      role="navigation">
   <div class="list-group">
-    <span class="list-group-item header">
-      <c:if test="<%=request.getUserPrincipal() != null && request.getUserPrincipal().getName() != null%>">
-        <span style="color:red;">You are logged in</span>
-      </c:if>
-      Business Directory</span>
-    <a href="<c:url value="/index.html"/>"
+    <a href="<c:url value="/"/>"
        class="list-group-item internal" data-toggle="offcanvas">
-      Directory <img class="glyphicon-align-right" src="<c:url value="/images/15362-illustration-of-office-buildings-in-a-city-pv-icon.png"/>"
-                     alt="Business Directory"/>
+      Home
     </a>
     <a href="<c:url value="/search.html"/>"
        class="list-group-item internal"
@@ -32,8 +26,7 @@
     <span class="list-group-item header">Landlord & Tenant Listings</span>
     <a href="<c:url value="/rentals.html"/>"
        class="list-group-item internal" data-toggle="offcanvas">
-      Rentals <img class="glyphicon-align-right" src="<c:url value="/images/14532-illustration-of-a-house-or-icon.png"/>"
-                           alt="Rentals"/>
+      Rentals
     </a>
     <a href="<c:url value="/tenants.html"/>"
        class="list-group-item internal"
