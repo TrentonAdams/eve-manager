@@ -1,0 +1,67 @@
+.modifydate {
+    font-style: italic;
+    font-size: 0.8em;
+}
+
+.list-group-item {
+    border-color: #bce8f1;
+    padding: 5px 5px;
+}
+
+a.list-group-item,
+a.list-group-item:hover,
+a.list-group-item:focus {
+    text-decoration: underline;
+}
+.list-group-item.header,
+.list-group-item.header:hover,
+.list-group-item.header:focus {
+    z-index: 2;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.article table, table.article
+{
+  border-collapse: collapse;
+  margin: 1px;
+  width: 100%;
+}
+
+.article table, table.article .article tr, .article th, .article td
+{
+  background-color:Transparent;
+}
+
+.article th, .article td
+{
+  padding: 2px;
+  border: solid 1px #D0D0D0;
+  vertical-align: top;
+  text-align:left;
+}
+
+.article th
+{
+  text-align:center;
+  vertical-align:middle;
+  padding: 7px;
+  background-color: #D7D7D7;
+}
+
+tr.row-separator {
+  background-color: #EFEFEF;
+}
+
+#validateemail {
+    display: none;
+}
+
+.required-field-block {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.alert .required-icon {
+    background-color: transparent;
+}

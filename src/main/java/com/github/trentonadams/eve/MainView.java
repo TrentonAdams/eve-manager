@@ -121,28 +121,9 @@ public class MainView
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Template(name = "index.jsp")
+    @Template(name = "/index.jsp")
     public MainView getService()
     {
-        return this;
-    }
-
-    @GET
-    @Path("/test")
-    @Produces(MediaType.TEXT_HTML)
-    @Template(name = "index.jsp")
-    public MainView getTest()
-    {
-        page = "/test.jsp";
-        return this;
-    }
-    @GET
-    @Path("/test/{pathParam}")
-    @Produces(MediaType.TEXT_HTML)
-    @Template(name = "index.jsp")
-    public MainView getPathParam()
-    {
-        page = "/testpath.jsp";
         return this;
     }
 
