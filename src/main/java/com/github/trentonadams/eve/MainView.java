@@ -121,7 +121,7 @@ public class MainView
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Template(name = "/index.jsp")
+    @Template(name = "/WEB-INF/jsp/index.jsp")
     public MainView getService()
     {
         return this;

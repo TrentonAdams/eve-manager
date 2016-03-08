@@ -94,14 +94,14 @@
 
     <div class="col-xs-12 col-sm-9" id="main-content">
       <c:choose>
-        <c:when test="${model.page == '/test.jsp'}">
-          <jsp:include page="/test.jsp"/>
+        <c:when test="${model.page == '/WEB-INF/jsp//test.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/test.jsp"/>
         </c:when>
-        <c:when test="${model.page == '/testpath.jsp'}">
-          <jsp:include page="/testpath.jsp"/>
+        <c:when test="${model.page == '/WEB-INF/jsp//testpath.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/testpath.jsp"/>
         </c:when>
         <c:otherwise>
-          <jsp:include page="/default-view.jsp"/>
+          <jsp:include page="/WEB-INF/jsp/default-view.jsp"/>
         </c:otherwise>
       </c:choose>
     </div>
