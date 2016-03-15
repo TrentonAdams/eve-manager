@@ -34,9 +34,10 @@ import java.util.List;
  * @author Trenton D. Adams
  */
 @Path("/")
-public class MainView
+public class MainView extends PageModel
 {
     public static final String message = "HAHAHA";
+    static final String INDEX_JSP = "/WEB-INF/jsp/index.jsp";
     protected String name;
 
     @Context
@@ -69,8 +70,7 @@ public class MainView
      */
     @InjectLinks(value = {
         @InjectLink(resource = MainView.class)})
-    private
-    List<Link> serviceLinks;
+    private List<Link> serviceLinks;
 
     /**
      * A link to this service, which can be used to construct sub-URIs.
@@ -111,17 +111,12 @@ public class MainView
         return serviceUri;
     }
 
-    public String getPage()
-    {
-        return page;
-    }
-
     /*
      * JAX-RS service methods .
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
-    @Template(name = "/WEB-INF/jsp/index.jsp")
+    @Template(name = INDEX_JSP)
     public MainView getService()
     {
         return this;

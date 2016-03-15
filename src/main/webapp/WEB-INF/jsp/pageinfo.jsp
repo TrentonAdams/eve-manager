@@ -1,9 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="model" scope="request" type="com.github.trentonadams.eve.MainView"/>
-<p>Jsp example: ${model.name}</p>
+<jsp:useBean id="model" scope="request" type="com.github.trentonadams.eve.PageModel"/>
 
-<h3>@Inject - with HttpSessionFactory</h3>
-<p>session: ${model.session}</p>
+
+<%--<h3>@Inject - with HttpSessionFactory</h3>
 
 <h2>@InjectLink(resource=NewService.class)</h2>
 <p>service link: ${model.serviceUri}</p>
@@ -38,3 +37,4 @@
   <c:set var="url" value="${model.serviceUri}test/blah/?test=blah"/>
   <li><a href="${url}">${url} - path parameter + query parameter test</a></li>
 </ul>
+--%>

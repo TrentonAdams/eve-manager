@@ -4,6 +4,7 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.mvc.MvcFeature;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
 import javax.servlet.http.HttpSession;
@@ -40,6 +41,7 @@ public class MyResourceConfig extends ResourceConfig
                 bindFactory(HttpSessionFactory.class).to(HttpSession.class);
             }
         });
+//        property(MvcFeature.TEMPLATE_BASE_PATH, "WEB-INF/jsp/");
         register(JspMvcFeature.class);
         register(DeclarativeLinkingFeature.class);
     }

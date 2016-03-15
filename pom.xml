@@ -40,7 +40,7 @@
       <artifactId>servlet-api</artifactId>
       <version>2.5</version>
       <type>jar</type>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <!--    <dependency>
           <groupId>org.glassfish.hk2</groupId>
@@ -57,6 +57,7 @@
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-grizzly2-http</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
@@ -93,11 +94,11 @@
         <artifactId>jstl</artifactId>
         <version>1.2</version>
     </dependency>
-    <dependency>
+<!--    <dependency>
         <groupId>org.glassfish.jersey.ext</groupId>
         <artifactId>jersey-bean-validation</artifactId>
         <version>2.22.1</version>
-    </dependency>
+    </dependency>-->
 
 
     <dependency>

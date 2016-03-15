@@ -94,11 +94,11 @@
 
     <div class="col-xs-12 col-sm-9" id="main-content">
       <c:choose>
-        <c:when test="${model.page == '/WEB-INF/jsp//test.jsp'}">
-          <jsp:include page="/WEB-INF/jsp/test.jsp"/>
+        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/main.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/main.jsp"/>
         </c:when>
-        <c:when test="${model.page == '/WEB-INF/jsp//testpath.jsp'}">
-          <jsp:include page="/WEB-INF/jsp/testpath.jsp"/>
+        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/sample.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/sample.jsp"/>
         </c:when>
         <c:otherwise>
           <jsp:include page="/WEB-INF/jsp/default-view.jsp"/>
@@ -108,6 +108,7 @@
     <!--/span-->
     <jsp:include page="/WEB-INF/jsp/navigation.jsp"/>
     <!--/span-->
+    <jsp:include page="pageinfo.jsp"/>
   </div>
   <!--/row-->
 
