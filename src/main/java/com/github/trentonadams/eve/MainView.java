@@ -5,12 +5,10 @@ import com.github.trentonadams.eve.validation.PassiveValidate;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.server.mvc.Template;
-import org.glassfish.jersey.server.mvc.Viewable;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -37,7 +35,7 @@ import java.util.List;
 public class MainView extends PageModel
 {
     public static final String message = "HAHAHA";
-    static final String INDEX_JSP = "/WEB-INF/jsp/index.jsp";
+    public static final String INDEX_JSP = "/WEB-INF/jsp/index.jsp";
     protected String name;
 
     @Context
@@ -78,11 +76,6 @@ public class MainView extends PageModel
     @InjectLink(resource = MainView.class)
     private URI serviceUri;
 
-    /**
-     * The current jsp page to rendered within the index.jsp
-     */
-    private String page;
-
     /*
      * Data methods.
      */
@@ -119,6 +112,7 @@ public class MainView extends PageModel
     @Template(name = INDEX_JSP)
     public MainView getService()
     {
+        page = "/WEB-INF/jsp/default-view.jsp";
         return this;
     }
 

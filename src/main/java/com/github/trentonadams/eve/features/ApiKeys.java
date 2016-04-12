@@ -1,5 +1,7 @@
-package com.github.trentonadams.eve;
+package com.github.trentonadams.eve.features;
 
+import com.github.trentonadams.eve.MainView;
+import com.github.trentonadams.eve.PageModel;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.ws.rs.GET;
@@ -22,9 +24,9 @@ import javax.ws.rs.core.MediaType;
 public class ApiKeys extends PageModel
 {
     private static final String SAMPLE_JSP =
-        "/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/sample.jsp";
+        "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
     private static final String MAIN_JSP =
-        "/WEB-INF/jsp/com/github/trentonadams/eve/ApiKeys/main.jsp";
+        "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/main.jsp";
 
     /**
      * The JSP page to access

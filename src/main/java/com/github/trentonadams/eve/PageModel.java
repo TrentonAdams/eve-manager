@@ -1,7 +1,9 @@
 package com.github.trentonadams.eve;
 
 /**
- * Created by IntelliJ IDEA.
+ * This is just a way of making it so that each JAX-RS service can return the
+ * same base functionality, such as what page we're accessing.  This allows
+ * us to use "${model.page}".  See index.jsp for examples.
  * <p/>
  * Created :  08/03/16 8:53 PM MST
  * <p/>
@@ -11,7 +13,7 @@ package com.github.trentonadams.eve;
  *
  * @author Trenton D. Adams
  */
-public abstract class PageModel
+public class PageModel
 {
     protected String page;
 
