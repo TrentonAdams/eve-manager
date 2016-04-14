@@ -125,13 +125,15 @@
     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="myValues">
         <value>
-          <list size="6">
+          <list size="8">
             <item index="0" class="java.lang.String" itemvalue="type" />
             <item index="1" class="java.lang.String" itemvalue="wmode" />
             <item index="2" class="java.lang.String" itemvalue="src" />
             <item index="3" class="java.lang.String" itemvalue="width" />
             <item index="4" class="java.lang.String" itemvalue="height" />
             <item index="5" class="java.lang.String" itemvalue="vspace" />
+            <item index="6" class="java.lang.String" itemvalue="ng-app" />
+            <item index="7" class="java.lang.String" itemvalue="ng-model" />
           </list>
         </value>
       </option>
@@ -271,17 +273,11 @@
       <option name="ignoreEnums" value="false" />
       <option name="ignoreInterfaces" value="false" />
     </inspection_tool>
-    <inspection_tool class="PublicMethodNotExposedInInterface" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignorableAnnotations">
-        <value />
-      </option>
-      <option name="onlyWarnIfContainingClassImplementsAnInterface" value="false" />
-    </inspection_tool>
     <inspection_tool class="ReadObjectAndWriteObjectPrivate" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantFieldInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantImport" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="RefusedBequest" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="RefusedBequest" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoreEmptySuperMethods" value="false" />
     </inspection_tool>
     <inspection_tool class="RequiredAttributes" enabled="true" level="WARNING" enabled_by_default="true">

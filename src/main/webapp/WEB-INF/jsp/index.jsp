@@ -27,6 +27,7 @@
   <link href="<c:url value="/bootstrap/css/required-fields.css"/>" rel="stylesheet">
   <link href="<c:url value="/bootstrap/css/offcanvas.css"/>" rel="stylesheet">
   <link rel="stylesheet" href="<c:url value="/jquery/jquery-ui.min.css"/>">
+<%--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>--%>
 
   <!-- Custom styles for this template -->
   <!--<link href="navbar-fixed-top.css" rel="stylesheet">-->
@@ -94,8 +95,8 @@
 
     <div class="col-xs-12 col-sm-9" id="main-content">
       <c:choose>
-        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/main.jsp'}">
-          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/main.jsp"/>
+        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp"/>
         </c:when>
         <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp'}">
           <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp"/>
@@ -104,7 +105,7 @@
           <jsp:include page="/WEB-INF/jsp/default-view.jsp"/>
         </c:when>
         <c:otherwise>
-          No page matched for ${model.page}
+          No page matched for "${model.page}" or model.page is empty.
         </c:otherwise>
       </c:choose>
     </div>
@@ -115,6 +116,7 @@
   </div>
   <!--/row-->
 
+  <jsp:include page="stateDebug.jsp"/>
   <hr>
 
   <footer>
