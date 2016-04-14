@@ -11,8 +11,8 @@
     <h2 class="panel-title">API Key Management</h2>
   </div>
   <div class="panel-body">
-    <form role="form" action="<c:url value="/api-keys/post"/>" method="post" ng-app="apiKeys"
-          ng-controller="MainCtrl as ctrl">
+    <form role="form" action="<c:url value="/api-keys/post"/>" method="post"
+          ng-app="apiKeys" ng-controller="MainCtrl as ctrl">
       <tags:bootstrap-field name="keyId"
                             errorMessage="Key ID is a required field">
         <input type="number" ng-model="ctrl.keyId" name="keyId" id="keyId"
@@ -22,9 +22,10 @@
           <div class="text">*</div>
         </div>
       </tags:bootstrap-field>
+
       <tags:bootstrap-field name="verificationCode"
                             errorMessage="Verification Code is a required field">
-        <input type="number" ng-model="ctrl.verificationCode"
+        <input type="text" ng-model="ctrl.verificationCode"
                name="verificationCode" id="verificationCode"
                placeholder="verificationCode" class="form-control"/>
 
@@ -32,9 +33,12 @@
           <div class="text">*</div>
         </div>
       </tags:bootstrap-field>
-      <%--      <div>
-              key_id = {{ctrl.key_id}}
-            </div>--%>
+      <div>
+        keyId = {{ctrl.keyId}}
+      </div>
+      <div>
+        verificationCode = {{ctrl.verificationCode}}
+      </div>
       <input type="submit" name="submit" value="Submit"
              class="btn btn-primary"/>
     </form>
@@ -46,7 +50,7 @@
         function ()
         {
           this.keyId = ${model.keyId == null? 0:model.keyId};
-          this.verificationCode = ${model.verificationCode == null ? 0:model.verificationCode};
+          this.verificationCode = '${model.verificationCode}';
         }]);
   </script>
 </div>

@@ -35,7 +35,7 @@ public class ApiKeys extends PageModel
     private UriInfo serviceUri;
 
     @QueryParam("keyId")
-    private String keyId;
+    private int keyId;
 
     @QueryParam("verificationCode")
     private String verificationCode;
@@ -89,7 +89,7 @@ public class ApiKeys extends PageModel
         return page;
     }
 
-    public String getKeyId()
+    public int getKeyId()
     {
         return keyId;
     }
