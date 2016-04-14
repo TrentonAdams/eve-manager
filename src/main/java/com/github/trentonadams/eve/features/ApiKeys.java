@@ -2,8 +2,12 @@ package com.github.trentonadams.eve.features;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.PageModel;
+import com.github.trentonadams.eve.SessionInject;
 import org.glassfish.jersey.server.mvc.Template;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -31,14 +35,19 @@ public class ApiKeys extends PageModel
     private static final String API_KEYS_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp";
 
+    private MyModel myModel;
+
     @Context
     private UriInfo serviceUri;
 
-    @QueryParam("keyId")
-    private int keyId;
+    @Context
+    private HttpServletRequest request;
 
-    @QueryParam("verificationCode")
-    private String verificationCode;
+    @Inject
+    private HttpSession session;
+
+    @SessionInject
+    private HttpSession anotherSession;
 
     /**
      * The JSP page to access
@@ -53,20 +62,34 @@ public class ApiKeys extends PageModel
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public ApiKeys getService()
+    public MyModel getService()
     {
-        page = API_KEYS_JSP;
-        return this;
+        myModel = (MyModel) session.getAttribute("model");
+        session.removeAttribute("model");
+        if (myModel == null)
+        {
+            myModel = new MyModel();
+        }
+        myModel.setPage(API_KEYS_JSP);
+        return myModel;
     }
 
     @POST
     @Path("/post")
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public Response postService() throws URISyntaxException
+    public Response postService(@FormParam("keyId") final int keyId,
+        @FormParam("verificationCode") String verificationCode)
+        throws URISyntaxException
     {
         final URI targetURIForRedirection = new URI(
             serviceUri.getBaseUri().toString() + "api-keys");
+        myModel = new MyModel();
+        myModel.keyId = keyId;
+        myModel.verificationCode = verificationCode;
+        myModel.setPage(API_KEYS_JSP);
+        session.setAttribute("model", myModel);
+
         return Response.seeOther(targetURIForRedirection).build();
     }
 
@@ -74,10 +97,10 @@ public class ApiKeys extends PageModel
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public ApiKeys getSample()
+    public MyModel getSample()
     {
         page = SAMPLE_JSP;
-        return this;
+        return myModel;
     }
 
 
@@ -91,11 +114,32 @@ public class ApiKeys extends PageModel
 
     public int getKeyId()
     {
-        return keyId;
+        return myModel.getKeyId();
     }
 
     public String getVerificationCode()
     {
-        return verificationCode;
+        return myModel.getVerificationCode();
+    }
+
+    public static class MyModel extends PageModel
+    {
+        private int keyId;
+
+        public int getKeyId()
+        {
+            return keyId;
+        }
+
+        private String verificationCode;
+
+        public String getVerificationCode()
+        {
+            return verificationCode;
+        }
+
+        public MyModel()
+        {
+        }
     }
 }

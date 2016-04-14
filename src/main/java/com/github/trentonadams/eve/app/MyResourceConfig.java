@@ -1,11 +1,15 @@
 package com.github.trentonadams.eve.app;
 
+import com.github.trentonadams.eve.SessionInject;
+import org.glassfish.hk2.api.InjectionResolver;
+import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 
+import javax.inject.Singleton;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.ext.Provider;
 
@@ -41,6 +45,16 @@ public class MyResourceConfig extends ResourceConfig
                 bindFactory(HttpSessionFactory.class).to(HttpSession.class);
             }
         });
+        register(new AbstractBinder() {
+                    @Override
+                    protected void configure() {
+                        bindFactory(HttpSessionFactory.class).to(HttpSession.class);
+
+                        bind(SessionInjectResolver.class)
+                            .to(new TypeLiteral<InjectionResolver<SessionInject>>(){})
+                            .in(Singleton.class);
+                    }
+                });
 //        property(MvcFeature.TEMPLATE_BASE_PATH, "WEB-INF/jsp/");
         register(JspMvcFeature.class);
         register(DeclarativeLinkingFeature.class);

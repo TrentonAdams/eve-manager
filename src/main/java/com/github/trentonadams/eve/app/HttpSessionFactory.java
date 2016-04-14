@@ -5,7 +5,6 @@ import org.glassfish.hk2.api.Factory;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.core.Context;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +23,7 @@ public class HttpSessionFactory implements Factory<HttpSession>
     private final HttpServletRequest request;
 
     @Inject
-    public HttpSessionFactory(HttpServletRequest request)
+    public HttpSessionFactory(final HttpServletRequest request)
     {
         this.request = request;
     }

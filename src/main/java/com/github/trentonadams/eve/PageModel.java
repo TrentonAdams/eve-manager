@@ -15,10 +15,15 @@ package com.github.trentonadams.eve;
  */
 public class PageModel
 {
-    protected String page;
+    private String page;
 
     public String getPage()
     {
         return page;
+    }
+
+    public void setPage(String page)
+    {
+        this.page = page;
     }
 }

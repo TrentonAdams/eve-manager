@@ -112,7 +112,7 @@ public class MainView extends PageModel
     @Template(name = INDEX_JSP)
     public MainView getService()
     {
-        page = "/WEB-INF/jsp/default-view.jsp";
+        setPage("/WEB-INF/jsp/default-view.jsp");
         return this;
     }
 
