@@ -5,6 +5,7 @@ import org.glassfish.hk2.api.Factory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,7 +32,15 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
     @Override
     public ApiKeys.MyModel provide()
     {
-        return (ApiKeys.MyModel) request.getSession().getAttribute("model");
+        final HttpSession session = request.getSession();
+        ApiKeys.MyModel model =
+            (ApiKeys.MyModel) session.getAttribute("model");
+        session.removeAttribute("model");
+        if (model == null)
+        {
+            model = new ApiKeys.MyModel();
+        }
+        return model;
     }
 
     @Override

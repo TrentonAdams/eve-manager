@@ -36,8 +36,6 @@ public class ApiKeys extends PageModel
     private static final String API_KEYS_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp";
 
-    private MyModel myModel;
-
     @Context
     private UriInfo serviceUri;
 
@@ -51,7 +49,7 @@ public class ApiKeys extends PageModel
     private HttpSession anotherSession;
 
     @SessionAttributeInject(attributeName = "model")
-    private MyModel aModel;
+    private MyModel myModel;
 
     /**
      * The JSP page to access
@@ -68,12 +66,6 @@ public class ApiKeys extends PageModel
     @Template(name = MainView.INDEX_JSP)
     public MyModel getService()
     {
-        myModel = (MyModel) session.getAttribute("model");
-        session.removeAttribute("model");
-        if (myModel == null)
-        {
-            myModel = new MyModel();
-        }
         myModel.setPage(API_KEYS_JSP);
         return myModel;
     }

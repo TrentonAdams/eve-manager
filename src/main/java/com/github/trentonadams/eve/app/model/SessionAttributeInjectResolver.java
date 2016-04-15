@@ -40,14 +40,10 @@ public class SessionAttributeInjectResolver
         {   // exit immediately, not handling any other type
             return null;
         }
-
-        final SessionAttributeInject sessionAttributeInject =
-            getSessionAttrAnnotation(injectee);
-/*        final Method method =
-            injectee.getInjecteeClass().getMethod("createModel");
-        injectee.*/
-        return request.getSession().getAttribute(
-            sessionAttributeInject.attributeName());
+        else
+        {
+            return systemInjectionResolver.resolve(injectee, handle);
+        }
     }
 
     /**
