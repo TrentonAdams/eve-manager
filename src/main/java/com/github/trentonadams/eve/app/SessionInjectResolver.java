@@ -1,6 +1,5 @@
 package com.github.trentonadams.eve.app;
 
-import com.github.trentonadams.eve.SessionInject;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.ServiceHandle;

@@ -1,6 +1,9 @@
 package com.github.trentonadams.eve.app;
 
-import com.github.trentonadams.eve.SessionInject;
+import com.github.trentonadams.eve.app.model.HttpSessionAttributeFactory;
+import com.github.trentonadams.eve.app.model.SessionAttributeInject;
+import com.github.trentonadams.eve.app.model.SessionAttributeInjectResolver;
+import com.github.trentonadams.eve.features.ApiKeys;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -45,16 +48,35 @@ public class MyResourceConfig extends ResourceConfig
                 bindFactory(HttpSessionFactory.class).to(HttpSession.class);
             }
         });
-        register(new AbstractBinder() {
-                    @Override
-                    protected void configure() {
-                        bindFactory(HttpSessionFactory.class).to(HttpSession.class);
+        register(new AbstractBinder()
+        {
+            @Override
+            protected void configure()
+            {
+                bindFactory(HttpSessionFactory.class).to(HttpSession.class);
 
-                        bind(SessionInjectResolver.class)
-                            .to(new TypeLiteral<InjectionResolver<SessionInject>>(){})
-                            .in(Singleton.class);
-                    }
-                });
+                bind(SessionInjectResolver.class)
+                    .to(new TypeLiteral<InjectionResolver<SessionInject>>()
+                    {
+                    })
+                    .in(Singleton.class);
+            }
+        });
+        register(new AbstractBinder()
+        {
+            @Override
+            protected void configure()
+            {
+                bindFactory(HttpSessionAttributeFactory.class).to(
+                    ApiKeys.MyModel.class);
+
+                bind(SessionAttributeInjectResolver.class)
+                    .to(new TypeLiteral<InjectionResolver<SessionAttributeInject>>()
+                    {
+                    })
+                    .in(Singleton.class);
+            }
+        });
 //        property(MvcFeature.TEMPLATE_BASE_PATH, "WEB-INF/jsp/");
         register(JspMvcFeature.class);
         register(DeclarativeLinkingFeature.class);

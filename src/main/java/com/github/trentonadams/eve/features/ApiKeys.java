@@ -2,7 +2,8 @@ package com.github.trentonadams.eve.features;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.PageModel;
-import com.github.trentonadams.eve.SessionInject;
+import com.github.trentonadams.eve.app.model.SessionAttributeInject;
+import com.github.trentonadams.eve.app.SessionInject;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -48,6 +49,9 @@ public class ApiKeys extends PageModel
 
     @SessionInject
     private HttpSession anotherSession;
+
+    @SessionAttributeInject(attributeName = "model")
+    private MyModel aModel;
 
     /**
      * The JSP page to access
