@@ -35,7 +35,7 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
         final HttpSession session = request.getSession();
         ApiKeys.MyModel model =
             (ApiKeys.MyModel) session.getAttribute("model");
-        session.removeAttribute("model");
+//        session.removeAttribute("model");
         if (model == null)
         {
             model = new ApiKeys.MyModel();

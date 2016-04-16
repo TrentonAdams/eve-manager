@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Primary JAX-RS resource for handling eve api key management tasks.  Used for
@@ -85,6 +86,14 @@ public class ApiKeys
         return myModel;
     }
 
+    @GET
+    @Path("json")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MyModel getJson()
+    {
+        return myModel;
+    }
+
     /**
      * @return the JSP page being used for the current operation.
      */
@@ -103,6 +112,7 @@ public class ApiKeys
         return myModel.getVerificationCode();
     }
 
+    @XmlRootElement
     public static class MyModel extends PageModel
     {
         String keyId;

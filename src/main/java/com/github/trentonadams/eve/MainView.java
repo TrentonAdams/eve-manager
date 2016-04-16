@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Trenton D. Adams
  */
-@Path("/")
+@Path("/rest")
 public class MainView extends PageModel
 {
     public static final String message = "HAHAHA";

@@ -64,6 +64,7 @@ public class PostApiKeys
         myModel.verificationCode = verificationCode;
         myModel.setPage(ApiKeys.API_KEYS_JSP);
         session.setAttribute("model", myModel);
+        session.setAttribute("apiKey", myModel);
 
         return Response.seeOther(targetURIForRedirection).build();
     }
