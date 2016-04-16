@@ -7,7 +7,6 @@ import org.glassfish.hk2.api.ServiceHandle;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 
 /**
@@ -29,9 +28,6 @@ public class SessionAttributeInjectResolver
     @Named(InjectionResolver.SYSTEM_RESOLVER_NAME)
     InjectionResolver<Inject> systemInjectionResolver;
 
-    @Inject
-    private HttpServletRequest request;
-
     @Override
     public Object resolve(final Injectee injectee,
         final ServiceHandle<?> handle)
@@ -50,6 +46,7 @@ public class SessionAttributeInjectResolver
      * Retrieves the session attribute annotation on the field.
      *
      * @param injectee the field we're injecting into
+     *
      * @return the {@link SessionAttributeInject} annotation
      */
     private SessionAttributeInject getSessionAttrAnnotation(

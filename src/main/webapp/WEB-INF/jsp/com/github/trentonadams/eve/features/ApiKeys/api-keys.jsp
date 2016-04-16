@@ -15,7 +15,7 @@
           ng-app="apiKeys" ng-controller="MainCtrl as ctrl">
       <tags:bootstrap-field name="keyId"
                             errorMessage="Key ID is a required field">
-        <input type="number" ng-model="ctrl.keyId" name="keyId" id="keyId"
+        <input type="text" ng-model="ctrl.keyId" name="keyId" id="keyId"
                placeholder="keyId" class="form-control"/>
 
         <div class="required-icon">

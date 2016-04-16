@@ -16,7 +16,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Created by IntelliJ IDEA.
+ * Primary JAX-RS resource for handling eve api key management tasks.  Used for
+ * displaying the main page, as well as delegating to sub-resource locator
+ * instances.
+ * <p>
+ * The only sub-resource locator instance is {@link PostApiKeys}
  * <p/>
  * Created :  08/03/16 4:12 PM MST
  * <p/>
@@ -27,7 +31,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Trenton D. Adams
  */
 @Path("/api-keys")
-public class ApiKeys extends PageModel
+public class ApiKeys
 {
     private static final String SAMPLE_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
@@ -81,7 +85,6 @@ public class ApiKeys extends PageModel
         return myModel;
     }
 
-
     /**
      * @return the JSP page being used for the current operation.
      */
@@ -90,7 +93,7 @@ public class ApiKeys extends PageModel
         return page;
     }
 
-    public int getKeyId()
+    public String getKeyId()
     {
         return myModel.getKeyId();
     }
@@ -102,9 +105,9 @@ public class ApiKeys extends PageModel
 
     public static class MyModel extends PageModel
     {
-        int keyId;
+        String keyId;
 
-        public int getKeyId()
+        public String getKeyId()
         {
             return keyId;
         }

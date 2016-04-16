@@ -36,8 +36,8 @@ public class MyResourceConfig extends ResourceConfig
     {
         property("jersey.config.servlet.filter.forwardOn404", true);
         property("jersey.config.server.tracing.type", "ON_DEMAND");
-        //property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         property(ServerProperties.RESOURCE_VALIDATION_IGNORE_ERRORS, true);
+        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         packages("com.github.trentonadams.eve",
             "com.github.trentonadams.eve.features");
         register(new AbstractBinder()
@@ -53,9 +53,12 @@ public class MyResourceConfig extends ResourceConfig
             @Override
             protected void configure()
             {
+                // a new factory is created every request
                 bindFactory(HttpSessionAttributeFactory.class).to(
                     ApiKeys.MyModel.class);
 
+                // one single instance for injection resolver for the life of
+                // the service; i.e. don't use instance variables within it.
                 bind(SessionAttributeInjectResolver.class)
                     .to(new TypeLiteral<InjectionResolver<SessionAttributeInject>>()
                     {

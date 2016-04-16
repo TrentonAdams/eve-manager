@@ -21,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
+ * The primary view controller upon first accessing the application.
  * <p/>
  * Created :  19/02/16 6:23 PM MST
  * <p/>

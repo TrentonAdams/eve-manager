@@ -1,6 +1,7 @@
 package com.github.trentonadams.eve.features.apikeys;
 
 import com.github.trentonadams.eve.MainView;
+import com.github.trentonadams.eve.features.apikeys.ApiKeys.MyModel;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -17,7 +18,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Handles post method mechanics for {@link ApiKeys}
+ * Handles post method mechanics for {@link ApiKeys}.  This class is responsible
+ * for saving the api keys, and redirecting back to the primary GET request
+ * after setting up the session to include a {@link MyModel model} attribute.
  * <p>
  * Created :  14/04/16 11:05 PM MST
  * <p>
@@ -38,26 +41,25 @@ public class PostApiKeys
     @Inject
     private HttpSession session;
 
+    @FormParam("keyId")
+    private String keyId;
+
+    @FormParam("verificationCode")
+    private String verificationCode;
+
     public PostApiKeys()
     {
-    }
-
-    public PostApiKeys(final UriInfo serviceUri, final HttpSession session)
-    {
-        //this.serviceUri = serviceUri;
-        //this.session = session;
     }
 
     @POST
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public Response postService(@FormParam("keyId") final int keyId,
-        @FormParam("verificationCode") final String verificationCode)
+    public Response postService()
         throws URISyntaxException
     {
         final URI targetURIForRedirection = new URI(
             serviceUri.getBaseUri().toString() + "api-keys");
-        final ApiKeys.MyModel myModel = new ApiKeys.MyModel();
+        final MyModel myModel = new MyModel();
         myModel.keyId = keyId;
         myModel.verificationCode = verificationCode;
         myModel.setPage(ApiKeys.API_KEYS_JSP);
