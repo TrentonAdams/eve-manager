@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="model" scope="request"
-             type="com.github.trentonadams.eve.features.ApiKeys.MyModel"/>
+             type="com.github.trentonadams.eve.features.apikeys.ApiKeys.MyModel"/>
 
 <%--@elvariable id="towns" type="java.util.List<ca.tnt.athome.data.Town>"--%>
 <%--@elvariable id="pageFields" type="java.util.Map<String,Object>"--%>
@@ -33,12 +33,14 @@
           <div class="text">*</div>
         </div>
       </tags:bootstrap-field>
+
       <div>
         keyId = {{ctrl.keyId}}
       </div>
       <div>
         verificationCode = {{ctrl.verificationCode}}
       </div>
+
       <input type="submit" name="submit" value="Submit"
              class="btn btn-primary"/>
     </form>

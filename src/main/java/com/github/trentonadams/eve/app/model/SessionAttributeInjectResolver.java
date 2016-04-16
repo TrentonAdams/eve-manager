@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.app.model;
 
-import com.github.trentonadams.eve.features.ApiKeys;
+import com.github.trentonadams.eve.features.apikeys.ApiKeys;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.ServiceHandle;
