@@ -7,7 +7,8 @@ import org.glassfish.jersey.server.mvc.Template;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -32,25 +33,23 @@ import java.net.URISyntaxException;
  */
 public class PostApiKeys
 {
-    @Context
-    private UriInfo serviceUri;
-
-    @Context
-    private HttpServletRequest request;
-
-    @Inject
-    private HttpSession session;
-
-    @FormParam("keyId")
-    private String keyId;
-
-    @FormParam("verificationCode")
-    private String verificationCode;
+    @Context private UriInfo serviceUri;
+    @Context private HttpServletRequest request;
+    @Inject private HttpSession session;
+    @BeanParam MyModel myModel;
 
     public PostApiKeys()
     {
     }
 
+    /**
+     * Sets up a {@link MyModel model} attribute in the session.
+     *
+     * @return the response is a redirect to the main api-keys/ {@link GET} path
+     * handled by {@link ApiKeys#getService()}
+     *
+     * @throws URISyntaxException
+     */
     @POST
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
@@ -59,9 +58,6 @@ public class PostApiKeys
     {
         final URI targetURIForRedirection = new URI(
             serviceUri.getBaseUri().toString() + "api-keys");
-        final MyModel myModel = new MyModel();
-        myModel.keyId = keyId;
-        myModel.verificationCode = verificationCode;
         myModel.setPage(ApiKeys.API_KEYS_JSP);
         session.setAttribute("model", myModel);
         session.setAttribute("apiKey", myModel);

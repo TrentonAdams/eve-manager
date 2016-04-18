@@ -2,8 +2,10 @@ package com.github.trentonadams.eve.app.model;
 
 import com.github.trentonadams.eve.features.apikeys.ApiKeys;
 import org.glassfish.hk2.api.Factory;
+import org.glassfish.hk2.api.InjectionResolver;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -24,6 +26,10 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
     private final HttpServletRequest request;
 
     @Inject
+    @Named(InjectionResolver.SYSTEM_RESOLVER_NAME)
+    InjectionResolver<Inject> systemInjectionResolver;
+
+    @Inject
     public HttpSessionAttributeFactory(final HttpServletRequest request)
     {
         this.request = request;
@@ -35,11 +41,10 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
         final HttpSession session = request.getSession();
         ApiKeys.MyModel model =
             (ApiKeys.MyModel) session.getAttribute("model");
-//        session.removeAttribute("model");
-        if (model == null)
+/*        if (model == null)
         {
             model = new ApiKeys.MyModel();
-        }
+        }*/
         return model;
     }
 

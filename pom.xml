@@ -76,7 +76,7 @@
     <dependency>
         <groupId>org.glassfish.jersey.ext</groupId>
         <artifactId>jersey-declarative-linking</artifactId>
-        <version>2.22.1</version>
+        <version>${jersey.version}</version>
     </dependency>
 
     <dependency>

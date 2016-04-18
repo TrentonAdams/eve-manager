@@ -46,6 +46,9 @@
         <AndroidXmlCodeStyleSettings>
           <option name="USE_CUSTOM_SETTINGS" value="true" />
         </AndroidXmlCodeStyleSettings>
+        <JavaCodeStyleSettings>
+          <option name="DO_NOT_WRAP_AFTER_SINGLE_ANNOTATION" value="true" />
+        </JavaCodeStyleSettings>
         <XML>
           <option name="XML_KEEP_LINE_BREAKS" value="false" />
           <option name="XML_ALIGN_ATTRIBUTES" value="false" />

@@ -8,9 +8,7 @@ import org.glassfish.jersey.server.mvc.Template;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -39,16 +37,15 @@ public class ApiKeys
     static final String API_KEYS_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp";
 
-    @Context
-    private UriInfo serviceUri;
+    @Context private UriInfo serviceUri;
 
-    @Context
-    private HttpServletRequest request;
+    @Context private HttpServletRequest request;
 
-    @Inject
-    private HttpSession session;
+    @Inject private HttpSession session;
 
-    @SessionAttributeInject(attributeName = "model")
+    /**
+     * The model for the mvc.
+     */
     private MyModel myModel;
 
     /**
@@ -57,7 +54,25 @@ public class ApiKeys
     private String page;
 
     /**
-     * The default handler for the ApiKeys.
+     * Inject myModel here since if it's null, we need to create a new one.
+     *
+     * @param myModel the data model
+     */
+    @SessionAttributeInject(attributeName = "model")
+    public ApiKeys(final MyModel myModel)
+    {
+        if (myModel == null)
+        {
+            this.myModel = new MyModel();
+        }
+        else
+        {
+            this.myModel = myModel;
+        }
+    }
+
+    /**
+     * The default handler for the ApiKeys; simply displays the main page.
      *
      * @return this service referencing {@link ApiKeys}
      */
@@ -82,10 +97,15 @@ public class ApiKeys
     @Template(name = MainView.INDEX_JSP)
     public MyModel getSample()
     {
-        page = SAMPLE_JSP;
+        myModel.setPage(SAMPLE_JSP);
         return myModel;
     }
 
+    /**
+     * Returns the current {@link MyModel model} as json.
+     *
+     * @return the {@link MyModel model}
+     */
     @GET
     @Path("json")
     @Produces(MediaType.APPLICATION_JSON)
@@ -112,25 +132,41 @@ public class ApiKeys
         return myModel.getVerificationCode();
     }
 
+    /**
+     * Class representing the data model for ApiKeys, including the keyId, the
+     * verificationCode, and the page inherited from {@link PageModel}.  This
+     * includes the JAX-RS annotated form parameters for keyId and
+     * verificationCode.
+     */
     @XmlRootElement
     public static class MyModel extends PageModel
     {
-        String keyId;
+        private String queryParam;
+
+        @FormParam("keyId")
+        private String keyId;
 
         public String getKeyId()
         {
             return keyId;
         }
 
-        String verificationCode;
+        @FormParam("verificationCode")
+        private String verificationCode;
 
         public String getVerificationCode()
         {
             return verificationCode;
         }
 
+        public MyModel(@QueryParam("keyId") final String queryParam)
+        {
+            this.queryParam = queryParam;
+        }
+
         public MyModel()
         {
+
         }
-    }
+    }   // END MyModel
 }

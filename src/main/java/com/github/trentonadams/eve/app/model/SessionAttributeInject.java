@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
  * @author Trenton D. Adams
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.CONSTRUCTOR})
 public @interface SessionAttributeInject
 {
     String attributeName();
