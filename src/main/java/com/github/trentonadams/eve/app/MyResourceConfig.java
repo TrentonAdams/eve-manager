@@ -3,7 +3,7 @@ package com.github.trentonadams.eve.app;
 import com.github.trentonadams.eve.app.model.HttpSessionAttributeFactory;
 import com.github.trentonadams.eve.app.model.SessionAttributeInject;
 import com.github.trentonadams.eve.app.model.SessionAttributeInjectResolver;
-import com.github.trentonadams.eve.features.apikeys.ApiKeys;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -54,7 +54,7 @@ public class MyResourceConfig extends ResourceConfig
             {
                 // a new factory is created every request
                 bindFactory(HttpSessionAttributeFactory.class).to(
-                    ApiKeys.MyModel.class);
+                    ApiKey.class);
 
                 // one single instance for injection resolver for the life of
                 // the service; i.e. don't use instance variables within it.

@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="model" scope="request" type="com.github.trentonadams.eve.PageModel"/>
+<jsp:useBean id="model" scope="request" type="com.github.trentonadams.eve.app.model.PageModel"/>
 
 
 <%--<h3>@Inject - with HttpSessionFactory</h3>

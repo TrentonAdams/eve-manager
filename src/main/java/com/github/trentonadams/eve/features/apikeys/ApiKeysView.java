@@ -1,8 +1,8 @@
 package com.github.trentonadams.eve.features.apikeys;
 
 import com.github.trentonadams.eve.MainView;
-import com.github.trentonadams.eve.PageModel;
 import com.github.trentonadams.eve.app.model.SessionAttributeInject;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -12,7 +12,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Primary JAX-RS resource for handling eve api key management tasks.  Used for
@@ -30,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Trenton D. Adams
  */
 @Path("/api-keys")
-public class ApiKeys
+public class ApiKeysView
 {
     private static final String SAMPLE_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
@@ -46,7 +45,7 @@ public class ApiKeys
     /**
      * The model for the mvc.
      */
-    private MyModel myModel;
+    private ApiKey apiKey;
 
     /**
      * The JSP page to access
@@ -56,33 +55,33 @@ public class ApiKeys
     /**
      * Inject myModel here since if it's null, we need to create a new one.
      *
-     * @param myModel the data model
+     * @param apiKey the data model
      */
     @SessionAttributeInject(attributeName = "model")
-    public ApiKeys(final MyModel myModel)
+    public ApiKeysView(final ApiKey apiKey)
     {
-        if (myModel == null)
+        if (apiKey == null)
         {
-            this.myModel = new MyModel();
+            this.apiKey = new ApiKey();
         }
         else
         {
-            this.myModel = myModel;
+            this.apiKey = apiKey;
         }
     }
 
     /**
      * The default handler for the ApiKeys; simply displays the main page.
      *
-     * @return this service referencing {@link ApiKeys}
+     * @return this service referencing {@link ApiKeysView}
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public MyModel getService()
+    public ApiKey getService()
     {
-        myModel.setPage(API_KEYS_JSP);
-        return myModel;
+        apiKey.setPage(API_KEYS_JSP);
+        return apiKey;
     }
 
     @Path("/post")
@@ -95,23 +94,23 @@ public class ApiKeys
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public MyModel getSample()
+    public ApiKey getSample()
     {
-        myModel.setPage(SAMPLE_JSP);
-        return myModel;
+        apiKey.setPage(SAMPLE_JSP);
+        return apiKey;
     }
 
     /**
-     * Returns the current {@link MyModel model} as json.
+     * Returns the current {@link ApiKey model} as json.
      *
-     * @return the {@link MyModel model}
+     * @return the {@link ApiKey model}
      */
     @GET
     @Path("json")
     @Produces(MediaType.APPLICATION_JSON)
-    public MyModel getJson()
+    public ApiKey getJson()
     {
-        return myModel;
+        return apiKey;
     }
 
     /**
@@ -124,49 +123,12 @@ public class ApiKeys
 
     public String getKeyId()
     {
-        return myModel.getKeyId();
+        return apiKey.getKeyId();
     }
 
     public String getVerificationCode()
     {
-        return myModel.getVerificationCode();
+        return apiKey.getVerificationCode();
     }
 
-    /**
-     * Class representing the data model for ApiKeys, including the keyId, the
-     * verificationCode, and the page inherited from {@link PageModel}.  This
-     * includes the JAX-RS annotated form parameters for keyId and
-     * verificationCode.
-     */
-    @XmlRootElement
-    public static class MyModel extends PageModel
-    {
-        private String queryParam;
-
-        @FormParam("keyId")
-        private String keyId;
-
-        public String getKeyId()
-        {
-            return keyId;
-        }
-
-        @FormParam("verificationCode")
-        private String verificationCode;
-
-        public String getVerificationCode()
-        {
-            return verificationCode;
-        }
-
-        public MyModel(@QueryParam("keyId") final String queryParam)
-        {
-            this.queryParam = queryParam;
-        }
-
-        public MyModel()
-        {
-
-        }
-    }   // END MyModel
 }

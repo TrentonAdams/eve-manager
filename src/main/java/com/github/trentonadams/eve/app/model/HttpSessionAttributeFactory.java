@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.app.model;
 
-import com.github.trentonadams.eve.features.apikeys.ApiKeys;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.InjectionResolver;
 
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Trenton D. Adams
  */
-public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
+public class HttpSessionAttributeFactory implements Factory<ApiKey>
 {
 
     private final HttpServletRequest request;
@@ -36,11 +36,11 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
     }
 
     @Override
-    public ApiKeys.MyModel provide()
+    public ApiKey provide()
     {
         final HttpSession session = request.getSession();
-        ApiKeys.MyModel model =
-            (ApiKeys.MyModel) session.getAttribute("model");
+        ApiKey model =
+            (ApiKey) session.getAttribute("model");
 /*        if (model == null)
         {
             model = new ApiKeys.MyModel();
@@ -49,7 +49,7 @@ public class HttpSessionAttributeFactory implements Factory<ApiKeys.MyModel>
     }
 
     @Override
-    public void dispose(final ApiKeys.MyModel t)
+    public void dispose(final ApiKey t)
     {
     }
 }

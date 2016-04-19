@@ -1,6 +1,7 @@
 package com.github.trentonadams.eve;
 
 import com.github.trentonadams.eve.app.HttpSessionFactory;
+import com.github.trentonadams.eve.app.model.PageModel;
 import com.github.trentonadams.eve.validation.PassiveValidate;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;

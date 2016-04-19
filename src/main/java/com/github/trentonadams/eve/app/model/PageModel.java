@@ -1,4 +1,4 @@
-package com.github.trentonadams.eve;
+package com.github.trentonadams.eve.app.model;
 
 /**
  * This is just a way of making it so that each JAX-RS service can return the

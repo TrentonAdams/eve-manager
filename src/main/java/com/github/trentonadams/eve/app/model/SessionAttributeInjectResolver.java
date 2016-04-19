@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.app.model;
 
-import com.github.trentonadams.eve.features.apikeys.ApiKeys;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.ServiceHandle;
@@ -32,7 +32,7 @@ public class SessionAttributeInjectResolver
     public Object resolve(final Injectee injectee,
         final ServiceHandle<?> handle)
     {
-        if (injectee.getRequiredType() != ApiKeys.MyModel.class)
+        if (injectee.getRequiredType() != ApiKey.class)
         {   // exit immediately, not handling any other type
             return null;
         }

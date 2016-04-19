@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="model" scope="request"
-             type="com.github.trentonadams.eve.features.apikeys.ApiKeys.MyModel"/>
+             type="com.github.trentonadams.eve.features.apikeys.entities.ApiKey"/>
 
 <%--@elvariable id="towns" type="java.util.List<ca.tnt.athome.data.Town>"--%>
 <%--@elvariable id="pageFields" type="java.util.Map<String,Object>"--%>
