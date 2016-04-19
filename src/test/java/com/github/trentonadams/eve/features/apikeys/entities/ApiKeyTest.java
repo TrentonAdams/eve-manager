@@ -11,7 +11,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
- * Created by IntelliJ IDEA.
+ * Tests {@link ApiKey} functionality.
  * <p>
  * Created :  19/04/16 2:25 AM MST
  * <p>
@@ -29,8 +29,7 @@ public class ApiKeyTest
     @Before
     public void setUp() throws Exception
     {
-        emf = Persistence.createEntityManagerFactory(
-            "apikey");
+        emf = Persistence.createEntityManagerFactory("apikey");
         em = emf.createEntityManager();
     }
 
@@ -41,6 +40,11 @@ public class ApiKeyTest
         emf.close();
     }
 
+    /**
+     * Simply tests that we can store api keys in a database.
+     *
+     * @throws Exception if an error occurs.
+     */
     @Test
     public void saveApiKey() throws Exception
     {
@@ -57,7 +61,6 @@ public class ApiKeyTest
         final ApiKey b = em.find(ApiKey.class, "5003323");
         Assert.assertEquals(
             "apiKey persisted should be the same as apiKey found", a, b);
-
     }
 
 }
