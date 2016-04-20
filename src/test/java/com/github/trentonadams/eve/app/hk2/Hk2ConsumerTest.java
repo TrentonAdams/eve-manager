@@ -1,8 +1,9 @@
 package com.github.trentonadams.eve.app.hk2;
 
-import org.glassfish.hk2.api.*;
-import org.glassfish.hk2.utilities.BuilderHelper;
-import org.glassfish.hk2.utilities.DescriptorBuilder;
+import org.glassfish.hk2.api.DynamicConfigurationService;
+import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.hk2.api.ServiceLocatorFactory;
+import org.glassfish.hk2.utilities.ServiceLocatorUtilities;
 import org.junit.Test;
 
 /**
@@ -28,16 +29,10 @@ public class Hk2ConsumerTest
         DynamicConfigurationService dcs = locator.getService(
             DynamicConfigurationService.class);
 
-        final DynamicConfiguration config = dcs.createDynamicConfiguration();
-        final DescriptorBuilder builder;
-        // create descriptor builder
-        builder = BuilderHelper.link(SpecialClass.class);
-        // link the interface to the impl
-        builder.to(SpecialClassInterface.class);
-        // bind to the lookup service.
-        config.bind(builder.build());
-        config.bind(BuilderHelper.link(Hk2Consumer.class).build());
-        config.commit();
+        // automatically detects implemented interfaces, so you can lookup a
+        // class instance from the interface.
+        ServiceLocatorUtilities.addClasses(locator, SpecialClass.class,
+            Hk2Consumer.class);
 
         final SpecialClassInterface specialClassInstance = locator.getService(
             SpecialClassInterface.class);
