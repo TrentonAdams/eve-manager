@@ -61,6 +61,7 @@ public class PostApiKeys
         apiKey.setPage(ApiKeysView.API_KEYS_JSP);
         session.setAttribute("model", apiKey);
         session.setAttribute("apiKey", apiKey);
+        session.setAttribute("keyId", apiKey.getKeyId());
 
         return Response.seeOther(targetURIForRedirection).build();
     }

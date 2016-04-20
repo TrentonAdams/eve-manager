@@ -46,7 +46,7 @@ public class ApiKeyTest
      * @throws Exception if an error occurs.
      */
     @Test
-    public void saveApiKey() throws Exception
+    public void testSaveApiKey() throws Exception
     {
         final EntityTransaction et = em.getTransaction();
         et.begin();

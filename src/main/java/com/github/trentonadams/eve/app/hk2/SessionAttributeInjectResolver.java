@@ -1,12 +1,14 @@
-package com.github.trentonadams.eve.app.model;
+package com.github.trentonadams.eve.app.hk2;
 
-import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
+import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import org.glassfish.hk2.api.Injectee;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.ServiceHandle;
+import org.glassfish.jersey.process.internal.RequestScoped;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.core.Context;
 import java.lang.annotation.Annotation;
 
 /**
@@ -20,26 +22,22 @@ import java.lang.annotation.Annotation;
  *
  * @author Trenton D. Adams
  */
+@RequestScoped
 public class SessionAttributeInjectResolver
     implements InjectionResolver<SessionAttributeInject>
 {
-
-    @Inject
-    @Named(InjectionResolver.SYSTEM_RESOLVER_NAME)
-    InjectionResolver<Inject> systemInjectionResolver;
+    @Context
+    private HttpServletRequest request;
 
     @Override
     public Object resolve(final Injectee injectee,
         final ServiceHandle<?> handle)
     {
-        if (injectee.getRequiredType() != ApiKey.class)
-        {   // exit immediately, not handling any other type
-            return null;
-        }
-        else
-        {
-            return systemInjectionResolver.resolve(injectee, handle);
-        }
+        final SessionAttributeInject annotation = getSessionAttrAnnotation(
+            injectee);
+        final HttpSession session = request.getSession();
+
+        return session.getAttribute(annotation.attributeName());
     }
 
     /**
@@ -69,7 +67,7 @@ public class SessionAttributeInjectResolver
     @Override
     public boolean isConstructorParameterIndicator()
     {
-        return false;
+        return true;
     }
 
     @Override

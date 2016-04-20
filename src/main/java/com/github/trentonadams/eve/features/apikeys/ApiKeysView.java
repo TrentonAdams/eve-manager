@@ -1,14 +1,16 @@
 package com.github.trentonadams.eve.features.apikeys;
 
 import com.github.trentonadams.eve.MainView;
-import com.github.trentonadams.eve.app.model.SessionAttributeInject;
+import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -61,7 +63,7 @@ public class ApiKeysView
     public ApiKeysView(final ApiKey apiKey)
     {
         if (apiKey == null)
-        {
+        {   /// If never created, create one now.
             this.apiKey = new ApiKey();
         }
         else
