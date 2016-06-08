@@ -1,20 +1,27 @@
 package com.github.trentonadams.eve.features.apikeys.services;
 
-import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
-import org.glassfish.jersey.server.mvc.Template;
+import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URISyntaxException;
 
 /**
- * Defines the service contract for posting the api keys web form, represented
- * in the JAX-RS {@link ApiKey} bean, or .
+ * Handles post method mechanics for {@link ApiKeysServiceView}.  This class is
+ * responsible for saving the api keys, and responding with JSON of the api keys
+ * posted, after setting up the session to include an {@link ApiKey ApiKeys
+ * model} attribute.
  * <p>
- * Created :  07/06/16 6:53 PM MST
+ * Created :  14/04/16 11:05 PM MST
  * <p>
  * Modified : $Date$ UTC
  * <p>
@@ -22,25 +29,38 @@ import java.net.URISyntaxException;
  *
  * @author Trenton D. Adams
  */
-public interface PostApiKeys
+public class PostApiKeys
 {
+    @Context protected UriInfo serviceUri;
+    @Context protected HttpServletRequest request;
+    @Inject protected HttpSession session;
+    @BeanParam protected ApiKey apiKey;
+
+    public PostApiKeys()
+    {
+    }
+
     /**
-     * Sets up a {@link ApiKey model} attribute in the session.
+     * Stores the {@link ApiKey ApiKey} as a model session attribute, an apiKey
+     * attribute, as well as the keyId.
      *
-     * @return the response is implementation specific.
+     * @return the response is JSON.
      *
      * @throws URISyntaxException
      */
     @POST
-    @Produces(MediaType.TEXT_HTML)
-    @Template(name = MainView.INDEX_JSP)
-    Response postForm() throws URISyntaxException;
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postForm() throws URISyntaxException
+    {
+        session.setAttribute("model", getModel());
+        session.setAttribute("apiKey", getModel());
+        session.setAttribute("keyId", getModel().getKeyId());
 
-    /**
-     * Retrieve the data model for the post.  Allows sub-classes of {@link
-     * PostApiKeys} to return instance specific sub-classes of {@link ApiKey}
-     *
-     * @return the {@link ApiKey} data model, or a sub-class if needed.
-     */
-    ApiKey getModel();
+        return Response.ok(apiKey).build();
+    }
+
+    public ApiKey getModel()
+    {
+        return apiKey;
+    }
 }

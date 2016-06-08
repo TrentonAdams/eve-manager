@@ -6,7 +6,6 @@ import com.github.trentonadams.eve.app.model.PageModel;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.FormPostApiKeysImpl;
 import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
-import com.github.trentonadams.eve.features.apikeys.services.PostApiKeysImpl;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -109,7 +108,7 @@ public class ApiKeysServiceView implements PageModel
     @Path("post")
     public Class<? extends PostApiKeys> postService()
     {
-        return PostApiKeysImpl.class;
+        return PostApiKeys.class;
     }
 
     @Path("sample")

@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
  * request after setting up the session to include a {@link ApiKey model}
  * attribute.
  * <p>
- * Inherits from {@link PostApiKeysImpl} and provides for a redirect, as well
+ * Inherits from {@link PostApiKeys} and provides for a redirect, as well
  * <p>
  * Created :  14/04/16 11:05 PM MST
  * <p>
@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
  *
  * @author Trenton D. Adams
  */
-public class FormPostApiKeysImpl extends PostApiKeysImpl
+public class FormPostApiKeysImpl extends PostApiKeys
 {
     public FormPostApiKeysImpl()
     {
