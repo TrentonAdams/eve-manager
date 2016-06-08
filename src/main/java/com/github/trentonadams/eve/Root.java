@@ -9,7 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * Created by IntelliJ IDEA.
+ * Placeholder to provide redirect to /rest/.
  * <p>
  * Created :  16/04/16 9:07 PM MST
  * <p>

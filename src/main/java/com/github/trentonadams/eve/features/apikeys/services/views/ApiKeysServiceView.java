@@ -4,9 +4,9 @@ import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import com.github.trentonadams.eve.app.model.PageModel;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
-import com.github.trentonadams.eve.features.apikeys.entities.ApiKeyImpl;
 import com.github.trentonadams.eve.features.apikeys.services.FormPostApiKeysImpl;
 import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
+import com.github.trentonadams.eve.features.apikeys.services.PostApiKeysImpl;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -51,7 +51,7 @@ public class ApiKeysServiceView implements PageModel
     /**
      * The model for the mvc.
      */
-    private ApiKeyImpl apiKey;
+    private ApiKey apiKey;
 
     /**
      * The JSP page to access
@@ -64,11 +64,11 @@ public class ApiKeysServiceView implements PageModel
      * @param apiKey the data model
      */
     @SessionAttributeInject(attributeName = "model")
-    public ApiKeysServiceView(final ApiKeyImpl apiKey)
+    public ApiKeysServiceView(final ApiKey apiKey)
     {
         if (apiKey == null)
         {   /// If never created, create one now.
-            this.apiKey = new ApiKeyImpl();
+            this.apiKey = new ApiKey();
         }
         else
         {
@@ -109,7 +109,7 @@ public class ApiKeysServiceView implements PageModel
     @Path("post")
     public Class<? extends PostApiKeys> postService()
     {
-        return FormPostApiKeysImpl.class;
+        return PostApiKeysImpl.class;
     }
 
     @Path("sample")
@@ -123,9 +123,9 @@ public class ApiKeysServiceView implements PageModel
     }
 
     /**
-     * Returns the current {@link ApiKeyImpl model} as json.
+     * Returns the current {@link ApiKey model} as json.
      *
-     * @return the {@link ApiKeyImpl model}
+     * @return the {@link ApiKey model}
      */
     @GET
     @Path("json")

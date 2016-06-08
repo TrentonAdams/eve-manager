@@ -1,7 +1,6 @@
 package com.github.trentonadams.eve.features.apikeys.services;
 
 import com.github.trentonadams.eve.MainView;
-import com.github.trentonadams.eve.features.apikeys.entities.ApiKeyImpl;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import org.glassfish.jersey.server.mvc.Template;
 
@@ -13,7 +12,7 @@ import java.net.URISyntaxException;
 
 /**
  * Defines the service contract for posting the api keys web form, represented
- * in the JAX-RS {@link ApiKey} bean.
+ * in the JAX-RS {@link ApiKey} bean, or .
  * <p>
  * Created :  07/06/16 6:53 PM MST
  * <p>
@@ -26,7 +25,7 @@ import java.net.URISyntaxException;
 public interface PostApiKeys
 {
     /**
-     * Sets up a {@link ApiKeyImpl model} attribute in the session.
+     * Sets up a {@link ApiKey model} attribute in the session.
      *
      * @return the response is implementation specific.
      *

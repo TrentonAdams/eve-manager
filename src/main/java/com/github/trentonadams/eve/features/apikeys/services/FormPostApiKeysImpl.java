@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.features.apikeys.services;
 
-import com.github.trentonadams.eve.features.apikeys.entities.ApiKeyImpl;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
 
 import javax.ws.rs.GET;
@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 /**
  * Handles post method mechanics for {@link ApiKeysServiceView}.  This class is
  * responsible for saving the api keys, and redirecting back to the primary GET
- * request after setting up the session to include a {@link ApiKeyImpl model}
+ * request after setting up the session to include a {@link ApiKey model}
  * attribute.
  * <p>
  * Inherits from {@link PostApiKeysImpl} and provides for a redirect, as well
@@ -32,7 +32,7 @@ public class FormPostApiKeysImpl extends PostApiKeysImpl
     }
 
     /**
-     * Ensures that the "model" is a {@link ApiKeyImpl} instance
+     * Ensures that the "model" is a {@link ApiKey} instance
      *
      * @return the response is a redirect to the main api-keys/ {@link GET} path
      * handled by {@link ApiKeysServiceView#getService()}

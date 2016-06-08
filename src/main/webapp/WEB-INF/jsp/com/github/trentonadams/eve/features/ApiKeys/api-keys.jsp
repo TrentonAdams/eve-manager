@@ -11,7 +11,7 @@
     <h2 class="panel-title">API Key Management</h2>
   </div>
   <div class="panel-body">
-    <form role="form" action="<c:url value="/api-keys/post"/>" method="post"
+    <form role="form" action="<c:url value="/api-keys/post-view"/>" method="post"
           ng-app="apiKeys" ng-controller="MainCtrl as ctrl">
       <tags:bootstrap-field name="keyId"
                             errorMessage="Key ID is a required field">
@@ -51,7 +51,7 @@
       .controller('MainCtrl', [
         function ()
         {
-          this.keyId = ${model.apiKey.keyId == null? 0:model.apiKey.keyId};
+          this.keyId = ${model.apiKey.keyId == null? '':model.apiKey.keyId};
           this.verificationCode = '${model.apiKey.verificationCode}';
         }]);
   </script>
