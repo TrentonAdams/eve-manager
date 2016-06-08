@@ -51,7 +51,7 @@
       .controller('MainCtrl', [
         function ()
         {
-          this.keyId = ${model.apiKey.keyId == null? '':model.apiKey.keyId};
+          this.keyId = '${model.apiKey.keyId == null? '':model.apiKey.keyId}';
           this.verificationCode = '${model.apiKey.verificationCode}';
         }]);
   </script>

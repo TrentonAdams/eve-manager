@@ -34,6 +34,7 @@ public class PostApiKeys
     @Context protected UriInfo serviceUri;
     @Context protected HttpServletRequest request;
     @Inject protected HttpSession session;
+
     @BeanParam protected ApiKey apiKey;
 
     public PostApiKeys()
@@ -49,12 +50,10 @@ public class PostApiKeys
      * @throws URISyntaxException
      */
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public Response postForm() throws URISyntaxException
     {
         session.setAttribute("model", getModel());
-        session.setAttribute("apiKey", getModel());
-        session.setAttribute("keyId", getModel().getKeyId());
 
         return Response.ok(apiKey).build();
     }
