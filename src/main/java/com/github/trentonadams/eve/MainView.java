@@ -33,7 +33,7 @@ import java.util.List;
  * @author Trenton D. Adams
  */
 @Path("/rest")
-public class MainView extends PageModel
+public class MainView implements PageModel
 {
     public static final String message = "HAHAHA";
     public static final String INDEX_JSP = "/WEB-INF/jsp/index.jsp";
@@ -41,6 +41,7 @@ public class MainView extends PageModel
 
     @Context
     protected HttpServletRequest request;
+    private String page;
 
     public MainView()
     {
@@ -120,5 +121,17 @@ public class MainView extends PageModel
     public String getQuery()
     {
         return query;
+    }
+
+    @Override
+    public String getPage()
+    {
+        return page;
+    }
+
+    @Override
+    public void setPage(final String page)
+    {
+        this.page = page;
     }
 }

@@ -2,8 +2,8 @@ package com.github.trentonadams.eve.app.model;
 
 /**
  * This is just a way of making it so that each JAX-RS service can return the
- * same base functionality, such as what page we're accessing.  This allows
- * us to use "${model.page}".  See index.jsp for examples.
+ * same base functionality, such as what page we're accessing.  This allows us
+ * to use "${model.page}".  See index.jsp for examples.
  * <p/>
  * Created :  08/03/16 8:53 PM MST
  * <p/>
@@ -13,17 +13,9 @@ package com.github.trentonadams.eve.app.model;
  *
  * @author Trenton D. Adams
  */
-public class PageModel
+public interface PageModel
 {
-    private String page;
+    String getPage();
 
-    public String getPage()
-    {
-        return page;
-    }
-
-    public void setPage(String page)
-    {
-        this.page = page;
-    }
+    void setPage(String page);
 }

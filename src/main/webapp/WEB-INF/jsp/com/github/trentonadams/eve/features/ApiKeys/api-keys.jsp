@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <jsp:useBean id="model" scope="request"
-             type="com.github.trentonadams.eve.features.apikeys.entities.ApiKey"/>
+             type="com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView"/>
 
 <%--@elvariable id="towns" type="java.util.List<ca.tnt.athome.data.Town>"--%>
 <%--@elvariable id="pageFields" type="java.util.Map<String,Object>"--%>
@@ -51,8 +51,8 @@
       .controller('MainCtrl', [
         function ()
         {
-          this.keyId = ${model.keyId == null? 0:model.keyId};
-          this.verificationCode = '${model.verificationCode}';
+          this.keyId = ${model.apiKey.keyId == null? 0:model.apiKey.keyId};
+          this.verificationCode = '${model.apiKey.verificationCode}';
         }]);
   </script>
 </div>

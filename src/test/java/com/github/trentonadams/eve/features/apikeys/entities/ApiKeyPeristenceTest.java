@@ -11,7 +11,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 /**
- * Tests {@link ApiKey} functionality.
+ * Tests {@link ApiKeyImpl} functionality.
  * <p>
  * Created :  19/04/16 2:25 AM MST
  * <p>
@@ -21,7 +21,7 @@ import javax.persistence.Persistence;
  *
  * @author Trenton D. Adams
  */
-public class ApiKeyTest
+public class ApiKeyPeristenceTest
 {
     private EntityManagerFactory emf;
     private EntityManager em;
@@ -50,7 +50,7 @@ public class ApiKeyTest
     {
         final EntityTransaction et = em.getTransaction();
         et.begin();
-        final ApiKey a = new ApiKey();
+        final ApiKey a = new ApiKeyImpl();
         a.setKeyId("5003323");
         a.setVerificationCode(
             "fSx3hRrDrtQSPCC3dNDgHem10HQCLOLE1taD5pC4RdTCwZjYKLTo2LXH2i86L13o");
@@ -58,7 +58,7 @@ public class ApiKeyTest
         et.commit();
         System.out.println(a);
 
-        final ApiKey b = em.find(ApiKey.class, "5003323");
+        final ApiKey b = em.find(ApiKeyImpl.class, "5003323");
         Assert.assertEquals(
             "apiKey persisted should be the same as apiKey found", a, b);
     }

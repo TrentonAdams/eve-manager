@@ -1,8 +1,12 @@
-package com.github.trentonadams.eve.features.apikeys;
+package com.github.trentonadams.eve.features.apikeys.services.views;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
+import com.github.trentonadams.eve.app.model.PageModel;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
+import com.github.trentonadams.eve.features.apikeys.entities.ApiKeyImpl;
+import com.github.trentonadams.eve.features.apikeys.services.FormPostApiKeysImpl;
+import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
@@ -20,7 +24,7 @@ import javax.ws.rs.core.UriInfo;
  * displaying the main page, as well as delegating to sub-resource locator
  * instances.
  * <p>
- * The only sub-resource locator instance is {@link PostApiKeys}
+ * The only sub-resource locator instance is {@link FormPostApiKeysImpl}
  * <p/>
  * Created :  08/03/16 4:12 PM MST
  * <p/>
@@ -31,11 +35,11 @@ import javax.ws.rs.core.UriInfo;
  * @author Trenton D. Adams
  */
 @Path("/api-keys")
-public class ApiKeysView
+public class ApiKeysServiceView implements PageModel
 {
     private static final String SAMPLE_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
-    static final String API_KEYS_JSP =
+    public static final String API_KEYS_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp";
 
     @Context private UriInfo serviceUri;
@@ -47,7 +51,7 @@ public class ApiKeysView
     /**
      * The model for the mvc.
      */
-    private ApiKey apiKey;
+    private ApiKeyImpl apiKey;
 
     /**
      * The JSP page to access
@@ -60,11 +64,11 @@ public class ApiKeysView
      * @param apiKey the data model
      */
     @SessionAttributeInject(attributeName = "model")
-    public ApiKeysView(final ApiKey apiKey)
+    public ApiKeysServiceView(final ApiKeyImpl apiKey)
     {
         if (apiKey == null)
         {   /// If never created, create one now.
-            this.apiKey = new ApiKey();
+            this.apiKey = new ApiKeyImpl();
         }
         else
         {
@@ -75,21 +79,37 @@ public class ApiKeysView
     /**
      * The default handler for the ApiKeys; simply displays the main page.
      *
-     * @return this service referencing {@link ApiKeysView}
+     * @return this service referencing {@link ApiKeysServiceView}
      */
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public ApiKey getService()
+    public PageModel getService()
     {
-        apiKey.setPage(API_KEYS_JSP);
-        return apiKey;
+        page = API_KEYS_JSP;
+        return this;
     }
 
-    @Path("/post")
-    public Class<PostApiKeys> postService()
+    /**
+     * Stores api keys using a service view html form.
+     *
+     * @return the service for posting api keys.
+     */
+    @Path("post-view")
+    public Class<? extends PostApiKeys> postServiceView()
     {
-        return PostApiKeys.class;
+        return FormPostApiKeysImpl.class;
+    }
+
+    /**
+     * Stores api keys using a service which simple returns 200
+     *
+     * @return the service for posting api keys.
+     */
+    @Path("post")
+    public Class<? extends PostApiKeys> postService()
+    {
+        return FormPostApiKeysImpl.class;
     }
 
     @Path("sample")
@@ -98,19 +118,27 @@ public class ApiKeysView
     @Template(name = MainView.INDEX_JSP)
     public ApiKey getSample()
     {
-        apiKey.setPage(SAMPLE_JSP);
+        page = SAMPLE_JSP;
         return apiKey;
     }
 
     /**
-     * Returns the current {@link ApiKey model} as json.
+     * Returns the current {@link ApiKeyImpl model} as json.
      *
-     * @return the {@link ApiKey model}
+     * @return the {@link ApiKeyImpl model}
      */
     @GET
     @Path("json")
     @Produces(MediaType.APPLICATION_JSON)
     public ApiKey getJson()
+    {
+        return apiKey;
+    }
+
+    /**
+     * @return the {@link ApiKey}
+     */
+    public ApiKey getApiKey()
     {
         return apiKey;
     }
@@ -123,14 +151,10 @@ public class ApiKeysView
         return page;
     }
 
-    public String getKeyId()
+    @Override
+    public void setPage(final String page)
     {
-        return apiKey.getKeyId();
-    }
-
-    public String getVerificationCode()
-    {
-        return apiKey.getVerificationCode();
+        this.page = page;
     }
 
 }
