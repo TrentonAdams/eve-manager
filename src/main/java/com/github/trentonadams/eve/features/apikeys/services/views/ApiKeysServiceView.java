@@ -101,7 +101,8 @@ public class ApiKeysServiceView implements PageModel
     }
 
     /**
-     * Stores api keys using a service which simple returns 200
+     * Stores api keys using a service which simple returns 200, with a
+     * JSON response.
      *
      * @return the service for posting api keys.
      */

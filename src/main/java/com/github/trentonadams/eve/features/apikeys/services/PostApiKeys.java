@@ -35,31 +35,17 @@ public class PostApiKeys
     @Context protected HttpServletRequest request;
     @Inject protected HttpSession session;
 
-    @BeanParam protected ApiKey apiKey;
-
     public PostApiKeys()
     {
     }
 
-    /**
-     * Stores the {@link ApiKey ApiKey} as a model session attribute, an apiKey
-     * attribute, as well as the keyId.
-     *
-     * @return the response is JSON.
-     *
-     * @throws URISyntaxException
-     */
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response postForm() throws URISyntaxException
+    public Response postForm(@BeanParam final ApiKey apiKey)
+        throws URISyntaxException
     {
-        session.setAttribute("model", getModel());
+        request.setAttribute("model", apiKey);
 
         return Response.ok(apiKey).build();
-    }
-
-    public ApiKey getModel()
-    {
-        return apiKey;
     }
 }

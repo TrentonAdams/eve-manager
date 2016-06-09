@@ -3,6 +3,7 @@ package com.github.trentonadams.eve.features.apikeys.services;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
 
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
@@ -41,9 +42,10 @@ public class FormPostApiKeysImpl extends PostApiKeys
      */
     @Override
     @POST
-    public Response postForm() throws URISyntaxException
+    public Response postForm(@BeanParam final ApiKey apiKey)
+        throws URISyntaxException
     {
-        super.postForm();  // ignore Response, we're returning a redirect.
+        super.postForm(apiKey);  // ignore Response, we're returning a redirect.
 
         final URI targetURIForRedirection = new URI(
             serviceUri.getBaseUri().toString() + "api-keys");
