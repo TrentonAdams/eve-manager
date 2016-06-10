@@ -27,9 +27,9 @@ import java.net.URISyntaxException;
  */
 public class PostApiKeys implements IPostApiKeys
 {
-    @Context private UriInfo serviceUri;
-    @Context private HttpServletRequest request;
-    @Inject private HttpSession session;
+    @Context protected UriInfo serviceUri;
+    @Context protected HttpServletRequest request;
+    @Inject protected HttpSession session;
 
     public PostApiKeys()
     {

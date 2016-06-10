@@ -45,7 +45,7 @@ public class FormPostApiKeysImpl extends PostApiKeys
         super.postForm(apiKey);  // ignore Response, we're returning a redirect.
 
         final URI targetURIForRedirection = new URI(
-            getServiceUri().getBaseUri().toString() + "api-keys");
+            serviceUri.getBaseUri().toString() + "api-keys");
 //        pageModelApiKey.setPage(ApiKeysView.API_KEYS_JSP);
 
         return Response.seeOther(targetURIForRedirection).build();
