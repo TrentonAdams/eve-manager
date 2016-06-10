@@ -6,11 +6,7 @@ import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServic
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.BeanParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URISyntaxException;
@@ -29,19 +25,18 @@ import java.net.URISyntaxException;
  *
  * @author Trenton D. Adams
  */
-public class PostApiKeys
+public class PostApiKeys implements IPostApiKeys
 {
-    @Context protected UriInfo serviceUri;
-    @Context protected HttpServletRequest request;
-    @Inject protected HttpSession session;
+    @Context private UriInfo serviceUri;
+    @Context private HttpServletRequest request;
+    @Inject private HttpSession session;
 
     public PostApiKeys()
     {
     }
 
-    @POST
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response postForm(@BeanParam final ApiKey apiKey)
+    @Override
+    public Response postForm(final ApiKey apiKey)
         throws URISyntaxException
     {
         request.setAttribute("model", apiKey);
