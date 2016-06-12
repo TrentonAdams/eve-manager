@@ -39,7 +39,7 @@ public class PostApiKeys implements IPostApiKeys
     public Response postForm(final ApiKey apiKey)
         throws URISyntaxException
     {
-        request.setAttribute("model", apiKey);
+        session.setAttribute("model", apiKey);
 
         return Response.ok(apiKey).build();
     }
