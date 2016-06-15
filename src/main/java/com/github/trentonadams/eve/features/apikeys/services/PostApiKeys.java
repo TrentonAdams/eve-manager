@@ -6,6 +6,7 @@ import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServic
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Validator;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -36,7 +37,7 @@ public class PostApiKeys implements IPostApiKeys
     }
 
     @Override
-    public Response postForm(final ApiKey apiKey)
+    public Response postForm(final ApiKey apiKey, final Validator validator)
         throws URISyntaxException
     {
         session.setAttribute("model", apiKey);

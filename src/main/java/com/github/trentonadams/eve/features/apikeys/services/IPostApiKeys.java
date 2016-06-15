@@ -2,9 +2,11 @@ package com.github.trentonadams.eve.features.apikeys.services;
 
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 
+import javax.validation.Validator;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URISyntaxException;
@@ -24,6 +26,7 @@ public interface IPostApiKeys
 {
     @POST
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    Response postForm(@BeanParam ApiKey apiKey)
+    Response postForm(@BeanParam ApiKey apiKey,
+        @Context final Validator validator)
         throws URISyntaxException;
 }

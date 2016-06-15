@@ -3,6 +3,7 @@ package com.github.trentonadams.eve.validation;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.Validator;
 import javax.ws.rs.core.Context;
 
 /**
@@ -18,21 +19,33 @@ import javax.ws.rs.core.Context;
  */
 
 public class PassiveValidator
-    implements ConstraintValidator<PassiveValidate, String>
+    implements ConstraintValidator<PassiveValidate, Object>
 {
     @Context
     private HttpServletRequest request;
 
+    @Context
+    private Validator validator;
+
+    private PassiveValidate constraintAnnotation;
+
     @Override
     public void initialize(final PassiveValidate constraintAnnotation)
     {
+        this.constraintAnnotation = constraintAnnotation;
     }
 
     @Override
-    public boolean isValid(final String value,
+    public boolean isValid(final Object value,
         final ConstraintValidatorContext context)
     {
-        request.setAttribute("fail", value == null || "".equals(value.trim()));
+/*        constraintAnnotation.
+        if (constraintAnnotation.assertFalse().length != 0)
+        {
+            validator.validateProperty()
+        }
+        validator.validate(value);*/
+
         return true;
     }
 }

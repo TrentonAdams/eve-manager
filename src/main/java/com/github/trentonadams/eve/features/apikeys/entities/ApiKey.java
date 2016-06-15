@@ -1,7 +1,11 @@
 package com.github.trentonadams.eve.features.apikeys.entities;
 
+import com.github.trentonadams.eve.validation.PassiveValidate;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,6 +22,8 @@ public class ApiKey
     {
     }
 
+    @PassiveValidate(notNull = {@NotNull}, digits =
+        {@Digits(integer = 10, fraction = 0, message = "{validate.integer}")})
     @Id
     @FormParam("keyId")
     protected String keyId;
@@ -27,7 +33,10 @@ public class ApiKey
         return keyId;
     }
 
-    @FormParam("verificationCode") protected String verificationCode;
+    @PassiveValidate(notNull = {@NotNull})
+    @NotNull
+    @FormParam("verificationCode")
+    protected String verificationCode;
 
     public String getVerificationCode()
     {
