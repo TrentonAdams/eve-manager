@@ -24,6 +24,8 @@ public class ApiKey
 
     @PassiveValidate(notNull = {@NotNull}, digits =
         {@Digits(integer = 10, fraction = 0, message = "{validate.integer}")})
+    @Digits(integer = 10, fraction = 0, message = "{validate.integer}")
+    @NotNull(message = "{validate.integer}")
     @Id
     @FormParam("keyId")
     protected String keyId;
@@ -34,7 +36,7 @@ public class ApiKey
     }
 
     @PassiveValidate(notNull = {@NotNull})
-    @NotNull
+    @NotNull(message = "{validate.notnull}")
     @FormParam("verificationCode")
     protected String verificationCode;
 

@@ -1,8 +1,12 @@
 package com.github.trentonadams.eve.validation;
 
+
+import org.hibernate.validator.internal.constraintvalidators.NotNullValidator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.ws.rs.core.Context;
 
@@ -39,10 +43,12 @@ public class PassiveValidator
     public boolean isValid(final Object value,
         final ConstraintValidatorContext context)
     {
-/*        constraintAnnotation.
-        if (constraintAnnotation.assertFalse().length != 0)
+        Validation.buildDefaultValidatorFactory()
+            .getConstraintValidatorFactory().getInstance(
+            NotNullValidator.class);
+/*        if (constraintAnnotation.assertFalse().length != 0)
         {
-            validator.validateProperty()
+            validator.validate(value, null);
         }
         validator.validate(value);*/
 

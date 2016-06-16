@@ -37,6 +37,8 @@ public class MyResourceConfig extends ResourceConfig
         property("jersey.config.server.tracing.type", "ON_DEMAND");
         property(ServerProperties.RESOURCE_VALIDATION_IGNORE_ERRORS, true);
 /*        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);*/
+//        property(ServerProperties.RESOURCE_VALIDATION_IGNORE_ERRORS, true);
+        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         packages("com.github.trentonadams.eve",
             "com.github.trentonadams.eve.features");
         register(new AbstractBinder()
