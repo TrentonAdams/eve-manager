@@ -38,7 +38,7 @@ public class ApiKeyTest
 
         assertEquals(1, constraintViolations.size());
         assertEquals(
-            "Value must be an integer.", // from ValidationMessages.properties
+            "keyId must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }
@@ -54,7 +54,7 @@ public class ApiKeyTest
 
         assertEquals(1, constraintViolations.size());
         assertEquals(
-            "Value must be an integer.", // from ValidationMessages.properties
+            "keyId must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }
@@ -70,7 +70,7 @@ public class ApiKeyTest
 
         assertEquals(1, constraintViolations.size());
         assertEquals(
-            "Value must not be null.", // from ValidationMessages.properties
+            "verificationCode must not be null.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }

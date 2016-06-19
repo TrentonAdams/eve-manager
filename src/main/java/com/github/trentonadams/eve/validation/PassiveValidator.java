@@ -43,15 +43,15 @@ public class PassiveValidator
     public boolean isValid(final Object value,
         final ConstraintValidatorContext context)
     {
-        Validation.buildDefaultValidatorFactory()
+        return Validation.buildDefaultValidatorFactory()
             .getConstraintValidatorFactory().getInstance(
-            NotNullValidator.class);
+            NotNullValidator.class).isValid(value, context);
 /*        if (constraintAnnotation.assertFalse().length != 0)
         {
             validator.validate(value, null);
         }
         validator.validate(value);*/
 
-        return true;
+//        return true;
     }
 }

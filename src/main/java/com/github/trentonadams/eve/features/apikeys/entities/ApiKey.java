@@ -22,10 +22,10 @@ public class ApiKey
     {
     }
 
-    @PassiveValidate(notNull = {@NotNull}, digits =
+    @PassiveValidate(message = "hello", notNull = {@NotNull}, digits =
         {@Digits(integer = 10, fraction = 0, message = "{validate.integer}")})
-    @Digits(integer = 10, fraction = 0, message = "{validate.integer}")
-    @NotNull(message = "{validate.integer}")
+    @Digits(integer = 10, fraction = 0, message = "keyId {validate.integer}")
+    @NotNull(message = "keyId {validate.integer}")
     @Id
     @FormParam("keyId")
     protected String keyId;
@@ -35,8 +35,8 @@ public class ApiKey
         return keyId;
     }
 
-    @PassiveValidate(notNull = {@NotNull})
-    @NotNull(message = "{validate.notnull}")
+    @PassiveValidate(message = "hello 2", notNull = {@NotNull})
+    @NotNull(message = "verificationCode {validate.notnull}")
     @FormParam("verificationCode")
     protected String verificationCode;
 
