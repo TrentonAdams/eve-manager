@@ -2,15 +2,12 @@ package com.github.trentonadams.eve.features.apikeys.services;
 
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
+import com.github.trentonadams.eve.validation.BaseResource;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Validator;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Handles post method mechanics for {@link ApiKeysServiceView}.  This class is
@@ -26,22 +23,23 @@ import java.net.URISyntaxException;
  *
  * @author Trenton D. Adams
  */
-public class PostApiKeys implements IPostApiKeys
+public class PostApiKeys extends BaseResource implements IPostApiKeys
 {
-    @Context protected UriInfo serviceUri;
-    @Context protected HttpServletRequest request;
-    @Inject protected HttpSession session;
+    private Logger logger = Logger.getLogger(
+        PostApiKeys.class.getSimpleName());
 
     public PostApiKeys()
     {
     }
 
     @Override
-    public Response postForm(final ApiKey apiKey, final Validator validator)
+    public Response postForm(final ApiKey apiKey)
         throws URISyntaxException
     {
+        logger.log(Level.INFO, "postForm");
         session.setAttribute("model", apiKey);
 
         return Response.ok(apiKey).build();
     }
+
 }

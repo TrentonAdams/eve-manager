@@ -10,6 +10,11 @@
   <div class="panel-heading">
     <h2 class="panel-title">API Key Management</h2>
   </div>
+  <ul>
+<%--  <c:forEach items="${model.apiKey.constraintViolations}" var="constraint">
+    <li>${constraint.message}</li>
+  </c:forEach>--%>
+  </ul>
   <div class="panel-body">
     <form role="form" action="<c:url value="/api-keys/post-view"/>" method="post"
           ng-app="apiKeys" ng-controller="MainCtrl as ctrl">

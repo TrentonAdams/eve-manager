@@ -1,7 +1,5 @@
 package com.github.trentonadams.eve.features.apikeys.entities;
 
-import com.github.trentonadams.eve.validation.PassiveValidate;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
@@ -14,16 +12,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * verificationCode.  This includes the JAX-RS annotated form parameters for
  * keyId and verificationCode.
  */
-@XmlRootElement
+@XmlRootElement(name="api-key")
 @Entity
-public class ApiKey
+public class ApiKey extends BaseData<ApiKey>
 {
+
     public ApiKey()
     {
     }
 
-    @PassiveValidate(message = "hello", notNull = {@NotNull}, digits =
-        {@Digits(integer = 10, fraction = 0, message = "{validate.integer}")})
     @Digits(integer = 10, fraction = 0, message = "keyId {validate.integer}")
     @NotNull(message = "keyId {validate.integer}")
     @Id
@@ -35,7 +32,6 @@ public class ApiKey
         return keyId;
     }
 
-    @PassiveValidate(message = "hello 2", notNull = {@NotNull})
     @NotNull(message = "verificationCode {validate.notnull}")
     @FormParam("verificationCode")
     protected String verificationCode;

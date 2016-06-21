@@ -2,7 +2,6 @@ package com.github.trentonadams.eve;
 
 import com.github.trentonadams.eve.app.HttpSessionFactory;
 import com.github.trentonadams.eve.app.model.PageModel;
-import com.github.trentonadams.eve.validation.PassiveValidate;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.server.mvc.Template;
@@ -48,7 +47,6 @@ public class MainView implements PageModel
         name = "my service " + System.currentTimeMillis();
     }
 
-    @PassiveValidate(message = "an error occurred")
     //@NotNull(message = "ouch, an error occurred")
     @QueryParam("query")
     private String query;
