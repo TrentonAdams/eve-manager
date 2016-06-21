@@ -38,6 +38,7 @@ public class PostApiKeys extends BaseResource implements IPostApiKeys
     {
         logger.log(Level.INFO, "postForm");
         session.setAttribute("model", apiKey);
+        validate(apiKey);
 
         return Response.ok(apiKey).build();
     }
