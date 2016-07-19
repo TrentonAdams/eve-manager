@@ -2,9 +2,14 @@ package com.github.trentonadams.eve.features.apikeys.services;
 
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
-import com.github.trentonadams.eve.validation.BaseResource;
 
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Validator;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +28,13 @@ import java.util.logging.Logger;
  *
  * @author Trenton D. Adams
  */
-public class PostApiKeys extends BaseResource implements IPostApiKeys
+public class PostApiKeys implements IPostApiKeys
 {
+    @Context protected Validator validator;
+    @Context protected UriInfo serviceUri;
+    @Context protected HttpServletRequest request;
+    @Inject protected HttpSession session;
+
     private Logger logger = Logger.getLogger(
         PostApiKeys.class.getSimpleName());
 
@@ -33,12 +43,11 @@ public class PostApiKeys extends BaseResource implements IPostApiKeys
     }
 
     @Override
-    public Response postForm(final ApiKey apiKey)
-        throws URISyntaxException
+    public Response postForm(final ApiKey apiKey) throws URISyntaxException
     {
         logger.log(Level.INFO, "postForm");
         session.setAttribute("model", apiKey);
-        validate(apiKey);
+        apiKey.setConstraintViolations(validator.validate(apiKey));
 
         return Response.ok(apiKey).build();
     }

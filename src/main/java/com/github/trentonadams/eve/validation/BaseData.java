@@ -10,8 +10,7 @@ import java.util.TreeSet;
  * This class is to be extended from, as it contains common data class
  * functionality not normally needed as part of a pure data class.
  * <p>
- * Currently, the only thing provided is the {@link #constraintViolations},
- * which are set by the {@link BaseResource#validate(BaseData)}
+ * Currently, the only thing provided is the {@link #constraintViolations}.
  * <p>
  * Created :  20/06/16 4:44 PM MST
  * <p>

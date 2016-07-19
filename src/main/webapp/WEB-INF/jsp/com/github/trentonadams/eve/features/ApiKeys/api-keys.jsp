@@ -13,6 +13,7 @@
   <ul>
   <c:forEach items="${model.apiKey.constraintViolations}" var="constraint">
     <li>${constraint.message}</li>
+    <li>${constraint.propertyPath}</li>
   </c:forEach>
   </ul>
   <div class="panel-body">
