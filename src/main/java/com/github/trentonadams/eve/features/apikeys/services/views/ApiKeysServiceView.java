@@ -76,7 +76,8 @@ public class ApiKeysServiceView implements PageModel
     }
 
     /**
-     * The default handler for the ApiKeys; simply displays the main page.
+     * The default handler for the ApiKeys; simply displays the main page.  This
+     * is for a request to /api-keys/, no /post appended.
      *
      * @return this service referencing {@link ApiKeysServiceView}
      */

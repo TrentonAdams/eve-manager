@@ -1,7 +1,5 @@
 package com.github.trentonadams.eve.validation;
 
-import com.github.trentonadams.eve.features.apikeys.entities.BaseData;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,7 +8,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Created by IntelliJ IDEA.
+ * All resources wanting to take advantage of the protected variables here, or
+ * wanting to support validation, should inherit from this class.
  * <p>
  * Created :  19/06/16 10:55 PM MST
  * <p>

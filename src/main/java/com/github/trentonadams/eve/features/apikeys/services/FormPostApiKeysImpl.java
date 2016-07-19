@@ -45,8 +45,6 @@ public class FormPostApiKeysImpl extends PostApiKeys
 
         final URI targetURIForRedirection = new URI(
             serviceUri.getBaseUri().toString() + "api-keys");
-//        pageModelApiKey.setPage(ApiKeysView.API_KEYS_JSP);
-
 
         return Response.seeOther(targetURIForRedirection).build();
     }

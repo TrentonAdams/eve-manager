@@ -1,5 +1,7 @@
 package com.github.trentonadams.eve.features.apikeys.entities;
 
+import com.github.trentonadams.eve.validation.BaseData;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
