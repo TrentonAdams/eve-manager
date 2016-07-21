@@ -1,0 +1,21 @@
+{
+  "allowedFiles": [
+    "/",
+    "/wrapper-test.html",
+    "/test.html",
+    "/api-keys.html",
+    "/bootstrap/css/bootstrap.css",
+    "/bootstrap/css/custom.css",
+    "/bootstrap/css/required-fields.css",
+    "/bootstrap/css/offcanvas.css",
+    "/bootstrap/css/theme.css",
+    "/bootstrap/js/bootstrap.js",
+    "/bootstrap/js/offcanvas.js",
+    "/jquery/jquery.min.js",
+    "/jquery/jquery-ui.min.js",
+    "/jquery/jquery.min.css",
+    "/jquery/jquery-ui.min.css",
+    "/js/bootstrap.js",
+    "/js/offcanvas.js"
+  ]
+}

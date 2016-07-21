@@ -1,0 +1,62 @@
+<div class="panel panel-info" ng-controller="MainCtrl as ctrl">
+    <div class="panel-heading">
+        <h2 class="panel-title">API Key Management</h2>
+    </div>
+    <ul>
+
+    </ul>
+    <div class="panel-body">
+        <form role="form" action="/eve-manufacturing-manager/api-keys/post-view"
+              method="post">
+
+            <div class="required-field-block ">
+
+                <input type="text" ng-model="ctrl.keyId" name="keyId" id="keyId"
+                       placeholder="keyId" class="form-control"/>
+
+                <div class="required-icon">
+                    <div class="text">*</div>
+                </div>
+
+                <div class="required-icon">
+                    <div class="text">*</div>
+                </div>
+            </div>
+
+            <div class="required-field-block ">
+
+                <input type="text" ng-model="ctrl.verificationCode"
+                       name="verificationCode" id="verificationCode"
+                       placeholder="verificationCode" class="form-control"/>
+
+                <div class="required-icon">
+                    <div class="text">*</div>
+                </div>
+
+                <div class="required-icon">
+                    <div class="text">*</div>
+                </div>
+            </div>
+
+            <div>
+                keyId = {{ctrl.keyId}}
+            </div>
+            <div>
+                verificationCode = {{ctrl.verificationCode}}
+            </div>
+
+            <input type="submit" name="submit" value="Submit"
+                   class="btn btn-primary"/>
+        </form>
+    </div>
+    <script type="text/javascript">
+        apiKeysModule.controller('MainCtrl',
+                function ()
+                {
+                    this.keyId = keyId;
+                    this.verificationCode = verificationCode;
+                });
+    </script>
+
+</div>
+

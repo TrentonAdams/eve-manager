@@ -23,7 +23,7 @@ public class ApiKey extends BaseData<ApiKey>
     {
     }
 
-    @Digits(integer = 10, fraction = 0, message = "keyId {validate.integer}")
+    @Digits(integer = 10, fraction = 0, message = "Key ID {validate.integer}")
     @NotNull(message = "keyId {validate.integer}")
     @Id
     @FormParam("keyId")
@@ -31,10 +31,11 @@ public class ApiKey extends BaseData<ApiKey>
 
     public String getKeyId()
     {
+
         return keyId;
     }
 
-    @NotNull(message = "verificationCode {validate.notnull}")
+    @NotNull(message = "Verification code {validate.notnull}")
     @FormParam("verificationCode")
     protected String verificationCode;
 
