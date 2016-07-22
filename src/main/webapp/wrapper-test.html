@@ -80,16 +80,14 @@
       </button>
     </p>
 
-    <div class="col-xs-12 col-sm-9" id="main-content" ng-app="apiKeys">
+    <div class="col-xs-12 col-sm-9" id="main-content">
       <script type="text/javascript">
         var keyId = 0;
         var verificationCode = 'kjlkajsdasdf';
       </script>
 
-      <script type="text/javascript">
-        var apiKeysModule = angular.module('apiKeys', []);
-      </script>
-      <div ng-include="'api-keys.html'">
+      <script type="text/javascript" src="add-api-keys.js"></script>
+      <div ng-app="apiKeys" add-api-keys>
       </div>
     </div>
 

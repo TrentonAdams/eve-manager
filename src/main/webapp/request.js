@@ -8,7 +8,7 @@ var sys = require("util"),
 http.createServer(function (request, response)
 {
     var allowedFilesConfig = config.get("allowedFiles");
-    console.log("allowedFiles: ", allowedFilesConfig);
+    //console.log("allowedFiles: ", allowedFilesConfig);
     var uri = url.parse(request.url).pathname;
     var filename = path.join(process.cwd(), uri);
     if ("/" == uri)
@@ -17,7 +17,7 @@ http.createServer(function (request, response)
     {
         //console.log("%s, %d", uri, allowedFilesConfig.indexOf(uri));
         console.log("filename: ", filename);
-        if (!exists || allowedFilesConfig.indexOf(uri) < 0)
+        if (!exists) // || allowedFilesConfig.indexOf(uri) < 0)
         {   // file does not exist or is not in the allowed list.
             response.writeHead(404, {"Content-Type": "text/plain"});
             response.end("404 Not Found");
