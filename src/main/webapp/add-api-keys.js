@@ -1,5 +1,4 @@
 var gvApp = angular.module('apiKeys', []);
-var gvKeysUrl;
 
 gvApp.directive('addApiKeys', [
     '$log', 'ApiKeyService', function ($log, apiKeyService)
@@ -33,7 +32,7 @@ gvApp.directive('addApiKeys', [
                     });
                 };
 
-                apiKeyService.getKeys().success(function (data)
+                apiKeyService.get().success(function (data)
                 {
                     ctrl.apiKeys = data;
                 });
@@ -42,22 +41,31 @@ gvApp.directive('addApiKeys', [
         };
     }]);
 
+/**
+ * The purpose of this service is to provide an API for managing API keys.
+ * @param $log the log service from angular
+ * @param $http the http service from angular
+ * @constructor
+ */
 function ApiKeyService($log, $http)
 {
-    var getKeysUrl = (gvKeysUrl == undefined ? 'apiKeys.json' :
-        gvKeysUrl);
+    var keysUrl;
     var service = this;
-    this.getKeys = function ()
+    this.get = function ()
     {
         return $http.get('apiKeys.json');
     };
     this.remove = function (keyId)
-    {
+    {   // fake a delete with a get of json
         return $http.get('deleteApiKey.json');
     };
     this.add = function (keyId, verificationCode)
-    {
+    {   // fake an add with a get of json
         return $http.get('addApiKey.json');
-    }
+    };
+    this.setKeysUrl = function(url)
+    {
+        keysUrl = url;
+    };
 }
 gvApp.service('ApiKeyService', ['$log', '$http', ApiKeyService]);
