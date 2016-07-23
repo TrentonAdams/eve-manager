@@ -3,6 +3,7 @@ package com.github.trentonadams.eve.features.apikeys.services;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
@@ -29,5 +30,5 @@ public interface IPostApiKeys
         MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA,
         MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    Response postForm(ApiKey apiKey) throws URISyntaxException;
+    Response postForm(@Valid ApiKey apiKey) throws URISyntaxException;
 }

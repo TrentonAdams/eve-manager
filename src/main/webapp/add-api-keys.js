@@ -26,6 +26,11 @@ gvApp.directive('addApiKeys', [
                             "keyId": ctrl.keyId,
                             "verificationCode": ctrl.verificationCode
                         };
+                        ctrl.errors = undefined;
+                    }).error(function (msg)
+                    {
+                        $log.log(msg);
+                        ctrl.errors = msg;
                     });
                 };
 
@@ -33,6 +38,11 @@ gvApp.directive('addApiKeys', [
                 {
                     ctrl.apiKeys = data;
                 });
+
+                this.clearError = function()
+                {
+                    ctrl.errors = undefined;
+                }
             },
             controllerAs: 'apiKeyCtrl'
         };

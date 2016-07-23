@@ -7,6 +7,7 @@ import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
 import org.glassfish.jersey.servlet.ServletProperties;
 
@@ -35,7 +36,7 @@ public class MyResourceConfig extends ResourceConfig
         property(ServletProperties.FILTER_FORWARD_ON_404, true);
         property("jersey.config.server.tracing.type", "ON_DEMAND");
         /*property(ServerProperties.RESOURCE_VALIDATION_IGNORE_ERRORS, true);*/
-        //property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
+        property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true);
         packages("com.github.trentonadams.eve");
         register(new AbstractBinder()
         {

@@ -7,20 +7,31 @@
     </ul>
     <div class="panel-body">
         <div ng-repeat="apiKey in apiKeyCtrl.apiKeys">
-            <span class="glyphicon glyphicon-remove"
+            <span class="glyphicon glyphicon-remove-circle clickable"
                   ng-click="apiKeyCtrl.remove(apiKey.keyId)"></span>
             <span><strong>Key Id:</strong> {{apiKey.keyId}}</span>
             <span><strong>Verification Code:</strong> {{apiKey.verificationCode}}</span>
         </div>
     </div>
     <div class="panel-body">
+        <div ng-show="apiKeyCtrl.errors !== undefined"
+             class="alert alert-danger">
+            <span class="glyphicon glyphicon-remove close"
+                  ng-click="apiKeyCtrl.clearError()"></span>
+            <ul>
+                <li ng-repeat="error in apiKeyCtrl.errors">
+                    {{error.message}}
+                </li>
+            </ul>
+        </div>
         <form role="form" name="keyForm"
               ng-submit="apiKeyCtrl.add(keyForm.keyId, keyForm.verificationCode)"
               method="post">
 
             <div class="required-field-block ">
 
-                <input type="text" ng-model="apiKeyCtrl.keyId" name="keyId" id="keyId"
+                <input type="text" ng-model="apiKeyCtrl.keyId" name="keyId"
+                       id="keyId"
                        placeholder="keyId" class="form-control"/>
 
                 <div class="required-icon">
@@ -54,7 +65,8 @@
                 verificationCode = {{apiKeyCtrl.verificationCode}}
             </div>
 
-            <input type="submit" id="submit" value="Submit" class="btn btn-primary"/>
+            <input type="submit" id="submit" value="Submit"
+                   class="btn btn-primary"/>
         </form>
     </div>
 

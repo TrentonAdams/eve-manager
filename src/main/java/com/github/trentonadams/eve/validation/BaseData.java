@@ -1,8 +1,5 @@
 package com.github.trentonadams.eve.validation;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-
 import javax.validation.ConstraintViolation;
 import java.util.Set;
 import java.util.TreeSet;

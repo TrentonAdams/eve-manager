@@ -65,3 +65,7 @@ tr.row-separator {
 .alert .required-icon {
     background-color: transparent;
 }
+
+.clickable:hover {
+    cursor: pointer;
+}
