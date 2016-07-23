@@ -13,8 +13,12 @@ gvApp.directive('addApiKeys', [
                 {
                     apiKeyService.remove(keyId).success(function (data)
                     {
-                        $log.log('remove keyId: ' + keyId + ', ' + data);
+                        $log.log('remove keyId: ' + keyId + ', %o', data);
                         delete ctrl.apiKeys[keyId];
+                    }).error(function (msg)
+                    {
+                        $log.log(msg);
+                        ctrl.errors = msg;
                     });
                 };
                 this.add = function ()
@@ -39,7 +43,7 @@ gvApp.directive('addApiKeys', [
                     ctrl.apiKeys = data;
                 });
 
-                this.clearError = function()
+                this.clearError = function ()
                 {
                     ctrl.errors = undefined;
                 }

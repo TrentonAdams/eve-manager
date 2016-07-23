@@ -11,12 +11,11 @@ import org.glassfish.jersey.server.mvc.Template;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -117,6 +116,24 @@ public class ApiKeysServiceView implements PageModel
 
         return mapOfApiKeys;
 
+    }
+
+    @DELETE
+    @Path("delete/{keyId}")
+    public ApiKey deleteApiKey(@PathParam("keyId") final String keyId)
+    {
+        final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("apikey");
+        final EntityManager em = emf.createEntityManager();
+        final EntityTransaction transaction =
+            em.getTransaction();
+        transaction.begin();
+        final ApiKey keyToRemove = em.find(ApiKey.class, keyId);
+        em.remove(keyToRemove);
+        transaction.commit();
+        em.close();
+        emf.close();
+        return keyToRemove;
     }
 
     /**

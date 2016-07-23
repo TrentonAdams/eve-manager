@@ -32,7 +32,7 @@
     };
     this.remove = function (keyId)
     {   // fake a delete with a get of json
-      return $http.get('<c:url value="/deleteApiKey.json"/>');
+      return $http.delete('<c:url value="/api-keys/delete/"/>' + keyId);
     };
     this.add = function (keyId, verificationCode)
     {   // fake an add with a get of json
