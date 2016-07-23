@@ -10,6 +10,8 @@
 
 <script type="text/javascript" src="<c:url value="/config.js"/>"></script>
 <script type="text/javascript">
+  // CRITICAL replace the ConfigService urls with base urls instead, so that we
+  // can eventually do only one single JSP with context specific paths.
   function ConfigService ()
   {
       this.addApiKeysUrl = '${addApiKeysUrl}';
