@@ -6,20 +6,21 @@
 
     </ul>
     <div class="panel-body">
-        <div ng-repeat="apiKey in ctrl.apiKeys">
+        <div ng-repeat="apiKey in apiKeyCtrl.apiKeys">
             <span class="glyphicon glyphicon-remove"
-                  ng-click="ctrl.remove(apiKey.keyId)"></span>
+                  ng-click="apiKeyCtrl.remove(apiKey.keyId)"></span>
             <span><strong>Key Id:</strong> {{apiKey.keyId}}</span>
             <span><strong>Verification Code:</strong> {{apiKey.verificationCode}}</span>
         </div>
     </div>
     <div class="panel-body">
-        <form role="form" action="/eve-manufacturing-manager/api-keys/post-view"
+        <form role="form" name="keyForm"
+              ng-submit="apiKeyCtrl.add(keyForm.keyId, keyForm.verificationCode)"
               method="post">
 
             <div class="required-field-block ">
 
-                <input type="text" ng-model="ctrl.keyId" name="keyId" id="keyId"
+                <input type="text" ng-model="apiKeyCtrl.keyId" name="keyId" id="keyId"
                        placeholder="keyId" class="form-control"/>
 
                 <div class="required-icon">
@@ -33,7 +34,7 @@
 
             <div class="required-field-block ">
 
-                <input type="text" ng-model="ctrl.verificationCode"
+                <input type="text" ng-model="apiKeyCtrl.verificationCode"
                        name="verificationCode" id="verificationCode"
                        placeholder="verificationCode" class="form-control"/>
 
@@ -47,14 +48,13 @@
             </div>
 
             <div>
-                keyId = {{ctrl.keyId}}
+                keyId = {{apiKeyCtrl.keyId}}
             </div>
             <div>
-                verificationCode = {{ctrl.verificationCode}}
+                verificationCode = {{apiKeyCtrl.verificationCode}}
             </div>
 
-            <input type="submit" name="submit" value="Submit"
-                   class="btn btn-primary"/>
+            <input type="submit" id="submit" value="Submit" class="btn btn-primary"/>
         </form>
     </div>
 

@@ -1,31 +1,63 @@
-var app = angular.module('apiKeys', []);
-app.directive('addApiKeys', function ()
-{
-    return {
-        restrict: 'A',
-        templateUrl: 'add-api-keys.html',
-        controller: function ()
-        {
-            this.keyId = keyId;
-            this.verificationCode = verificationCode;
-            this.apiKeys = {
-                'heiloowo': {keyId: 'heiloowo', verificationCode: 'eothaice'},
-                'keecough': {keyId: 'keecough', verificationCode: 'dahgooli'},
-                'xaejaiko': {keyId: 'xaejaiko', verificationCode: 'tharohch'},
-                'iephaepi': {keyId: 'iephaepi', verificationCode: 'uoquuloo'},
-                'aoteezoh': {keyId: 'aoteezoh', verificationCode: 'gahchaej'},
-                'coquiuzu': {keyId: 'coquiuzu', verificationCode: 'cheiyaim'},
-                'paequich': {keyId: 'paequich', verificationCode: 'uutuchie'},
-                'techaiph': {keyId: 'techaiph', verificationCode: 'inaequah'},
-                'oojaedee': {keyId: 'oojaedee', verificationCode: 'quootaix'},
-                'iayiefax': {keyId: 'iayiefax', verificationCode: 'chaidiel'}
-            };
-            this.remove = function (keyId)
+var gvApp = angular.module('apiKeys', []);
+var gvKeysUrl;
+
+gvApp.directive('addApiKeys', [
+    '$log', 'ApiKeyService', function ($log, apiKeyService)
+    {
+        return {
+            restrict: 'A',
+            templateUrl: 'add-api-keys.html',
+            controller: function ()
             {
-                // CRITICAL call to server to delete key, then remove
-                delete this.apiKeys[keyId];
-            }
-        },
-        controllerAs: 'ctrl'
+                this.keyId = keyId;
+                this.verificationCode = verificationCode;
+                this.apiKeys = apiKeyService.apiKeys;
+                var ctrl = this;
+                this.remove = function (keyId)
+                {
+                    apiKeyService.remove(keyId).success(function (data)
+                    {
+                        $log.log('remove keyId: ' + keyId + ', ' + data);
+                        delete ctrl.apiKeys[keyId];
+                    });
+                };
+                this.add = function ()
+                {
+                    apiKeyService.add(ctrl.keyId,
+                        ctrl.verificationCode).success(function (data)
+                    {
+                        ctrl.apiKeys[ctrl.keyId] = {
+                            "keyId": ctrl.keyId,
+                            "verificationCode": ctrl.verificationCode
+                        };
+                    });
+                };
+
+                apiKeyService.getKeys().success(function (data)
+                {
+                    ctrl.apiKeys = data;
+                });
+            },
+            controllerAs: 'apiKeyCtrl'
+        };
+    }]);
+
+function ApiKeyService($log, $http)
+{
+    var getKeysUrl = (gvKeysUrl == undefined ? 'apiKeys.json' :
+        gvKeysUrl);
+    var service = this;
+    this.getKeys = function ()
+    {
+        return $http.get('apiKeys.json');
     };
-});
+    this.remove = function (keyId)
+    {
+        return $http.get('deleteApiKey.json');
+    };
+    this.add = function (keyId, verificationCode)
+    {
+        return $http.get('addApiKey.json');
+    }
+}
+gvApp.service('ApiKeyService', ['$log', '$http', ApiKeyService]);
