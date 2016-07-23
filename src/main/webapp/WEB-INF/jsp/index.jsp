@@ -27,7 +27,6 @@
   <link href="<c:url value="/bootstrap/css/required-fields.css"/>" rel="stylesheet">
   <link href="<c:url value="/bootstrap/css/offcanvas.css"/>" rel="stylesheet">
   <link rel="stylesheet" href="<c:url value="/jquery/jquery-ui.min.css"/>">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 
   <!-- Custom styles for this template -->
   <!--<link href="navbar-fixed-top.css" rel="stylesheet">-->

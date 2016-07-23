@@ -1,16 +1,14 @@
-var gvApp = angular.module('apiKeys', []);
 
 gvApp.directive('addApiKeys', [
-    '$log', 'ApiKeyService', function ($log, apiKeyService)
+    '$log', 'ApiKeyService', 'ConfigService',
+    function ($log, apiKeyService, configService)
     {
         return {
             restrict: 'A',
-            templateUrl: 'add-api-keys.html',
+            templateUrl: configService.addApiKeysUrl,
             controller: function ()
             {
-                this.keyId = keyId;
-                this.verificationCode = verificationCode;
-                this.apiKeys = apiKeyService.apiKeys;
+                this.apiKeys = {};
                 var ctrl = this;
                 this.remove = function (keyId)
                 {
@@ -47,7 +45,7 @@ gvApp.directive('addApiKeys', [
  * @param $http the http service from angular
  * @constructor
  */
-function ApiKeyService($log, $http)
+function TestApiKeyService($log, $http)
 {
     var keysUrl;
     var service = this;
@@ -63,9 +61,11 @@ function ApiKeyService($log, $http)
     {   // fake an add with a get of json
         return $http.get('addApiKey.json');
     };
-    this.setKeysUrl = function(url)
+    this.setKeysUrl = function (url)
     {
         keysUrl = url;
     };
 }
-gvApp.service('ApiKeyService', ['$log', '$http', ApiKeyService]);
+
+gvApp.service('ApiKeyService', ['$log', '$http', TestApiKeyService]);
+
