@@ -28,7 +28,7 @@
     var service = this;
     this.get = function ()
     {
-      return $http.get('<c:url value="/apiKeys.json"/>');
+      return $http.get('<c:url value="/api-keys/get"/>');
     };
     this.remove = function (keyId)
     {   // fake a delete with a get of json

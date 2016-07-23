@@ -1,7 +1,5 @@
 package com.github.trentonadams.eve.features.apikeys.entities;
 
-import com.github.trentonadams.eve.validation.BaseData;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
@@ -15,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="api-key")
 @Entity
-public class ApiKey extends BaseData<ApiKey>
+public class ApiKey
 {
 
     public ApiKey()

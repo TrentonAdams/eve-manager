@@ -9,6 +9,9 @@ import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
@@ -17,6 +20,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Primary JAX-RS resource for handling eve api key management tasks.  Used for
@@ -90,6 +96,29 @@ public class ApiKeysServiceView implements PageModel
         return this;
     }
 
+    @GET
+    @Path("get")
+    public Map<String, ApiKey> getApiKeys()
+    {
+        final List<ApiKey> apiKeyList;
+        final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("apikey");
+        final EntityManager em = emf.createEntityManager();
+        apiKeyList = em.createQuery("SELECT apiKey FROM ApiKey apiKey",
+            ApiKey.class).getResultList();
+
+        /* lambda = apiKeyList.stream().collect(
+                        Collectors.toMap(ApiKey::getKeyId, apiKey1 -> apiKey1));*/
+        final Map<String, ApiKey> mapOfApiKeys = new HashMap<>();
+        for (final ApiKey apiKey : apiKeyList)
+        {
+            mapOfApiKeys.put(apiKey.getKeyId(), apiKey);
+        }
+
+        return mapOfApiKeys;
+
+    }
+
     /**
      * Stores api keys using a service view html form.
      *
@@ -102,8 +131,8 @@ public class ApiKeysServiceView implements PageModel
     }
 
     /**
-     * Stores api keys using a service which simple returns 200, with a
-     * JSON response.
+     * Stores api keys using a service which simple returns 200, with a JSON
+     * response.
      *
      * @return the service for posting api keys.
      */

@@ -4,6 +4,7 @@ import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.views.ApiKeysServiceView;
 
 import javax.inject.Inject;
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Validator;
@@ -11,7 +12,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,10 +45,15 @@ public class PostApiKeys implements IPostApiKeys
     @Override
     public Response postForm(final ApiKey apiKey) throws URISyntaxException
     {
-        logger.log(Level.INFO, "postForm");
-        session.setAttribute("model", apiKey);
-        apiKey.setConstraintViolations(validator.validate(apiKey));
-
+        final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("apikey");
+        final EntityManager em = emf.createEntityManager();
+        final EntityTransaction et = em.getTransaction();
+        et.begin();
+        em.persist(apiKey);
+        et.commit();
+        em.close();;
+        emf.close();
         return Response.ok(apiKey).build();
     }
 
