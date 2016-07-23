@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.FormParam;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,7 +25,6 @@ public class ApiKey extends BaseData<ApiKey>
     @Digits(integer = 10, fraction = 0, message = "Key ID {validate.integer}")
     @NotNull(message = "keyId {validate.integer}")
     @Id
-    @FormParam("keyId")
     protected String keyId;
 
     public String getKeyId()
@@ -36,7 +34,6 @@ public class ApiKey extends BaseData<ApiKey>
     }
 
     @NotNull(message = "Verification code {validate.notnull}")
-    @FormParam("verificationCode")
     protected String verificationCode;
 
     public String getVerificationCode()

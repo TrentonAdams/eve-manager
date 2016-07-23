@@ -12,9 +12,9 @@
 <script type="text/javascript">
   // CRITICAL replace the ConfigService urls with base urls instead, so that we
   // can eventually do only one single JSP with context specific paths.
-  function ConfigService ()
+  function ConfigService()
   {
-      this.addApiKeysUrl = '${addApiKeysUrl}';
+    this.addApiKeysUrl = '${addApiKeysUrl}';
   }
   gvApp.service('ConfigService', [ConfigService]);
 
@@ -36,7 +36,8 @@
     };
     this.add = function (keyId, verificationCode)
     {   // fake an add with a get of json
-      return $http.get('<c:url value="/addApiKey.json"/>');
+      return $http.post('<c:url value="/api-keys/post"/>',
+        {"keyId": keyId, "verificationCode": verificationCode});
     };
   }
 

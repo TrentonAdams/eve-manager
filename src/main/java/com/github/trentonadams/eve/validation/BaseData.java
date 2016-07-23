@@ -1,8 +1,9 @@
 package com.github.trentonadams.eve.validation;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+
 import javax.validation.ConstraintViolation;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,10 +21,10 @@ import java.util.TreeSet;
  *
  * @author Trenton D. Adams
  */
-@XmlRootElement(name = "base-entity")
 public class BaseData<T>
 {
-    @XmlElement(name = "constraint-violations")
+    // CRITICAL Create a constraint violation wrapper, as it does not
+    // serialize to JAXB/JSON well.
     private Set<ConstraintViolation<T>> constraintViolations;
 
     public BaseData()

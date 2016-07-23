@@ -1,4 +1,3 @@
-
 gvApp.directive('addApiKeys', [
     '$log', 'ApiKeyService', 'ConfigService',
     function ($log, apiKeyService, configService)
@@ -68,4 +67,3 @@ function TestApiKeyService($log, $http)
 }
 
 gvApp.service('ApiKeyService', ['$log', '$http', TestApiKeyService]);
-
