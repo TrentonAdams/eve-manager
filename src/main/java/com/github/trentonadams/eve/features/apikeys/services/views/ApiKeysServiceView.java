@@ -128,12 +128,12 @@ public class ApiKeysServiceView implements PageModel
         final EntityTransaction transaction =
             em.getTransaction();
         transaction.begin();
-        final ApiKey keyToRemove = em.find(ApiKey.class, keyId);
-        em.remove(keyToRemove);
+        final ApiKey removedKey = em.find(ApiKey.class, keyId);
+        em.remove(removedKey);
         transaction.commit();
         em.close();
         emf.close();
-        return keyToRemove;
+        return removedKey;
     }
 
     /**
