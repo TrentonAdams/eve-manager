@@ -51,7 +51,15 @@ public class PostApiKeys implements IPostApiKeys
         final EntityTransaction et = em.getTransaction();
         et.begin();
         em.persist(apiKey);
-        et.commit();
+        try
+        {   // CRITICAL, replace with proper error handling, or checking
+            // if the item already exists.
+            et.commit();
+        }
+        catch (RollbackException e)
+        {
+            logger.fine(e.toString());
+        }
         em.close();;
         emf.close();
         return Response.ok(apiKey).build();

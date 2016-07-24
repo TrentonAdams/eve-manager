@@ -4,7 +4,7 @@ gvApp.directive('addApiKeys', [
     {
         return {
             restrict: 'A',
-            templateUrl: configService.baseUrl + 'add-api-keys.html',
+            templateUrl: configService.angularBase + 'add-api-keys.html',
             controller: function ()
             {
                 this.apiKeys = {};

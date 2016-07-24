@@ -5,14 +5,13 @@ var app = express();
 
 var apiKeys = require("./apiKeys.json");
 
-app.use(express.static('bootstrap'));
-app.use(express.static('.'));
+app.use(express.static('./'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res)
 {
-    res.redirect('/wrapper-test.html');
+    res.redirect('/angular/wrapper-test.html');
 });
 app.get('/api-keys/get', function (req, res)
 {
