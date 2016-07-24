@@ -36,5 +36,5 @@ app.post('/api-keys/post', function (req, res)
 });
 app.listen(8081, function ()
 {
-    console.log('Eve Manager mock app listing on 8081!');
+    console.log('Eve Manager mock app listing on http://localhost:8081/ ');
 });
