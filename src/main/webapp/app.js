@@ -13,9 +13,16 @@ app.get('/', function (req, res)
 {
     res.redirect('/angular/wrapper-test.html');
 });
+
 app.get('/api-keys/get', function (req, res)
 {
+    console.log('get all');
     res.send(apiKeys);
+});
+app.get('/api-keys/get/:keyId', function (req, res)
+{
+    console.log('get ' + req.params.keyId);
+   res.send(apiKeys[req.params.keyId]); 
 });
 app.delete('/api-keys/delete/:keyId', function (req, res)
 {
@@ -34,7 +41,11 @@ app.post('/api-keys/post', function (req, res)
     fs.writeFile( "apiKeys.json", JSON.stringify( apiKeys ), "utf8");
     res.send(key);
 });
-app.listen(8081, function ()
+
+var server = app.listen(process.env.PORT, 'localhost', function ()
 {
-    console.log('Eve Manager mock app listing on http://localhost:8081/ ');
+    console.log('Eve Manager mock app listing on http://' +process.env.IP +
+    ':' + process.env.PORT);
 });
+
+module.exports = server;
