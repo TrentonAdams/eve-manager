@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "angular": "^1.5.7",
     "body-parser": "^1.15.2",
     "config": "^1.21.0",
     "express": "^4.14.0",
@@ -13,7 +14,25 @@
     "sys": "0.0.1",
     "url": "^0.11.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "angular-mocks": "^1.5.7",
+    "browserify": "^13.1.0",
+    "commonjs": "0.0.1",
+    "jasmine-core": "^2.4.1",
+    "jasmine-node": "^1.14.5",
+    "karma": "^1.1.2",
+    "karma-browserify": "^5.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-commonjs": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-mocha": "^1.1.1",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-requirejs": "^1.0.0",
+    "requirejs": "^2.2.0",
+    "supertest": "^2.0.0",
+    "watchify": "^3.7.0",
+    "webpack": "^1.13.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

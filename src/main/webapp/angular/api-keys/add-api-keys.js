@@ -4,7 +4,7 @@ gvApp.directive('addApiKeys', [
     {
         return {
             restrict: 'A',
-            templateUrl: configService.angularBase + 'add-api-keys.html',
+            templateUrl: configService.angularBase + 'api-keys/add-api-keys.html',
             controller: function ()
             {
                 this.apiKeys = {};
@@ -72,7 +72,7 @@ function TestApiKeyService($log, $http, configService)
             configService.baseUrl + 'api-keys/delete/' + keyId);
     };
     this.add = function (keyId, verificationCode)
-    {   // fake an add with a get of json
+    {   // create a new api key on the server.
         return $http.post(configService.baseUrl + 'api-keys/post',
             {"keyId": keyId, "verificationCode": verificationCode});
     };

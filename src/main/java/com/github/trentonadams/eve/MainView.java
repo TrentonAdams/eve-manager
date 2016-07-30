@@ -50,8 +50,8 @@ public class MainView implements PageModel
     //@NotNull(message = "ouch, an error occurred")
     @QueryParam("query")
     private String query;
-
-    /**
+    
+        /**
      * Example of a custom injection using {@link HttpSessionFactory}
      */
     @Inject
