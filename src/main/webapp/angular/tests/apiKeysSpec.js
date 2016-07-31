@@ -10,11 +10,11 @@ describe('loading express', function() {
     server.close();
   });
   
-  it('redirects to /angular/wrapper-test.html', function (done) {
+  it('redirects to /angular/index.html', function (done) {
     console.log('get /');
     var tResponse = {};
     request(server).get('/')
-    .expect('Location', '/angular/wrapper-test.html').expect(302, done);
+    .expect('Location', '/angular/index.html').expect(302, done);
     //$httpBackend.flush();
   
   });

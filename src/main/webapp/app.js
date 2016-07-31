@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 
 app.get('/', function (req, res)
 {
-    res.redirect('/angular/wrapper-test.html');
+    res.redirect('/angular/index.html');
 });
 
 app.get('/api-keys/get', function (req, res)
@@ -42,7 +42,7 @@ app.post('/api-keys/post', function (req, res)
     res.send(key);
 });
 
-var server = app.listen(process.env.PORT, 'localhost', function ()
+var server = app.listen(process.env.PORT, process.env.IP, function ()
 {
     console.log('Eve Manager mock app listing on http://' +process.env.IP +
     ':' + process.env.PORT);
