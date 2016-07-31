@@ -1,0 +1,18 @@
+{
+  "name": "eve-manufacturing-manager",
+  "description": "Generic EVE Online Character/Corp manager.",
+  "main": "index.js",
+  "authors": [
+    "Trenton D. Adams"
+  ],
+  "license": "Apache 2.0",
+  "homepage": "https://github.com/TrentonAdams/eve-manager",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

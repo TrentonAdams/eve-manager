@@ -4,3 +4,5 @@ target/*
 .idea/artifacts/
 js/node_modules
 src/main/webapp/node_modules/
+src/main/webapp/build/
+src/main/webapp/bower_components/
