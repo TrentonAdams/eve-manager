@@ -46,7 +46,7 @@ gvApp.directive('addApiKeys', [
                 this.clearError = function ()
                 {
                     ctrl.errors = undefined;
-                }
+                };
             },
             controllerAs: 'apiKeyCtrl'
         };

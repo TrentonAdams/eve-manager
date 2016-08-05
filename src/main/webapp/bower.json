@@ -14,5 +14,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "jshint": "^2.9.2",
+    "grunt-contrib-jshint": "^1.0.0"
+  }
 }
