@@ -42,6 +42,9 @@ app.post('/api-keys/post', function (req, res)
     res.send(key);
 });
 
+process.env.PORT=58080;
+process.env.IP="127.0.0.1";
+
 var server = app.listen(process.env.PORT, process.env.IP, function ()
 {
     console.log('Eve Manager mock app listing on http://' +process.env.IP +

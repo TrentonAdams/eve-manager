@@ -15,8 +15,9 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "jshint": "^2.9.2",
-    "grunt-contrib-jshint": "^1.0.0"
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "bootstrap": "^3.3.7",
+    "angular": "angularjs#^1.5.8"
   }
 }

@@ -1,3 +1,5 @@
+// Your config.js and ConfigService must be fully included prior to including
+// this file.
 gvApp.directive('addApiKeys', [
     '$log', 'ApiKeyService', 'ConfigService',
     function ($log, apiKeyService, configService)

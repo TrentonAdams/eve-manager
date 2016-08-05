@@ -25,3 +25,5 @@ And install the war in target/ manually into your servlet container.
 === bootstrap ===
  sudo npm install -g bootstrap
  rsync -av /usr/lib/node_modules/bootstrap/dist/ bootstrap/
+sudo npm install -g mocha karma-mocha
+sudo npm install -g bower
