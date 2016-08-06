@@ -6,43 +6,55 @@ gvApp.directive('addApiKeys', [
     {
         return {
             restrict: 'A',
-            templateUrl: configService.angularBase + 'api-keys/add-api-keys.html',
+            templateUrl: configService.angularBase +
+            'api-keys/add-api-keys.html',
             controller: function ()
             {
                 this.apiKeys = {};
                 var ctrl = this;
                 this.remove = function (keyId)
                 {
-                    apiKeyService.remove(keyId).success(function (data)
+                    apiKeyService.remove(keyId).then(function (response)
                     {
-                        $log.log('remove keyId: ' + keyId + ', %o', data);
+                        $log.log('remove keyId: ' + keyId + ', %o', response.data);
                         delete ctrl.apiKeys[keyId];
-                    }).error(function (msg)
+                    }, function (response)
                     {
-                        $log.log(msg);
-                        ctrl.errors = msg;
+                        ctrl.errors =
+                            (response.status === -1 ?
+                                [{message: "Error connecting"}] :
+                                response.data);
                     });
                 };
                 this.add = function ()
                 {
                     apiKeyService.add(ctrl.keyId,
-                        ctrl.verificationCode).success(function (data)
+                        ctrl.verificationCode).then(function (response)
                     {
                         ctrl.apiKeys[ctrl.keyId] = {
                             "keyId": ctrl.keyId,
                             "verificationCode": ctrl.verificationCode
                         };
                         ctrl.errors = undefined;
-                    }).error(function (msg)
+                    }, function (response)
                     {
-                        $log.log(msg);
-                        ctrl.errors = msg;
+                        ctrl.errors =
+                            (response.status === -1 ?
+                                [{message: "Error connecting"}] :
+                                response.data);
+                        $log.debug(response);
                     });
                 };
 
-                apiKeyService.get().success(function (data)
+                apiKeyService.get().then(function (response)
                 {
-                    ctrl.apiKeys = data;
+                    ctrl.apiKeys = response.data;
+                }, function (response)
+                {
+                    ctrl.errors =
+                        (response.status === -1 ?
+                            [{message: "Error connecting"}] :
+                            response.data);
                 });
 
                 this.clearError = function ()
