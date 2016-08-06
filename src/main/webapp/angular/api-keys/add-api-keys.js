@@ -76,7 +76,7 @@ function TestApiKeyService($log, $http, configService)
     this.add = function (keyId, verificationCode)
     {   // create a new api key on the server.
         return $http.put(configService.baseUrl + 'api-keys/' + keyId,
-            {"keyId": keyId, "verificationCode": verificationCode});
+            {"keyId": Number(keyId), "verificationCode": verificationCode});
     };
     this.setKeysUrl = function (url)
     {
