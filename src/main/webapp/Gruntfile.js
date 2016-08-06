@@ -8,12 +8,12 @@ module.exports = function (grunt)
         copy: {
             dist: {
                 files: [
-/*                    {
-                        expand: true,
-                        cwd: 'build/',
-                        src: '**',
-                        dest: 'dist/'
-                    },*/
+                    /*                    {
+                     expand: true,
+                     cwd: 'build/',
+                     src: '**',
+                     dest: 'dist/'
+                     },*/
                     {
                         expand: true,
                         src: [
@@ -65,26 +65,54 @@ module.exports = function (grunt)
             app: {
                 src: ['angular/**/*.js', 'app.js']
             }
-        }/*,
-
-        'useminPrepare': {
-            options: {
-                dest: 'dist'
-            },
-            html: 'angular/index.html'
         },
+        clean: {
+            build: ['build/'],
+            dist: ['dist/']
+        },
+        execute: {
+            express: {
+                options: {cwd: 'dist'},
+                // execute javascript files in a node child_process
+                src: ['app.js']
+            }
+        },
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec',
+                    captureFile: 'results.txt', // Optionally capture the reporter output to a file
+                    quiet: false, // Optionally suppress output to standard out (defaults to false)
+                    clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
+                },
+                src: ['tests/**/*Spec.js']
+            }
+        }
 
-        usemin: {
-            html: ['dist/angular/index.html']
-        }*/
-    });
+            /*,
+
+             'useminPrepare': {
+             options: {
+             dest: 'dist'
+             },
+             html: 'angular/index.html'
+             },
+
+             usemin: {
+             html: ['dist/angular/index.html']
+             }*/
+        });
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-execute');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     // Default task(s).
-    grunt.registerTask('default',
-        ['jshint', 'copy']);
+    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'copy']);
+    grunt.registerTask('run', ['deploy', 'execute']);
 };

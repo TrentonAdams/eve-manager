@@ -66,16 +66,16 @@ function TestApiKeyService($log, $http, configService)
     var service = this;
     this.get = function ()
     {
-        return $http.get(configService.baseUrl + 'api-keys/get');
+        return $http.get(configService.baseUrl + 'api-keys/');
     };
     this.remove = function (keyId)
     {   // fake a delete with a get of json
         return $http.delete(
-            configService.baseUrl + 'api-keys/delete/' + keyId);
+            configService.baseUrl + 'api-keys/' + keyId);
     };
     this.add = function (keyId, verificationCode)
     {   // create a new api key on the server.
-        return $http.post(configService.baseUrl + 'api-keys/post',
+        return $http.put(configService.baseUrl + 'api-keys/' + keyId,
             {"keyId": keyId, "verificationCode": verificationCode});
     };
     this.setKeysUrl = function (url)

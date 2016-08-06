@@ -14,17 +14,15 @@ app.get('/', function (req, res)
     res.redirect('/angular/index.html');
 });
 
-app.get('/api-keys/get', function (req, res)
+app.get('/api-keys/', function (req, res)
 {
-    console.log('get all');
     res.send(apiKeys);
 });
-app.get('/api-keys/get/:keyId', function (req, res)
+app.get('/api-keys/:keyId', function (req, res)
 {
-    console.log('get ' + req.params.keyId);
-   res.send(apiKeys[req.params.keyId]); 
+   res.send(apiKeys[req.params.keyId]);
 });
-app.delete('/api-keys/delete/:keyId', function (req, res)
+app.delete('/api-keys/:keyId', function (req, res)
 {
     var keyId = req.params.keyId;
     var removedKey = apiKeys[keyId];
@@ -32,12 +30,10 @@ app.delete('/api-keys/delete/:keyId', function (req, res)
     fs.writeFile( "apiKeys.json", JSON.stringify( apiKeys ), "utf8");
     res.send(removedKey);
 });
-app.post('/api-keys/post', function (req, res)
+app.put('/api-keys/:keyId', function (req, res)
 {
-    var keyId = req.body.keyId;
     var key = req.body;
-    console.log(keyId + ' - ', key);
-    apiKeys[keyId] = key;
+    apiKeys[req.params.keyId] = key;
     fs.writeFile( "apiKeys.json", JSON.stringify( apiKeys ), "utf8");
     res.send(key);
 });
