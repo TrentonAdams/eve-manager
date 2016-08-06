@@ -38,8 +38,10 @@ app.put('/api-keys/:keyId', function (req, res)
     res.send(key);
 });
 
-process.env.PORT=58080;
-process.env.IP="127.0.0.1";
+// cloud9 has process.env.PORT and IP defined, otherwise we define them
+// ourselves.
+process.env.PORT=(process.env.PORT === undefined ? 58080 : process.env.PORT);
+process.env.IP=(process.env.IP === undefined ? "127.0.0.1" : process.env.IP);
 
 var server = app.listen(process.env.PORT, process.env.IP, function ()
 {

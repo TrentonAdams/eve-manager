@@ -113,6 +113,6 @@ module.exports = function (grunt)
 
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
-    grunt.registerTask('deploy', ['clean', 'jshint', 'copy']);
+    grunt.registerTask('deploy', ['clean', 'jshint', 'mochaTest', 'copy']);
     grunt.registerTask('run', ['deploy', 'execute']);
 };
