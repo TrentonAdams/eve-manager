@@ -22,6 +22,12 @@ module.exports = function (grunt)
                     },
                     {
                         expand: true,
+                        src: [
+                            'rest/'],
+                        dest: 'dist/'
+                    },
+                    {
+                        expand: true,
                         cwd: 'bower_components/jquery/dist',
                         src: '*',
                         dest: 'dist/jquery'
