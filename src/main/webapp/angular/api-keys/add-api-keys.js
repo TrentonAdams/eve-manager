@@ -1,5 +1,12 @@
 // Your config.js and ConfigService must be fully included prior to including
 // this file.
+
+/**
+ * The addApiKeys abstracts the ApiKeyService service from the GUI, as it needs
+ * to handle some special things.  It logs the response, updates errors if
+ * necessary, etc.  Other than that, it's a direct wrapper of the ApiKeyService
+ * service.
+ */
 gvApp.directive('addApiKeys', [
     '$log', 'ApiKeyService', 'ConfigService',
     function ($log, apiKeyService, configService)
@@ -50,7 +57,8 @@ gvApp.directive('addApiKeys', [
                 {
                     ctrl.apiKeys = response.data;
                 }, function (response)
-                {
+                {   // update the errors to display on the page, in the same
+                    // json format as the web service would respond.
                     ctrl.errors =
                         (response.status === -1 ?
                             [{message: "Error connecting"}] :
@@ -67,7 +75,12 @@ gvApp.directive('addApiKeys', [
     }]);
 
 /**
- * The purpose of this service is to provide an API for managing API keys.
+ * The purpose of this service is to provide an API client for managing API keys
+ * by making calls to the ApiKeys REST web service.  This service will be
+ * used by any Eve Online API key related activities.  Since most of the
+ * application will need access to at least the "get" function, we build
+ * it as a service.
+ *
  * @param $log the log service from angular
  * @param $http the http service from angular
  * @constructor

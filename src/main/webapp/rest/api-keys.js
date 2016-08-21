@@ -1,3 +1,6 @@
+/**
+ * This is the ApiKeys REST web service.
+ */
 var fs = require("fs");
 
 module.exports = function ApiKeys(expressApp)
