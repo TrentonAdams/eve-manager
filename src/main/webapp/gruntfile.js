@@ -1,3 +1,5 @@
+var defaultAssets = require ('./config/assets/default');
+
 module.exports = function (grunt)
 {
 
@@ -8,12 +10,6 @@ module.exports = function (grunt)
         copy: {
             dist: {
                 files: [
-                    /*                    {
-                     expand: true,
-                     cwd: 'build/',
-                     src: '**',
-                     dest: 'dist/'
-                     },*/
                     {
                         expand: true,
                         src: [
@@ -21,16 +17,17 @@ module.exports = function (grunt)
                         dest: 'dist/'
                     },
                     {
-                        expand: true,
+                        expand: false,
                         src: [
-                            'rest/'],
+                            defaultAssets.client.lib.css,
+                            defaultAssets.client.lib.js],
                         dest: 'dist/'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/jquery/dist',
-                        src: '*',
-                        dest: 'dist/jquery'
+                        src: [
+                            'rest/*'],
+                        dest: 'dist/'
                     },
                     {
                         expand: true,
@@ -39,21 +36,10 @@ module.exports = function (grunt)
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/bootstrap/dist',
-                        src: '**',
-                        dest: 'dist/bootstrap'
-                    },
-                    {
-                        expand: true,
                         src: 'bootstrap-custom/**',
                         dest: 'dist/'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'bower_components/angular',
-                        src: 'angular*',
-                        dest: 'dist/'
-                    }]
+                    }
+                ]
             }
         },
 
@@ -119,6 +105,14 @@ module.exports = function (grunt)
 
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
+
+    // Generates a "dist" folder with a fully functional express.js application.
+    // runnable via "cd dist/; node app.js"
     grunt.registerTask('deploy', ['clean', 'jshint', 'mochaTest', 'copy']);
+
+    // runs on the spot with the files in the current directory.
     grunt.registerTask('run', ['deploy', 'execute']);
+
+    // CRITICAL get the assets listed out into files
+    // CRITICAL implement routing like mean.js
 };

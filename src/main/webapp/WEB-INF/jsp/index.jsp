@@ -22,15 +22,15 @@
 
   <!-- Bootstrap core CSS -->
   <!--<link href="$.mobile-1.4.2.css" rel="stylesheet">-->
-  <link href="<c:url value="/bootstrap/css/bootstrap.css"/>" rel="stylesheet">
-  <link href="<c:url value="/bootstrap/css/custom.css"/>" rel="stylesheet">
-  <link href="<c:url value="/bootstrap/css/required-fields.css"/>" rel="stylesheet">
-  <link href="<c:url value="/bootstrap/css/offcanvas.css"/>" rel="stylesheet">
-  <link rel="stylesheet" href="<c:url value="/jquery/jquery-ui.min.css"/>">
+  <link href="<c:url value="/public/lib/bootstrap/dist/css/bootstrap.css"/>" rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/custom.css"/>" rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/required-fields.css"/>" rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/offcanvas.css"/>" rel="stylesheet">
+  <link rel="stylesheet" href="<c:url value="/public/custom/jquery-custom/jquery-ui.min.css"/>">
 
   <!-- Custom styles for this template -->
   <!--<link href="navbar-fixed-top.css" rel="stylesheet">-->
-  <link href="<c:url value="/bootstrap/css/theme.css"/>" rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/theme.css"/>" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,10 +41,10 @@
   <![endif]-->
 </head>
 <body>
-<script src="<c:url value="/jquery/jquery.min.js"/>"></script>
-<script src="<c:url value="/jquery/jquery-ui.min.js"/>"></script>
-<script src="<c:url value="/bootstrap/js/bootstrap.js"/>"></script>
-<script src="<c:url value="/bootstrap/js/offcanvas.js"/>"></script>
+<script src="<c:url value="/public/lib/jquery/dist/jquery.min.js"/>"></script>
+<script src="<c:url value="/public/custom/jquery-custom/jquery-ui.min.js"/>"></script>
+<script src="<c:url value="/public/lib/bootstrap/dist/js/bootstrap.js"/>"></script>
+<script src="<c:url value="/public/custom/bootstrap-custom/js/offcanvas.js"/>"></script>
 
 <!-- Fixed navbar -->
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">

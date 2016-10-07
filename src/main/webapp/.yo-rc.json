@@ -1,0 +1,25 @@
+{
+  "generator-meanjs": {
+    "suffixes": {
+      "client": {
+        "config": ".config.js",
+        "routes": ".routes.js",
+        "controller": ".controller.js",
+        "services": ".service.js",
+        "module": ".module.js",
+        "views": ".view.html",
+        "controller_tests": ".controller.tests.js",
+        "routes_tests": ".routes.tests.js"
+      },
+      "server": {
+        "config": ".config.js",
+        "routes": ".routes.js",
+        "controller": ".controller.js",
+        "model": ".model.js",
+        "policy": ".policy.js",
+        "model_tests": ".model.tests.js",
+        "routes_tests": ".routes.tests.js"
+      }
+    }
+  }
+}

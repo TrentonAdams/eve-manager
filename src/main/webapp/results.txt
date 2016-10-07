@@ -1,0 +1,16 @@
+
+[0m[0m
+[0m  loading express[0m
+get /
+Eve Manager mock app listing on http://127.0.0.1:58080
+  [32m  ✓[0m[90m / redirects to /angular/index.html[0m
+314159
+  [32m  ✓[0m[90m /api-keys/314159 (put)[0m
+  [32m  ✓[0m[90m /api-keys/ (get)[0m
+  [32m  ✓[0m[90m /api-keys/314159 (get)[0m
+  [32m  ✓[0m[90m /api-keys/314159 (delete)[0m
+  [32m  ✓[0m[90m 404 everything else[0m
+
+
+[92m [0m[32m 6 passing[0m[90m (127ms)[0m
+
