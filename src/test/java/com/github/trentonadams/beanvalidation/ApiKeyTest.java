@@ -37,8 +37,9 @@ public class ApiKeyTest
             validator.validate(apiKey);
 
         assertEquals(1, constraintViolations.size());
+        System.out.println(constraintViolations.iterator().next().getMessage());
         assertEquals(
-            "keyId must be an integer.", // from ValidationMessages.properties
+            "Key ID must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }
@@ -53,8 +54,9 @@ public class ApiKeyTest
             validator.validate(apiKey);
 
         assertEquals(1, constraintViolations.size());
+        System.out.println(constraintViolations.iterator().next().getMessage());
         assertEquals(
-            "keyId must be an integer.", // from ValidationMessages.properties
+            "Key ID must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }
@@ -70,7 +72,7 @@ public class ApiKeyTest
 
         assertEquals(1, constraintViolations.size());
         assertEquals(
-            "verificationCode must not be null.", // from ValidationMessages.properties
+            "Verification code must not be null.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
         );
     }

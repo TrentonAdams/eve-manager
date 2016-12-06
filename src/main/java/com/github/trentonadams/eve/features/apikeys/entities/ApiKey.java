@@ -21,7 +21,7 @@ public class ApiKey
     }
 
     @Digits(integer = 10, fraction = 0, message = "Key ID {validate.integer}")
-    @NotNull(message = "keyId {validate.integer}")
+    @NotNull(message = "Key ID {validate.integer}")
     @Id
     protected String keyId;
 
