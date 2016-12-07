@@ -16,7 +16,16 @@ module.exports = function ApiKeys(expressApp)
 
         app.get('/api-keys/:keyId', function (req, res)
         {
-            res.send(apiKeys[req.params.keyId]);
+            var returnApiKey = apiKeys[req.params.keyId];
+            if (returnApiKey == undefined)
+            {
+                res.status('404').send({"error": "404 not found"});
+            }
+            else
+            {
+                res.status('200').send(returnApiKey);
+            }
+
         });
 
 
@@ -30,13 +39,13 @@ module.exports = function ApiKeys(expressApp)
         });
 
 
-        app.put('/api-keys/:keyId', function (req, res)
+        app.post('/api-keys', function (req, res)
         {
-            console.log(req.params.keyId);
             var key = req.body;
-            apiKeys[req.params.keyId] = key;
+            console.log(key.keyId);
+            apiKeys[key.keyId] = key;
             fs.writeFile("apiKeys.json", JSON.stringify(apiKeys), "utf8");
-            res.send(key);
+            res.status('201').send(key);
         });
     };
 };

@@ -178,7 +178,7 @@ public class ApiKeysServiceView implements PageModel
         }
         em.close();;
         emf.close();
-        return Response.ok(apiKey).build();
+        return Response.created(null).entity(apiKey).build();
     }
 
     @Path("sample")

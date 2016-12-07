@@ -29,11 +29,26 @@ sudo npm install -g mocha karma-mocha
 sudo npm install -g bower
 
 === HTTP Calls ===
-
- curl -X PUT -H 'Accept: application/json' -H "Content-Type: application/json" \
- -d '{"keyId": "2123", "verificationCode": "cjklsdjlkjsdf"}' \
- 'http://localhost:8080/eve-manufacturing-manager/api-keys/2123'
+The following calls operate on the node express.js version of the application.
+The url needs changing for the J2EE instance.
 
  curl -X POST -H 'Accept: application/json' -H "Content-Type: application/json" \
   -d '{"keyId": "2123", "verificationCode": "cjklsdjlkjsdf"}' \
-  'http://localhost:8080/eve-manufacturing-manager/api-keys'
+  'http://localhost:58080/api-keys'
+
+ curl -H 'Accept: application/json' 'http://localhost:58080/api-keys/2123'
+
+== Java vs Node ==
+
+=== Commonalities ===
+The commonalities between the two are as follows.
+
+* public/ - contains all bower web dependencies and must be remain as is for Java or be copied to the distribution of a node web application.
+* angular/ - contains all angular related files for the application.
+*
+
+=== Node Only ===
+
+* rest/ - the express.js routes for REST.
+* apiKeys.json - the location api keys are stored.
+* app.js - the root node application; run this to start the express.js app.

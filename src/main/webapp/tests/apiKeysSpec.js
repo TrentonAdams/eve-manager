@@ -22,16 +22,16 @@ describe('loading express', function ()
         //$httpBackend.flush();
     });
 
-    it('/api-keys/314159 (put)', function (done)
+    it('/api-keys/314159 (post)', function (done)
     {
-        request(server).put('/api-keys/314159').send(
+        request(server).post('/api-keys').send(
             {"keyId": 314159, "verificationCode": "2323254575745"})
             .expect('Content-Type', /json/).expect(function (res)
         {
             if (res.body.keyId !== 314159 ||
                 res.body.verificationCode !== "2323254575745")
                 throw new Error('key not found');
-        }).expect(200, done);
+        }).expect(201, done);
     });
 
     it('/api-keys/ (get)', function (done)
