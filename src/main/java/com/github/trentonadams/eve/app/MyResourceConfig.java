@@ -5,7 +5,6 @@ import com.github.trentonadams.eve.app.hk2.SessionAttributeInjectResolver;
 import org.glassfish.hk2.api.InjectionResolver;
 import org.glassfish.hk2.api.TypeLiteral;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.jsp.JspMvcFeature;
@@ -66,6 +65,6 @@ public class MyResourceConfig extends ResourceConfig
         });
 //        property(MvcFeature.TEMPLATE_BASE_PATH, "WEB-INF/jsp/");
         register(JspMvcFeature.class);
-        register(DeclarativeLinkingFeature.class);
+//        register(DeclarativeLinkingFeature.class);
     }
 }

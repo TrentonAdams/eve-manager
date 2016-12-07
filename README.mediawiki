@@ -27,3 +27,13 @@ And install the war in target/ manually into your servlet container.
  rsync -av /usr/lib/node_modules/bootstrap/dist/ bootstrap/
 sudo npm install -g mocha karma-mocha
 sudo npm install -g bower
+
+=== HTTP Calls ===
+
+ curl -X PUT -H 'Accept: application/json' -H "Content-Type: application/json" \
+ -d '{"keyId": "2123", "verificationCode": "cjklsdjlkjsdf"}' \
+ 'http://localhost:8080/eve-manufacturing-manager/api-keys/2123'
+
+ curl -X POST -H 'Accept: application/json' -H "Content-Type: application/json" \
+  -d '{"keyId": "2123", "verificationCode": "cjklsdjlkjsdf"}' \
+  'http://localhost:8080/eve-manufacturing-manager/api-keys'

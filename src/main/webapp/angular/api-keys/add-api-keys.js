@@ -35,9 +35,11 @@ gvApp.directive('addApiKeys', [
                 };
                 this.add = function ()
                 {
+                    // call the key service add,
                     apiKeyService.add(ctrl.keyId,
                         ctrl.verificationCode).then(function (response)
                     {
+                        $log.log('added %o', response.data);
                         ctrl.apiKeys[ctrl.keyId] = {
                             "keyId": ctrl.keyId,
                             "verificationCode": ctrl.verificationCode
@@ -91,7 +93,8 @@ function TestApiKeyService($log, $http, configService)
     var service = this;
     this.get = function ()
     {
-        return $http.get(configService.baseUrl + 'api-keys/');
+        return $http.get(configService.baseUrl + 'api-keys/',
+            {headers: {'Accept': 'application/json'}});
     };
     this.remove = function (keyId)
     {   // fake a delete with a get of json
@@ -100,7 +103,7 @@ function TestApiKeyService($log, $http, configService)
     };
     this.add = function (keyId, verificationCode)
     {   // create a new api key on the server.
-        return $http.put(configService.baseUrl + 'api-keys/' + keyId,
+        return $http.post(configService.baseUrl + 'api-keys',
             {"keyId": Number(keyId), "verificationCode": verificationCode});
     };
     this.setKeysUrl = function (url)

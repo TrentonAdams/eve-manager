@@ -6,7 +6,7 @@
 
     </ul>
     <div class="panel-body">
-        <div ng-repeat="apiKey in apiKeyCtrl.apiKeys">
+        <div ng-repeat="apiKey in apiKeyCtrl.apiKeys track by $index">
             <span class="glyphicon glyphicon-remove-circle clickable"
                   ng-click="apiKeyCtrl.remove(apiKey.keyId)"></span>
             <span><strong>Key Id:</strong> {{apiKey.keyId}}</span>

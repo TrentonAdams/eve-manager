@@ -9,19 +9,20 @@ import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static okhttp3.internal.Internal.logger;
 
 /**
  * Primary JAX-RS resource for handling eve api key management tasks.  Used for
@@ -96,7 +97,7 @@ public class ApiKeysServiceView implements PageModel
     }
 
     @GET
-    @Path("get")
+    @Produces(MediaType.APPLICATION_JSON)
     public Map<String, ApiKey> getApiKeys()
     {
         final List<ApiKey> apiKeyList;
@@ -153,10 +154,31 @@ public class ApiKeysServiceView implements PageModel
      *
      * @return the service for posting api keys.
      */
-    @Path("post")
-    public Class<? extends PostApiKeys> postService()
+    @POST
+    @Consumes({
+        MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA,
+        MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response postService(@Valid ApiKey apiKey)
     {
-        return PostApiKeys.class;
+        final EntityManagerFactory emf =
+            Persistence.createEntityManagerFactory("apikey");
+        final EntityManager em = emf.createEntityManager();
+        final EntityTransaction et = em.getTransaction();
+        et.begin();
+        em.persist(apiKey);
+        try
+        {   // CRITICAL, replace with proper error handling, or checking
+            // if the item already exists.
+            et.commit();
+        }
+        catch (RollbackException e)
+        {
+            logger.fine(e.toString());
+        }
+        em.close();;
+        emf.close();
+        return Response.ok(apiKey).build();
     }
 
     @Path("sample")

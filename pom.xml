@@ -11,7 +11,7 @@
   <name>eve-manufacturing-manager</name>
 
   <properties>
-    <jersey.version>2.23.1</jersey.version>
+    <jersey.version>2.24.1</jersey.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!--
@@ -227,7 +227,7 @@
           <dependency>
             <groupId>org.apache.openjpa</groupId>
             <artifactId>openjpa</artifactId>
-            <version>2.3.0</version>
+            <version>2.4.1</version>
           </dependency>
         </dependencies>
       </plugin>
@@ -243,6 +243,35 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+          <groupId>org.apache.openjpa</groupId>
+          <artifactId>openjpa-maven-plugin</artifactId>
+          <version>2.2.1</version>
+          <configuration>
+              <includes>**/entities/*.class</includes>
+              <excludes>**/entities/XML*.class</excludes>
+              <addDefaultConstructor>true</addDefaultConstructor>
+              <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+          </configuration>
+          <executions>
+              <execution>
+                  <id>enhancer</id>
+                  <phase>process-classes</phase>
+                  <goals>
+                      <goal>enhance</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <dependencies>
+              <dependency>
+                  <groupId>org.apache.openjpa</groupId>
+                  <artifactId>openjpa</artifactId>
+                  <!-- set the version to be the same as the level in your runtime -->
+                  <version>2.3.0</version>
+              </dependency>
+          </dependencies>
       </plugin>
     </plugins>
 

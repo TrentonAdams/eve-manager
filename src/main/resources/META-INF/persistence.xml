@@ -4,6 +4,7 @@
   <persistence-unit name="apikey">
     <class>com.github.trentonadams.eve.features.apikeys.entities.ApiKey</class>
     <properties>
+      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
       <property name="openjpa.ConnectionURL"
         value="jdbc:derby:${project.build.directory}/testdb;create=true" />
