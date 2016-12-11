@@ -5,7 +5,6 @@ var planetaryClass = {};
 for (var schematicID in planetSchematics)
 {
     var schematic = planetSchematics[schematicID];
-
-    console.log(schematic);
+    var type = types[schematic.typeID];
 //    planetaryClass[schematicID] = planetSchematics[schematicID];
 }
