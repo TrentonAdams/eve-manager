@@ -2,8 +2,7 @@
 target/*
 .idea/libraries/
 .idea/artifacts/
-js/node_modules
-src/main/webapp/node_modules/
+**/node_modules
 src/main/webapp/build/
 src/main/webapp/dist/
 src/main/webapp/bower_components/
