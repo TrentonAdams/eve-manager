@@ -14,7 +14,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-var sanitizeMaterials = /[,x]/g;
+var sanitizeMaterials = /[,]/g;
 var materialsRegex = /(\d+),(\d)?/;
 var materials = new Array();
 
@@ -33,13 +33,14 @@ function sumMaterialsByName(totals, matName, matCount)
 
 function showTotal(totals, s)
 {
-    return totals[s] !== undefined ? s + ': ' + totals[s] : s + ': 0';
+    return totals[s] !== undefined ? s + ' x ' + totals[s] : s + ': 0';
 }
 
 rl.on('line', (input) => {
+    // CRITICAL split on the x instead
     var inputLine = input.replace(sanitizeMaterials, '');
     inputLine = inputLine.replace('  ', ' ');
-    materials.push(inputLine.split(' '));
+    materials.push(inputLine.split(' x '));
 }).on('close', () => {
     var totals = {};
     //console.log(materials);
@@ -51,12 +52,8 @@ rl.on('line', (input) => {
         sumMaterialsByName(totals, matName, matCount);
     }
 
-    console.log('%s\n%s\n%s\n%s\n%s\n%s\n%s\n',
-        showTotal(totals, 'Tritanium'),
-        showTotal(totals, 'Pyerite'),
-        showTotal(totals, 'Mexallon'),
-        showTotal(totals, 'Isogen'),
-        showTotal(totals, 'Nocxium'),
-        showTotal(totals, 'Zydrine'),
-        showTotal(totals, 'Megacyte'));
+    for (var totalItem in totals)
+    {
+        console.log(showTotal(totals, totalItem))
+    }
 });
