@@ -7,20 +7,20 @@
  22 x Zydrine
  */
 
-const readline = require('readline');
-
 /**
  * Create an EveParser object.  Note that in order to use the object you must
  * hook the eveParser.rl.on('complete', function(){}); to receive the complete
  * event, which happens after parsing of stdin completes.
  * @constructor
  */
-var EveParser = function ()
+var EveParser = function (stream)
 {
+    const readline = require('readline');
+
     this.rl = readline.createInterface({
-        input: process.stdin/*,
-         only needed if you want the lines to go to stdout
-         output: process.stdout*/
+        input: stream
+         // only needed if you want the lines to go to stdout
+         // output: process.stdout
     });
     var sanitizeMaterials = /[,]/g;
     // regexes for matching various types of standard eve inputs
@@ -51,8 +51,8 @@ var EveParser = function ()
      */
     this.showTotal = function (s)
     {
-        return totals[s] !== undefined ? s + ' x ' + totals[s] :
-        s + ': 0';
+        return totals[s] !== undefined ? totals[s] + ' x ' + s:
+        '0 x ' + s;
     };
 
     /**
@@ -97,12 +97,4 @@ var EveParser = function ()
     };
 };
 
-var eveParser = new EveParser();
-eveParser.parse();
-eveParser.rl.on('complete', () =>
-{
-    for (var totalItem in eveParser.getTotals())
-    {
-        console.log(eveParser.showTotal(totalItem));
-    }
-});
+module.exports = EveParser;
