@@ -1,5 +1,5 @@
 {
-  "name": "Eve data",
+  "name": "EveData",
   "version": "1.0.0",
   "description": "General node stuff",
   "scripts": {
@@ -16,6 +16,12 @@
   },
   "homepage": "https://github.com/TrentonAdams/eve-manager#readme",
   "dependencies": {
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "grunt": "^1.0.1"
+  },
+  "devDependencies": {
+    "grunt-protractor-coverage": "~0.2.15",
+    "grunt-protractor-runner": "~3.2.0",
+    "gulp-protractor": "^3.0.0"
   }
 }

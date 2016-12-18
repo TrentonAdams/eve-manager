@@ -151,6 +151,12 @@
       <version>4.9</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-java</artifactId>
+        <version>3.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -230,6 +236,30 @@
             <version>2.4.1</version>
           </dependency>
         </dependencies>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>java</executable>
+          <arguments>
+            <argument>-Dwebdriver.gecko.driver=./chromedriver</argument>
+            <argument>-classpath</argument>
+            <!-- automatically creates the classpath using all project dependencies,
+                 also adding the project build directory -->
+            <classpath/>
+            <argument>org.openqa.selenium.example.Selenium2Example</argument>
+          </arguments>
+        </configuration>
       </plugin>
 
       <plugin>

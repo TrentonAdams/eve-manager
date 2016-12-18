@@ -34,9 +34,9 @@ public class BiofuelsSchematic implements PlanetarySchematic
     }
 
     @Override
-    public int getCycleTime()
+    public CycleTimes getCycleTime()
     {
-        return 1800;
+        return CycleTimes.P1;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class BiofuelsSchematic implements PlanetarySchematic
     @Override
     public PlanetaryCommodity[] getInputs()
     {
-        return new Biofuels[0];
+        return new PlanetaryCommodity[0];
     }
 
     @Override

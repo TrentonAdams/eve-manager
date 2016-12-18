@@ -26,7 +26,7 @@ public interface PlanetarySchematic
     /**
      * @return The time required to generate the output.
      */
-    int getCycleTime();
+    CycleTimes getCycleTime();
 
     /**
      * Must change this to an actual class.

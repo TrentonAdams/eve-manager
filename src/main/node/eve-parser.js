@@ -23,7 +23,11 @@ var EveParser = function ()
          output: process.stdout*/
     });
     var sanitizeMaterials = /[,]/g;
-    var materialsRegex = /(\d+),(\d)?/;
+    // regexes for matching various types of standard eve inputs
+    const countFirstRegex = /(\d+)(,\d)? *x *(.*$)/;
+    const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
+    const inventoryListRegex = /(.+) *(\d+)(,\d)? .*/;
+
     var materials = new Array();
 
     var $this = this;
@@ -60,27 +64,41 @@ var EveParser = function ()
         return totals;
     };
 
-    this.rl.on('line', (input) =>
+    /**
+     * Determines the type of eve line that is being read, and parses it
+     * accordingly.
+     *
+     * @param input an input line
+     */
+    function parseLine(input)
     {
-        // CRITICAL split on the x instead
         var inputLine = input.replace(sanitizeMaterials, '');
         inputLine = inputLine.replace('  ', ' ');
         materials.push(inputLine.split(' x '));
-    }).on('close', () =>
+    }
+
+    this.parse = function parse()
     {
-        //console.log(materials);
-        for (var line = 0; line < materials.length; line++)
+        $this.rl.on('line', (input) =>
         {
-            var matName = materials[line][1];
-            var matCount = Number(materials[line][0]);
-            //console.log("name: %s, count: %s", matName, matCount);
-            sumMaterialsByName(totals, matName, matCount);
-        }
-        this.rl.emit('complete');
-    });
+            parseLine(input);
+        }).on('close', () =>
+        {
+            //console.log(materials);
+            for (var line = 0; line < materials.length; line++)
+            {
+                var matName = materials[line][1];
+                var matCount = Number(materials[line][0]);
+                //console.log("name: %s, count: %s", matName, matCount);
+                sumMaterialsByName(totals, matName, matCount);
+            }
+            $this.rl.emit('complete');
+        });
+    };
 };
 
 var eveParser = new EveParser();
+eveParser.parse();
 eveParser.rl.on('complete', () =>
 {
     for (var totalItem in eveParser.getTotals())
