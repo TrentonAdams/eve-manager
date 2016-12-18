@@ -17,9 +17,15 @@ describe("test eve parser", function ()
     beforeEach(function ()
     {
         var EveParser = require('../eve-parser.js');
-        var raitaruStream = fs.createReadStream('test-data.txt');
+        //var testStream = fs.createReadStream('test-data.txt');
 
-        eveParser = new EveParser(raitaruStream);
+        var testStream = new stream.Readable();
+        testStream._read = function noop() {};
+        testStream.push("1000 x Tritanium\n500 x Pyerite\n" +
+            "250 x Mexallon\n100 x Isogen\n50 x Nocxium\n20 x Zydrine\n" +
+            "1000 x Tritanium\n100 x Isogen\n");
+        testStream.push(null);
+        eveParser = new EveParser(testStream);
         eveParser.parse();
     });
 
