@@ -13,20 +13,42 @@
  * event, which happens after parsing of stdin completes.
  * @constructor
  */
+
+var BlueprintParser = function ()
+{
+    const sanitizeMaterials = /[,]/g;
+    const blueprintMaterialsRegex = /(\d+)(,\d)? *x *(.*$)/;
+    this.parse = function (line)
+    {
+        var inputLine = line.replace(sanitizeMaterials, '');
+        inputLine = inputLine.replace('  ', ' ');
+        return inputLine.split(' x ');
+    };
+    this.matches = function (line)
+    {
+        return line.matches(blueprintMaterialsRegex);
+    };
+};
+
 var EveParser = function (stream)
 {
     const readline = require('readline');
 
     this.rl = readline.createInterface({
         input: stream
-         // only needed if you want the lines to go to stdout
-         // output: process.stdout
+        // only needed if you want the lines to go to stdout
+        // output: process.stdout
     });
-    var sanitizeMaterials = /[,]/g;
+
     // regexes for matching various types of standard eve inputs
-    const countFirstRegex = /(\d+)(,\d)? *x *(.*$)/;
+    /**
+     * Parses the format that you can copy from within the blueprint.
+     */
+
     const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
     const inventoryListRegex = /(.+) *(\d+)(,\d)? .*/;
+
+    this.matchedParser = new BlueprintParser();
 
     var materials = new Array();
 
@@ -51,8 +73,7 @@ var EveParser = function (stream)
      */
     this.showTotal = function (s)
     {
-        return totals[s] !== undefined ? totals[s] + ' x ' + s:
-        '0 x ' + s;
+        return totals[s] !== undefined ? totals[s] + ' x ' + s : '0 x ' + s;
     };
 
     /**
@@ -72,9 +93,7 @@ var EveParser = function (stream)
      */
     function parseLine(input)
     {
-        var inputLine = input.replace(sanitizeMaterials, '');
-        inputLine = inputLine.replace('  ', ' ');
-        materials.push(inputLine.split(' x '));
+        materials.push($this.matchedParser.parse(input));
     }
 
     this.parse = function parse()
