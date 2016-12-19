@@ -8,7 +8,7 @@
  */
 
 /**
- * Parsers blueprint materials in the form of...
+ * Parses blueprint materials in the form of...
  *
  * 1000 x Tritanium
  *
@@ -20,6 +20,7 @@
  */
 const BlueprintParser = function ()
 {
+    this.name = "BlueprintParser";
     const sanitizeMaterials = /[,]/g;
     const regex = /(\d+)(,\d)? *x *(.*$)/;
     this.parse = function (line)
@@ -33,18 +34,22 @@ const BlueprintParser = function ()
         return line.match(regex);
     };
 };
+
 /**
- * Integrity Response Drones	14	Advanced Commodities			1,400 m3
+ * Parsers inventory lists in the tab separated form of...
+ *
+ * Integrity Response Drones    14    Advanced Commodities            1,400 m3
  *
  * Splits the input by tab character into an array of the first two, then
  * inverts their location.
  *
- * e.g. ['Integrity Response Drones', '14'];
+ * e.g. ['Integrity Response Drones', '14'] => ['14', 'Integrity Response Drones'];
  *
  * @constructor
  */
 var InventoryListParser = function ()
 {
+    this.name = "InventoryListParser";
     const sanitizeMaterials = /[,]/g;
     const regex = /(.+) *(\d+)(,\d)?.*/;
     this.parse = function (line)
@@ -59,7 +64,7 @@ var InventoryListParser = function ()
     };
 };
 
-const parsers = [new BlueprintParser(), new InventoryListParser()];
+
 
 const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
 
@@ -122,11 +127,11 @@ var EveParser = function (stream)
     {
         if ($this.matchedParser === undefined)
         {   // should only happen once for the duration of EveParser
-            for (var index = 0; index < parsers.length; index++)
+            for (var index = 0; index < EveParser.parsers.length; index++)
             {
-                if (parsers[index].matches(input))
+                if (EveParser.parsers[index].matches(input))
                 {
-                    $this.matchedParser = parsers[index];
+                    $this.matchedParser = EveParser.parsers[index];
                     break;  // found one, we're done
                 }
             }
@@ -169,5 +174,7 @@ var EveParser = function (stream)
         return totals;
     };
 };
+
+EveParser.parsers = [new BlueprintParser(), new InventoryListParser()];
 
 module.exports = EveParser;
