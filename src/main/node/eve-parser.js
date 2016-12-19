@@ -8,16 +8,20 @@
  */
 
 /**
- * Create an EveParser object.  Note that in order to use the object you must
- * hook the eveParser.rl.on('complete', function(){}); to receive the complete
- * event, which happens after parsing of stdin completes.
+ * Parsers blueprint materials in the form of...
+ *
+ * 1000 x Tritanium
+ *
+ * And splits it into an array of two.
+ *
+ * e.g. ['1000', 'Tritanium']
+ *
  * @constructor
  */
-
-var BlueprintParser = function ()
+const BlueprintParser = function ()
 {
     const sanitizeMaterials = /[,]/g;
-    const blueprintMaterialsRegex = /(\d+)(,\d)? *x *(.*$)/;
+    const regex = /(\d+)(,\d)? *x *(.*$)/;
     this.parse = function (line)
     {
         var inputLine = line.replace(sanitizeMaterials, '');
@@ -26,14 +30,44 @@ var BlueprintParser = function ()
     };
     this.matches = function (line)
     {
-        return line.match(blueprintMaterialsRegex);
+        return line.match(regex);
+    };
+};
+/**
+ * Integrity Response Drones	14	Advanced Commodities			1,400 m3
+ *
+ * Splits the input by tab character into an array of the first two.
+ *
+ * e.g. ['Integrity Response Drones', '14'];
+ *
+ * @constructor
+ */
+var InventoryListParser = function ()
+{
+    const sanitizeMaterials = /[,]/g;
+    const regex = /(.+) *(\d+)(,\d)?.*/;
+    this.parse = function (line)
+    {
+        var inputLine = line.replace(sanitizeMaterials, '');
+        var data = inputLine.split("\t", 2)
+        return [data[1], data[0]];
+    };
+    this.matches = function (line)
+    {
+        return line.match(regex);
     };
 };
 
 const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
-const inventoryListRegex = /(.+) *(\d+)(,\d)? .*/;
 
 
+
+/**
+ * Create an EveParser object.  Note that in order to use the object you must
+ * hook the eveParser.rl.on('complete', function(){}); to receive the complete
+ * event, which happens after parsing of stdin completes.
+ * @constructor
+ */
 var EveParser = function (stream)
 {
     const readline = require('readline');
@@ -68,7 +102,7 @@ var EveParser = function (stream)
 
     /**
      * @param s the material name - must match a material that came in on stdin.
-     * @returns {string} the total into an eve compatible format
+     * @returns {string} the total in the format of "100 x Name".
      */
     this.showTotal = function (s)
     {
@@ -99,11 +133,29 @@ var EveParser = function (stream)
             {
                 $this.matchedParser = parser;
             }
+            if ($this.matchedParser === undefined)
+            {
+                parser = new InventoryListParser();
+                if (parser.matches(input))
+                {
+                    $this.matchedParser = parser;
+                }
+
+            }
             //console.log($this.matchedParser);
         }
-        materials.push($this.matchedParser.parse(input));
+        if ($this.matchedParser !== undefined)
+        {
+            //console.log($this.matchedParser.parse(input));
+            materials.push($this.matchedParser.parse(input));
+        }
+
     }
 
+    /**
+     * Parses the input from the stream, automatically determining the type
+     * of eve input.
+     */
     this.parse = function parse()
     {
         $this.rl.on('line', (input) =>
