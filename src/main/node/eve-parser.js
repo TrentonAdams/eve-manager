@@ -36,7 +36,8 @@ const BlueprintParser = function ()
 /**
  * Integrity Response Drones	14	Advanced Commodities			1,400 m3
  *
- * Splits the input by tab character into an array of the first two.
+ * Splits the input by tab character into an array of the first two, then
+ * inverts their location.
  *
  * e.g. ['Integrity Response Drones', '14'];
  *
@@ -88,34 +89,27 @@ var EveParser = function (stream)
     var $this = this;
     var totals = {};
 
-    function sumMaterialsByName(totals, matName, matCount)
-    {   // hidden from caller
-        if (totals[matName] !== undefined)
-        {
-            totals[matName] += matCount;
-        }
-        else
-        {
-            totals[matName] = matCount;
-        }
-    }
-
     /**
-     * @param s the material name - must match a material that came in on stdin.
-     * @returns {string} the total in the format of "100 x Name".
+     * Parses the input from the stream, automatically determining the type
+     * of eve input.
      */
-    this.showTotal = function (s)
+    this.parse = function parse()
     {
-        return totals[s] !== undefined ? totals[s] + ' x ' + s : '0 x ' + s;
-    };
-
-    /**
-     * Retrieves the map of totals by material name.
-     * @returns e.g. {"Tritanium": "1000", "Pyerite": "1000"}
-     */
-    this.getTotals = function ()
-    {
-        return totals;
+        $this.rl.on('line', (input) =>
+        {
+            parseLine(input);
+        }).on('close', () =>
+        {
+            //console.log(materials);
+            for (var line = 0; line < materials.length; line++)
+            {
+                var matName = materials[line][1];
+                var matCount = Number(materials[line][0]);
+                //console.log("name: %s, count: %s", matName, matCount);
+                sumMaterialsByName(totals, matName, matCount);
+            }
+            $this.rl.emit('complete');
+        });
     };
 
     /**
@@ -145,27 +139,34 @@ var EveParser = function (stream)
         }
     }
 
+    function sumMaterialsByName(totals, matName, matCount)
+    {   // hidden from caller
+        if (totals[matName] !== undefined)
+        {
+            totals[matName] += matCount;
+        }
+        else
+        {
+            totals[matName] = matCount;
+        }
+    }
+
     /**
-     * Parses the input from the stream, automatically determining the type
-     * of eve input.
+     * @param s the material name - must match a material that came in on stdin.
+     * @returns {string} the total in the format of "100 x Name".
      */
-    this.parse = function parse()
+    this.showTotal = function (s)
     {
-        $this.rl.on('line', (input) =>
-        {
-            parseLine(input);
-        }).on('close', () =>
-        {
-            //console.log(materials);
-            for (var line = 0; line < materials.length; line++)
-            {
-                var matName = materials[line][1];
-                var matCount = Number(materials[line][0]);
-                //console.log("name: %s, count: %s", matName, matCount);
-                sumMaterialsByName(totals, matName, matCount);
-            }
-            $this.rl.emit('complete');
-        });
+        return totals[s] !== undefined ? totals[s] + ' x ' + s : '0 x ' + s;
+    };
+
+    /**
+     * Retrieves the map of totals by material name.
+     * @returns e.g. {"Tritanium": "1000", "Pyerite": "1000"}
+     */
+    this.getTotals = function ()
+    {
+        return totals;
     };
 };
 
