@@ -58,9 +58,9 @@ var InventoryListParser = function ()
     };
 };
 
+const parsers = [new BlueprintParser(), new InventoryListParser()];
+
 const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
-
-
 
 /**
  * Create an EveParser object.  Note that in order to use the object you must
@@ -128,19 +128,13 @@ var EveParser = function (stream)
     {
         if ($this.matchedParser === undefined)
         {   // should only happen once for the duration of EveParser
-            var parser = new BlueprintParser();
-            if (parser.matches(input))
+            for (var index = 0; index < parsers.length; index++)
             {
-                $this.matchedParser = parser;
-            }
-            if ($this.matchedParser === undefined)
-            {
-                parser = new InventoryListParser();
-                if (parser.matches(input))
+                if (parsers[index].matches(input))
                 {
-                    $this.matchedParser = parser;
+                    $this.matchedParser = parsers[index];
+                    break;  // found one, we're done
                 }
-
             }
             //console.log($this.matchedParser);
         }
@@ -149,7 +143,6 @@ var EveParser = function (stream)
             //console.log($this.matchedParser.parse(input));
             materials.push($this.matchedParser.parse(input));
         }
-
     }
 
     /**
