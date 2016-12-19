@@ -26,9 +26,13 @@ var BlueprintParser = function ()
     };
     this.matches = function (line)
     {
-        return line.matches(blueprintMaterialsRegex);
+        return line.match(blueprintMaterialsRegex);
     };
 };
+
+const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
+const inventoryListRegex = /(.+) *(\d+)(,\d)? .*/;
+
 
 var EveParser = function (stream)
 {
@@ -44,11 +48,6 @@ var EveParser = function (stream)
     /**
      * Parses the format that you can copy from within the blueprint.
      */
-
-    const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
-    const inventoryListRegex = /(.+) *(\d+)(,\d)? .*/;
-
-    this.matchedParser = new BlueprintParser();
 
     var materials = new Array();
 
@@ -93,6 +92,15 @@ var EveParser = function (stream)
      */
     function parseLine(input)
     {
+        if ($this.matchedParser === undefined)
+        {   // should only happen once for the duration of EveParser
+            var parser = new BlueprintParser();
+            if (parser.matches(input))
+            {
+                $this.matchedParser = parser;
+            }
+            //console.log($this.matchedParser);
+        }
         materials.push($this.matchedParser.parse(input));
     }
 
