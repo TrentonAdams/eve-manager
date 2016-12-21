@@ -33,18 +33,6 @@ describe('test InventoryListParser', function ()
         expect(inventoryParser.parse(inputLineWithTabs)[1]).toEqual(
             "Integrity Response Drones");
     });
-    it('count matches', function ()
-    {
-        expect(inventoryParser.parse(inputLineWithSpaces)[0]).toEqual(
-            "1000");
-        expect(inventoryParser.parse(inputLineWithTabs)[0]).toEqual(
-            "1000");
-    });
-    it('inventory line matches', function ()
-    {
-        expect(inventoryParser.matches(inputLineWithTabs)).toBeTruthy();
-        expect(inventoryParser.matches(inputLineWithSpaces)).toBeTruthy();
-    });
     it('line components retrievable', function ()
     {
         var match = [0, 0];
@@ -52,9 +40,10 @@ describe('test InventoryListParser', function ()
         expect(match[1]).toEqual("Integrity Response Drones");
         match = inventoryParser.inventoryCount.exec(inputLineWithSpaces);
         expect(match[1]).toEqual("1,000");
-        /*        expect("Tritanium").toBeTruthy();
-         expect(inventoryParser.matches(inputLineWithTabs)).toBeTruthy();
-         expect(inventoryParser.matches(inputLineWithSpaces)).toBeTruthy();*/
+        match = inventoryParser.inventoryItem.exec(inputLineWithTabs);
+        expect(match[1]).toEqual("Integrity Response Drones");
+        match = inventoryParser.inventoryCount.exec(inputLineWithTabs);
+        expect(match[1]).toEqual("1,000");
     });
     it('parsing successful', function ()
     {
