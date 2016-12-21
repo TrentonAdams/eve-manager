@@ -1,32 +1,82 @@
 var stream = require('stream');
 var fs = require('fs');
-var EveParser = require('../eve-parser.js');
+var EveParser = require('../eve-parser.js').EveParser;
+var InventoryListParser = require('../eve-parser.js').InventoryListParser;
+var BlueprintParser = require('../eve-parser.js').BlueprintParser;
+
 describe("can create EveParser", function ()
 {
     it("create EveParser", function ()
     {
-        var EveParser = require('../eve-parser.js');
-
         var eveParser = new EveParser(process.stdin);
         expect(eveParser).toBeDefined();
+    });
+});
+
+describe('test InventoryListParser', function ()
+{
+    var inputLineWithSpaces = "Integrity Response Drones  1,000  Blah   1,400 m3\n";
+    var inputLineWithTabs = "Integrity Response Drones	1,000	Blah			1,400 m3\n";
+    var inventoryParser = new InventoryListParser();
+    /*
+    many of these tests are here just to make it easy to identify problems in
+    parsing.  They are listed in order of dependency.  In other words,
+    the dependant ones are below those they depend on to be working.
+
+    Ironically, there's more testing code than there is actual parsing code.
+    */
+
+    it('inventory items match', function ()
+    {
+        expect(inventoryParser.parse(inputLineWithSpaces)[1]).toEqual(
+            "Integrity Response Drones");
+        expect(inventoryParser.parse(inputLineWithTabs)[1]).toEqual(
+            "Integrity Response Drones");
+    });
+    it('count matches', function ()
+    {
+        expect(inventoryParser.parse(inputLineWithSpaces)[0]).toEqual(
+            "1000");
+        expect(inventoryParser.parse(inputLineWithTabs)[0]).toEqual(
+            "1000");
+    });
+    it('inventory line matches', function ()
+    {
+        expect(inventoryParser.matches(inputLineWithTabs)).toBeTruthy();
+        expect(inventoryParser.matches(inputLineWithSpaces)).toBeTruthy();
+    });
+    it('line components retrievable', function ()
+    {
+        var match = [0, 0];
+        match = inventoryParser.inventoryItem.exec(inputLineWithSpaces);
+        expect(match[1]).toEqual("Integrity Response Drones");
+        match = inventoryParser.inventoryCount.exec(inputLineWithSpaces);
+        expect(match[1]).toEqual("1,000");
+        /*        expect("Tritanium").toBeTruthy();
+         expect(inventoryParser.matches(inputLineWithTabs)).toBeTruthy();
+         expect(inventoryParser.matches(inputLineWithSpaces)).toBeTruthy();*/
+    });
+    it('parsing successful', function ()
+    {
+        expect(inventoryParser.parse(inputLineWithTabs)).toEqual(
+            ['1000', 'Integrity Response Drones']);
+        expect(inventoryParser.parse(inputLineWithSpaces)).toEqual(
+            ['1000', 'Integrity Response Drones']);
     });
 });
 
 for (var index = 0; index < EveParser.parsers.length; index++)
 {
     var parser = EveParser.parsers[index];
-    console.log(parser);
-    (function(parser)
+    //console.log(parser);
+    (function (parser)
     {   // closure required or parser gets shared and each run is the same as
         // the last one set.
-        describe("test " + parser.name, function ()
+        describe("test " + parser.name + " selection", function ()
         {
             var eveParser;
             beforeEach(function ()
             {
-                var EveParser = require('../eve-parser.js');
-                //var testStream = fs.createReadStream('test-data.txt');
-
                 var testStream = new stream.Readable();
                 testStream._read = function noop()
                 {

@@ -2,7 +2,7 @@
 
 // Protractor configuration
 var config = {
-  specs: ['todo-spec.js']
+  specs: ['spec/*Spec.js']
 };
 
 config.capabilities = {

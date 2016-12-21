@@ -35,6 +35,8 @@ const BlueprintParser = function ()
     };
 };
 
+module.exports.BlueprintParser = BlueprintParser;
+
 /**
  * Parsers inventory lists in the tab separated form of...
  *
@@ -50,13 +52,18 @@ const BlueprintParser = function ()
 var InventoryListParser = function ()
 {
     this.name = "InventoryListParser";
-    const sanitizeMaterials = /[,]/g;
+    const removeCommas = /[,]/g;
+    this.inventoryItem = /([a-zA-z]+(\s+[a-zA-z]+)*)/;
+    this.inventoryCount = /(\d+(,\d+)*)/;
     const regex = /(.+) *(\d+)(,\d)?.*/;
     this.parse = function (line)
     {
-        var inputLine = line.replace(sanitizeMaterials, '');
-        var data = inputLine.split("\t", 2)
-        return [data[1], data[0]];
+        var inputLine = line.replace(removeCommas, '');
+        var itemMatch = this.inventoryItem.exec(inputLine);
+        var countMatch = this.inventoryCount.exec(inputLine);
+        //console.log(inputLine);
+        // e.g. ['1000', 'Integrity Response Drones']
+        return [countMatch[1], itemMatch[1]];
     };
     this.matches = function (line)
     {
@@ -64,7 +71,7 @@ var InventoryListParser = function ()
     };
 };
 
-
+module.exports.InventoryListParser = InventoryListParser;
 
 const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
 
@@ -135,7 +142,7 @@ var EveParser = function (stream)
                     break;  // found one, we're done
                 }
             }
-            //console.log($this.matchedParser);
+            //console.log($this.matchedParser.name);
         }
         if ($this.matchedParser !== undefined)
         {
@@ -177,4 +184,4 @@ var EveParser = function (stream)
 
 EveParser.parsers = [new BlueprintParser(), new InventoryListParser()];
 
-module.exports = EveParser;
+module.exports.EveParser = EveParser;
