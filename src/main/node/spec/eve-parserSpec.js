@@ -1,3 +1,4 @@
+"use strict";
 var stream = require('stream');
 var fs = require('fs');
 var EveParser = require('../eve-parser.js').EveParser;
@@ -19,12 +20,12 @@ describe('test InventoryListParser', function ()
     var inputLineWithTabs = "Integrity Response Drones	1,000	Blah			1,400 m3\n";
     var inventoryParser = new InventoryListParser();
     /*
-    many of these tests are here just to make it easy to identify problems in
-    parsing.  They are listed in order of dependency.  In other words,
-    the dependant ones are below those they depend on to be working.
+     many of these tests are here just to make it easy to identify problems in
+     parsing.  They are listed in order of dependency.  In other words,
+     the dependant ones are below those they depend on to be working.
 
-    Ironically, there's more testing code than there is actual parsing code.
-    */
+     Ironically, there's more testing code than there is actual parsing code.
+     */
 
     it('inventory items match', function ()
     {
@@ -73,9 +74,9 @@ for (var index = 0; index < EveParser.parsers.length; index++)
 
                 if (parser.name === 'BlueprintParser')
                 {
-                    testStream.push("1000 x Tritanium\n500 x Pyerite\n" +
-                        "250 x Mexallon\n100 x Isogen\n50 x Nocxium\n20 x Zydrine\n" +
-                        "1000 x Tritanium\n100 x Isogen\n");
+                    testStream.push("1000 Tritanium\n500 Pyerite\n" +
+                        "250 Mexallon\n100 Isogen\n50 Nocxium\n20 Zydrine\n" +
+                        "-1 Nocxium\n1000 Tritanium\n100 Isogen\n");
                 }
                 else if (parser.name === 'InventoryListParser')
                 {
@@ -85,6 +86,7 @@ for (var index = 0; index < EveParser.parsers.length; index++)
                         "Mexallon	250	Advanced Commodities			1,900 m3\n" +
                         "Isogen	100	Advanced Commodities			7,400 m3\n" +
                         "Nocxium	50	Advanced Commodities			400 m3\n" +
+                        "Nocxium	-1	Advanced Commodities			400 m3\n" +
                         "Zydrine	20	Advanced Commodities			7,400 m3\n" +
                         "Tritanium	1000	Blah			1,400 m3\n" +
                         "Isogen	100	Advanced Commodities			7,400 m3\n");
@@ -97,40 +99,47 @@ for (var index = 0; index < EveParser.parsers.length; index++)
 
             it("1000 + 1000 Tritanium is 2000", function (done)
             {
-                eveParser.rl.on('complete', () =>
+                eveParser.stream.on('complete', () =>
                 {
                     expect(eveParser.showTotal('Tritanium')).toEqual(
-                        '2000 x Tritanium');
+                        '2000 Tritanium');
                     done();
                 });
             });
             it("100 + 100 Isogen is 200", function (done)
             {
-                eveParser.rl.on('complete', () =>
+                eveParser.stream.on('complete', () =>
                 {
                     expect(eveParser.showTotal('Isogen')).toEqual(
-                        '200 x Isogen');
+                        '200 Isogen');
+                    done();
+                });
+            });
+            it("50 - 1 Nocxium is 49", function (done)
+            {
+                eveParser.stream.on('complete', function ()
+                {
+                    expect(eveParser.showTotal('Nocxium')).toEqual(
+                        '49 Nocxium');
                     done();
                 });
             });
             it("other minerals unchanged", function (done)
             {
-                eveParser.rl.on('complete', () =>
+                eveParser.stream.on('complete', () =>
                 {
                     expect(eveParser.showTotal('Pyerite')).toEqual(
-                        '500 x Pyerite');
+                        '500 Pyerite');
                     expect(eveParser.showTotal('Mexallon')).toEqual(
-                        '250 x Mexallon');
-                    expect(eveParser.showTotal('Nocxium')).toEqual(
-                        '50 x Nocxium');
+                        '250 Mexallon');
                     expect(eveParser.showTotal('Zydrine')).toEqual(
-                        '20 x Zydrine');
+                        '20 Zydrine');
                     done();
                 });
             });
             it("contains all components", function (done)
             {
-                eveParser.rl.on('complete', () =>
+                eveParser.stream.on('complete', () =>
                 {
                     var totals = Object.keys(eveParser.getTotals());
                     expect(totals).toContain('Tritanium');

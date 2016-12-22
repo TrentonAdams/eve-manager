@@ -1,8 +1,8 @@
-var EveParse = require('./eve-parser.js');
+var EveParse = require('./eve-parser.js').EveParser;
 
 var parser = new EveParse(process.stdin);
 parser.parse();
-parser.rl.on('complete', () =>
+parser.stream.on('complete', () =>
 {
     for (var total in parser.getTotals())
     {

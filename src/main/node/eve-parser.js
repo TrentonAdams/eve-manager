@@ -22,7 +22,7 @@ const BlueprintParser = function ()
 {
     this.name = "BlueprintParser";
     const sanitizeMaterials = /[,]/g;
-    const regex = /(\d+)(,\d)? *x *(.*$)/;
+    const regex = /[-]{0,1}(\d+)(,\d)? *x *(.*$)/;
     this.parse = function (line)
     {
         var inputLine = line.replace(sanitizeMaterials, '');
@@ -54,7 +54,7 @@ var InventoryListParser = function ()
     this.name = "InventoryListParser";
     const removeCommas = /[,]/g;
     this.inventoryItem = /([a-zA-z]+(\s+[a-zA-z]+)*)/;
-    this.inventoryCount = /(\d+(,\d+)*)/;
+    this.inventoryCount = /([-]{0,1}\d+(,\d+)*)/;
     const regex = /(.+) *(\d+)(,\d)?.*/;
     this.parse = function (line)
     {
@@ -83,14 +83,9 @@ const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
  */
 var EveParser = function (stream)
 {
-    const readline = require('readline');
+    const split2 = require('split2');
 
-    this.rl = readline.createInterface({
-        input: stream
-        // only needed if you want the lines to go to stdout
-        // output: process.stdout
-    });
-
+    this.stream = stream;
     // regexes for matching various types of standard eve inputs
     /**
      * Parses the format that you can copy from within the blueprint.
@@ -107,12 +102,12 @@ var EveParser = function (stream)
      */
     this.parse = function parse()
     {
-        $this.rl.on('line', (input) =>
+        stream.pipe(split2()).on('data', function(input)
         {
+            //console.log(input);
             parseLine(input);
-        }).on('close', () =>
+        }).on('end', function()
         {
-            //console.log(materials);
             for (var line = 0; line < materials.length; line++)
             {
                 var matName = materials[line][1];
@@ -120,7 +115,7 @@ var EveParser = function (stream)
                 //console.log("name: %s, count: %s", matName, matCount);
                 sumMaterialsByName(totals, matName, matCount);
             }
-            $this.rl.emit('complete');
+            stream.emit('complete');
         });
     };
 
@@ -169,7 +164,7 @@ var EveParser = function (stream)
      */
     this.showTotal = function (s)
     {
-        return totals[s] !== undefined ? totals[s] + ' x ' + s : '0 x ' + s;
+        return totals[s] !== undefined ? totals[s] + ' ' + s : '0 ' + s;
     };
 
     /**

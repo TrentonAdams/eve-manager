@@ -6,3 +6,4 @@
 20 x Zydrine
 1000 x Tritanium
 100 x Isogen
+-100 x Tritanium
