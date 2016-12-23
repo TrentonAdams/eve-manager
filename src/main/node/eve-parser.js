@@ -1,3 +1,4 @@
+"use strict";
 /*
  24,889 x Tritanium
  7,444 x Pyerite
@@ -56,6 +57,7 @@ var InventoryListParser = function ()
     this.inventoryItem = /([a-zA-z]+(\s+[a-zA-z]+)*)/;
     this.inventoryCount = /([-]{0,1}\d+(,\d+)*)/;
     const regex = /(.+) *(\d+)(,\d)?.*/;
+//    const regex = /[a-zA-Z]*\t(\d+)(,\d)?.*/;
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');

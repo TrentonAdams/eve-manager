@@ -14,6 +14,43 @@ describe("can create EveParser", function ()
     });
 });
 
+describe('test BlueprintParser', function ()
+{
+    var inputLineWithSpaces = "1000 x Integrity Response Drones";
+    var parser = new BlueprintParser();
+    /*
+     many of these tests are here just to make it easy to identify problems in
+     parsing.  They are listed in order of dependency.  In other words,
+     the dependant ones are below those they depend on to be working.
+
+     Ironically, there's more testing code than there is actual parsing code.
+     */
+
+    it('blueprint items match', function ()
+    {
+        expect(parser.parse(inputLineWithSpaces)[1]).toEqual(
+            "Integrity Response Drones");
+    });
+/*    it('line components retrievable', function ()
+    {
+        var match = [0, 0];
+        match = parser.regex.exec(inputLineWithSpaces);
+        expect(match[1]).toEqual("Integrity Response Drones");
+        match = parser.inventoryCount.exec(inputLineWithSpaces);
+        expect(match[1]).toEqual("1,000");
+        match = parser.inventoryItem.exec(inputLineWithTabs);
+        expect(match[1]).toEqual("Integrity Response Drones");
+        match = parser.inventoryCount.exec(inputLineWithTabs);
+        expect(match[1]).toEqual("1,000");
+    });*/
+    it('parsing successful', function ()
+    {
+        expect(parser.parse(inputLineWithSpaces)).toEqual(
+            ['1000', 'Integrity Response Drones']);
+    });
+});
+
+
 describe('test InventoryListParser', function ()
 {
     var inputLineWithSpaces = "Integrity Response Drones  1,000  Blah   1,400 m3\n";
