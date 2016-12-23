@@ -29,7 +29,7 @@ const BlueprintParser = function ()
     // any alphabetic string, including optional spaces, at the end
     this.itemName = / x ([a-zA-z]+(\s+[a-zA-z]+)*)$/;
 
-    const regex = /[-]{0,1}(\d+)(,\d)? *x *(.*$)/;
+    const regex = /[-]{0,1}(\d+)(,\d)* x ([a-zA-z]+(\s+[a-zA-z]+)*)$/;
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
