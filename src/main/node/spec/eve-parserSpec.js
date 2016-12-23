@@ -38,9 +38,9 @@ describe('BlueprintParser is valid', function ()
         expect(match[0]).toEqual("1000");
         expect(match[1]).toEqual("Integrity Response Drones");
 
-        match = parser.itemCount.exec(inputLineWithSpaces);
+        match = inputLineWithSpaces.match(parser.itemCount);
         expect(match[1]).toEqual("1,000");
-        match = parser.itemName.exec(inputLineWithSpaces);
+        match = inputLineWithSpaces.match(parser.itemName);
         expect(match[1]).toEqual("Integrity Response Drones");
     });
 

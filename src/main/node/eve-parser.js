@@ -25,23 +25,28 @@ const BlueprintParser = function ()
     const removeCommas = /[,]/g;
     const sanitizeMaterials = /[,]/g;
     // number only at the beginning of the strong
-    this.itemCount = /^(([-]{0,1}(\d+)(,\d)*){1,})/;
+    this.itemCount = "^(([-]{0,1}(\\d+)(,\\d)*){1,})";
     // any alphabetic string, including optional spaces, at the end
-    this.itemName = / x ([a-zA-z]+(\s+[a-zA-z]+)*)$/;
-
-    const regex = /[-]{0,1}(\d+)(,\d)* x ([a-zA-z]+(\s+[a-zA-z]+)*)$/;
+    this.itemName = " x ([a-zA-z]+(\\s+[a-zA-z]+)*)$";
+    this.regex = this.itemCount + this.itemName;
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
-        var itemMatch = this.itemName.exec(inputLine);
-        var countMatch = this.itemCount.exec(inputLine);
-        //console.log(countMatch);
-        //console.log(itemMatch);
-        return [countMatch[1], itemMatch[1]];
+        var match = inputLine.match(this.regex);
+        if (match && match.length == 7)
+        {   // ignore everything but a perfect match.
+            //console.log(match);
+            return [match[1], match[5]];
+        }
+        else
+        {
+            return ['0','Invalid Input'];
+        }
     };
     this.matches = function (line)
-    {
-        return line.match(regex);
+    {   // ignore everything but a perfect match.
+        var match = line.match(this.regex);
+        return match && match.length == 7;
     };
 };
 
