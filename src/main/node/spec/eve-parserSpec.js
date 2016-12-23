@@ -14,9 +14,9 @@ describe("can create EveParser", function ()
     });
 });
 
-describe('test BlueprintParser', function ()
+describe('BlueprintParser is valid', function ()
 {
-    var inputLineWithSpaces = "1000 x Integrity Response Drones";
+    var inputLineWithSpaces = "1,000 x Integrity Response Drones";
     var parser = new BlueprintParser();
     /*
      many of these tests are here just to make it easy to identify problems in
@@ -28,21 +28,22 @@ describe('test BlueprintParser', function ()
 
     it('blueprint items match', function ()
     {
-        expect(parser.parse(inputLineWithSpaces)[1]).toEqual(
-            "Integrity Response Drones");
+        expect(parser.matches(inputLineWithSpaces)).toBeTruthy();
     });
-/*    it('line components retrievable', function ()
+
+    it('line components retrievable', function ()
     {
         var match = [0, 0];
-        match = parser.regex.exec(inputLineWithSpaces);
+        match = parser.parse(inputLineWithSpaces);
+        expect(match[0]).toEqual("1000");
         expect(match[1]).toEqual("Integrity Response Drones");
-        match = parser.inventoryCount.exec(inputLineWithSpaces);
+
+        match = parser.itemCount.exec(inputLineWithSpaces);
         expect(match[1]).toEqual("1,000");
-        match = parser.inventoryItem.exec(inputLineWithTabs);
+        match = parser.itemName.exec(inputLineWithSpaces);
         expect(match[1]).toEqual("Integrity Response Drones");
-        match = parser.inventoryCount.exec(inputLineWithTabs);
-        expect(match[1]).toEqual("1,000");
-    });*/
+    });
+
     it('parsing successful', function ()
     {
         expect(parser.parse(inputLineWithSpaces)).toEqual(
@@ -51,7 +52,7 @@ describe('test BlueprintParser', function ()
 });
 
 
-describe('test InventoryListParser', function ()
+describe('InventoryListParser is valid', function ()
 {
     var inputLineWithSpaces = "Integrity Response Drones  1,000  Blah   1,400 m3\n";
     var inputLineWithTabs = "Integrity Response Drones	1,000	Blah			1,400 m3\n";
@@ -99,7 +100,7 @@ for (var index = 0; index < EveParser.parsers.length; index++)
     (function (parser)
     {   // closure required or parser gets shared and each run is the same as
         // the last one set.
-        describe("test " + parser.name + " selection", function ()
+        describe(parser.name + " parser selection", function ()
         {
             var eveParser;
             beforeEach(function ()

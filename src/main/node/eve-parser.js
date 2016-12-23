@@ -22,13 +22,22 @@
 const BlueprintParser = function ()
 {
     this.name = "BlueprintParser";
+    const removeCommas = /[,]/g;
     const sanitizeMaterials = /[,]/g;
+    // number only at the beginning of the strong
+    this.itemCount = /^(([-]{0,1}(\d+)(,\d)*){1,})/;
+    // any alphabetic string, including optional spaces, at the end
+    this.itemName = / x ([a-zA-z]+(\s+[a-zA-z]+)*)$/;
+
     const regex = /[-]{0,1}(\d+)(,\d)? *x *(.*$)/;
     this.parse = function (line)
     {
-        var inputLine = line.replace(sanitizeMaterials, '');
-        inputLine = inputLine.replace('  ', ' ');
-        return inputLine.split(' x ');
+        var inputLine = line.replace(removeCommas, '');
+        var itemMatch = this.itemName.exec(inputLine);
+        var countMatch = this.itemCount.exec(inputLine);
+        //console.log(countMatch);
+        //console.log(itemMatch);
+        return [countMatch[1], itemMatch[1]];
     };
     this.matches = function (line)
     {
