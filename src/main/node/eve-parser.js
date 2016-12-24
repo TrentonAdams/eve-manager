@@ -27,7 +27,7 @@ const BlueprintParser = function ()
     // number only at the beginning of the strong
     this.itemCount = "^(([-]{0,1}(\\d+)(,\\d)*){1,})";
     // any alphabetic string, including optional spaces, at the end
-    this.itemName = " x ([a-zA-z]+(\\s+[a-zA-z]+)*)$";
+    this.itemName = " x ([a-zA-Z\\-]+(\\s+[a-zA-Z\\-]+)*)$";
     this.regex = this.itemCount + this.itemName;
     this.parse = function (line)
     {
@@ -40,7 +40,7 @@ const BlueprintParser = function ()
         }
         else
         {
-            return ['0','Invalid Input'];
+            return ['0','Invalid Input: ' + inputLine];
         }
     };
     this.matches = function (line)
