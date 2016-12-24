@@ -25,20 +25,20 @@ const BlueprintParser = function ()
     const removeCommas = /[,]/g;
     const sanitizeMaterials = /[,]/g;
     // number only at the beginning of the strong
-    this.itemCount = "^(([-]{0,1}(\\d+)(,\\d)*){1,})";
+    this.itemCount = "^((?:[-]{0,1}(?:\\d+)(?:,\\d)*){1,})";
     // any alphabetic string, including optional spaces, at the end
-    this.itemName = " x ([a-zA-Z\\-]+(\\s+[a-zA-Z\\-]+)*)$";
+    this.itemName = " x ([a-zA-Z\\-]+(?:\\s+[a-zA-Z\\-]+)*)$";
     this.regex = this.itemCount + this.itemName;
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
         var match = inputLine.match(this.regex);
-        //console.log('BlueprintParser.parse()');
-        if (match && match.length == 7)
+        //console.log('BlueprintParser.parse(): ', match);
+        if (match && match.length == 3)
         {   // ignore everything but a perfect match.
             //console.log([match[1], match[5]]);
             // e.g. ['1000', 'Integrity Response Drones']
-            return [match[1], match[5]];
+            return [match[1], match[2]];
         }
         else
         {
@@ -49,7 +49,7 @@ const BlueprintParser = function ()
     this.matches = function (line)
     {   // ignore everything but a perfect match.
         var match = line.match(this.regex);
-        return match && match.length == 7;
+        return match && match.length == 3;
     };
 };
 
@@ -72,21 +72,22 @@ var InventoryListParser = function ()
     this.name = "InventoryListParser";
     const removeCommas = /[,\r\n]/g;
     // 4 main groups, item, count, category (ignored), and m3 (ignored)
-//    this.regex = "^([a-zA-z]+(\\s+[a-zA-z]+)*)\\s*([-]{0,1}\\d+(,\\d+)*)\\s*([a-zA-z]+(\\s+[a-zA-z]+)*)\\s*(\\d+(,\\d+)*) m3$";
-    this.itemName = "^([a-zA-Z]+(\\s+[a-zA-Z]+)*)";
-    this.itemCount = "([-]{0,1}\\d+(,\\d+)*)";
+    // We use non-capture groups so that the match array only has the items we
+    // need.  This is defined by (?:regex here).  Note the '?:'
+    this.itemName = "^([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
+    this.itemCount = "([-]{0,1}\\d+(?:,\\d+)*)";
     this.regex = this.itemName +
-    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(\\s+[a-zA-Z]+)*\\s*\\d+(,\\d+)* m3$";
+    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)* m3$";
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
         var match = inputLine.match(this.regex);
         //console.log('parse-inputLine: ', inputLine);
         //console.log('parse-match: ', match);
-        if (match && match.length == 7)
+        if (match && match.length == 3)
         {   // ignore everything but a perfect match.
             // e.g. ['1000', 'Integrity Response Drones']
-            return [match[3], match[1]];
+            return [match[2], match[1]];
         }
         else
         {
@@ -99,7 +100,7 @@ var InventoryListParser = function ()
         //console.log('matches-line: ', line);
         //console.log('matches-regex: ', this.regex);
         //console.log('matches-match: ', match, ', length: ', match.length);
-        return match && match.length == 7;
+        return match && match.length == 3;
     };
 };
 

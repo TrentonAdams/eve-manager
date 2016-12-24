@@ -29,7 +29,7 @@ describe('InventoryListParser is valid', function ()
         expect(match[1]).toEqual("1,000");*/
         match = inputLineWithTabs.match(parser.regex);
         expect(match[1]).toEqual("Integrity Response Drones");
-        expect(match[3]).toEqual("1,000");
+        expect(match[2]).toEqual("1,000");
     });
     it('parsing successful', function ()
     {
