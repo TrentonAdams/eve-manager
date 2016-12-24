@@ -12,14 +12,16 @@
  * Base parser object.
  * @constructor
  */
-var Parser = {};
+class Parser {
+    constructor()
+    {
+        this.name = "Default Parser";
+        this.removeCharacters = /[,\r\n]/g;
+        this.itemCount = "";
+        this.itemName = "";
+        this.regex = "";
+    }
 
-Parser.prototype = {
-    name: "Default Parser",
-    removeCharacters: /[,\r\n]/g,
-    itemCount: "",
-    itemName: "",
-    regex: "",
     /**
      * Parses the input.  The regex set by your object *must* return only two
      * capture groups, the count and the item name.  That way, this base method
@@ -35,11 +37,12 @@ Parser.prototype = {
      * @param line the input line
      * @returns {*[]}
      */
-    parse: function (line)
+    parse(line)
     {
         var inputLine = line.replace(this.removeCharacters, '');
         var match = inputLine.match(this.regex);
         //console.log('parse-inputLine: ', inputLine);
+        //console.log('parse-removeCharacters: ', this.removeCharacters);
         //console.log('parse-match: ', match);
         if (match && match.length == 3)
         {   // ignore everything but a perfect match.
@@ -52,7 +55,7 @@ Parser.prototype = {
             //console.log([match[1], match[5]]);
             return ['0', 'Invalid Input: ' + inputLine];
         }
-    },
+    }
 
     /**
      * Your "this.regex" must return only two capture groups, one for count
@@ -61,7 +64,7 @@ Parser.prototype = {
      * @param line the line to match.
      * @returns true if this parser can parse the line;
      */
-    matches: function (line)
+    matches(line)
     {   // ignore everything but a perfect match.
         var match = line.match(this.regex);
         //console.log('matches-line: ', line);
@@ -69,7 +72,7 @@ Parser.prototype = {
         //console.log('matches-match: ', match);
         return match && match.length == 3;
     }
-};
+}
 
 /**
  * Parses blueprint materials in the form of...
@@ -83,18 +86,18 @@ Parser.prototype = {
  * @constructor
  */
 
-var BlueprintParser = function ()
-{
-    this.prototype = Parser.prototype;
-    this.name = "BlueprintParser";
-    // number only at the beginning of the strong
-    this.itemCount = "^((?:[-]{0,1}(?:\\d+)(?:,\\d)*){1,})";
-    // any alphabetic string, including optional spaces, at the end
-    this.itemName = " x ([a-zA-Z\\-]+(?:\\s+[a-zA-Z\\-]+)*)$";
-    this.regex = this.itemCount + this.itemName;
-};
-
-BlueprintParser.prototype = Parser.prototype;
+class BlueprintParser extends Parser {
+    constructor()
+    {
+        super();
+        this.name = "BlueprintParser";
+        // number only at the beginning of the strong
+        this.itemCount = "^((?:[-]{0,1}(?:\\d+)(?:,\\d)*){1,})";
+        // any alphabetic string, including optional spaces, at the end
+        this.itemName = " x ([a-zA-Z\\-]+(?:\\s+[a-zA-Z\\-]+)*)$";
+        this.regex = this.itemCount + this.itemName;
+    }
+}
 
 module.exports.BlueprintParser = BlueprintParser;
 
@@ -110,28 +113,38 @@ module.exports.BlueprintParser = BlueprintParser;
  *
  * @constructor
  */
-var InventoryListParser = function ()
-{
-    this.prototype = Parser.prototype;
-    this.name = "InventoryListParser";
-    // 4 main groups, item, count, category (ignored), and m3 (ignored)
-    // We use non-capture groups so that the match array only has the items we
-    // need.  This is defined by (?:regex here).  Note the '?:'
-    this.itemName = "^([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
-    this.itemCount = "([-]{0,1}\\d+(?:,\\d+)*)";
-    this.regex = this.itemName +
-        "\\s*" + this.itemCount +
-        "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
-    this.parse = function (line)
+class InventoryListParser extends Parser{
+    constructor()
     {
-        var match = Parser.prototype.parse.call(this, line);
+        super();
+        this.name = "InventoryListParser";
+        // 4 main groups, item, count, category (ignored), and m3 (ignored)
+        // We use non-capture groups so that the match array only has the items we
+        // need.  This is defined by (?:regex here).  Note the '?:'
+        this.itemName = "^([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
+        this.itemCount = "([-]{0,1}\\d+(?:,\\d+)*)";
+        this.regex = this.itemName +
+            "\\s*" + this.itemCount +
+            "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
+
+    }
+
+    /**
+     * We have to swap the data locations, as inventory items have descriptions
+     * first, not counts.
+     *
+     * @param line the input line
+     * @returns [super.parse(line)[1], super.parse(line)[0]]
+     */
+    parse(line)
+    {
+        var match = super.parse(line);
         //console.log(match);
         //console.log([match[1], match[0]]);
         return [match[1], match[0]];
     };
-};
-
-InventoryListParser.prototype = Parser.prototype;
+}
+;
 
 module.exports.InventoryListParser = InventoryListParser;
 
