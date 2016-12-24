@@ -10,6 +10,7 @@
 
 /**
  * Base parser object.
+ *
  * @constructor
  */
 class Parser {
@@ -59,7 +60,7 @@ class Parser {
 
     /**
      * Your "this.regex" must return only two capture groups, one for count
-     * and one for the item name.
+     * and one for the item name.  Any other groups must be non-capturing.
      *
      * @param line the line to match.
      * @returns true if this parser can parse the line;
@@ -113,7 +114,7 @@ module.exports.BlueprintParser = BlueprintParser;
  *
  * @constructor
  */
-class InventoryListParser extends Parser{
+class InventoryListParser extends Parser {
     constructor()
     {
         super();
@@ -126,7 +127,6 @@ class InventoryListParser extends Parser{
         this.regex = this.itemName +
             "\\s*" + this.itemCount +
             "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
-
     }
 
     /**
@@ -144,11 +144,8 @@ class InventoryListParser extends Parser{
         return [match[1], match[0]];
     };
 }
-;
 
 module.exports.InventoryListParser = InventoryListParser;
-
-const countSecondRegex = /(.+) *x *(\d+)(,\d)?/;
 
 /**
  * Create an EveParser object.  Note that in order to use the object you must
@@ -203,22 +200,21 @@ var EveParser = function (stream)
      */
     function parseLine(input)
     {
-        if ($this.matchedParser === undefined)
-        {   // should only happen once for the duration of EveParser
-            for (var index = 0; index < EveParser.parsers.length; index++)
+        var matchedParser;
+
+        for (var index = 0; index < EveParser.parsers.length; index++)
+        {
+            if (EveParser.parsers[index].matches(input))
             {
-                if (EveParser.parsers[index].matches(input))
-                {
-                    $this.matchedParser = EveParser.parsers[index];
-                    break;  // found one, we're done
-                }
+                matchedParser = EveParser.parsers[index];
+                break;  // found one, we're done
             }
-            //console.log($this.matchedParser.name);
         }
-        if ($this.matchedParser !== undefined)
+        //console.log($this.matchedParser.name);
+        if (matchedParser !== undefined)
         {
             //console.log($this.matchedParser.parse(input));
-            materials.push($this.matchedParser.parse(input));
+            materials.push(matchedParser.parse(input));
         }
     }
 

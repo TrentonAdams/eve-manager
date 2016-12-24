@@ -113,3 +113,84 @@ for (var index = 0; index < EveParser.parsers.length; index++)
         });
     })(parser);
 }
+
+describe("multi-format parsing", function ()
+{
+    var eveParser;
+    beforeEach(function ()
+    {
+        var testStream = new stream.Readable();
+        testStream._read = function noop()
+        {
+        };
+
+        testStream.push(
+            "1000 x Tritanium\n500 x Pyerite\n" +
+            "Mexallon	250	Advanced Commodities			1,900 m3\n" +
+            "Isogen	100	Advanced Commodities			7,400 m3\n" +
+            "Nocxium	50	Advanced Commodities			400 m3\n" +
+            "Nocxium	-1	Advanced Commodities			400 m3\n" +
+            "Zydrine	20	Advanced Commodities			7,400 m3\n" +
+            "Tritanium	1000	Blah			1,400 m3\n" +
+            "Isogen	100	Advanced Commodities			7,400 m3\n");
+
+        testStream.push(null);
+        eveParser = new EveParser(testStream);
+        eveParser.parse();
+    });
+
+    it("1000 + 1000 Tritanium is 2000", function (done)
+    {
+        eveParser.stream.on('complete', () =>
+        {
+            expect(eveParser.showTotal('Tritanium')).toEqual(
+                '2000 Tritanium');
+            done();
+        });
+    });
+    it("100 + 100 Isogen is 200", function (done)
+    {
+        eveParser.stream.on('complete', () =>
+        {
+            expect(eveParser.showTotal('Isogen')).toEqual(
+                '200 Isogen');
+            done();
+        });
+    });
+    it("50 - 1 Nocxium is 49", function (done)
+    {
+        eveParser.stream.on('complete', function ()
+        {
+            expect(eveParser.showTotal('Nocxium')).toEqual(
+                '49 Nocxium');
+            done();
+        });
+    });
+    it("other minerals unchanged", function (done)
+    {
+        eveParser.stream.on('complete', () =>
+        {
+            expect(eveParser.showTotal('Pyerite')).toEqual(
+                '500 Pyerite');
+            expect(eveParser.showTotal('Mexallon')).toEqual(
+                '250 Mexallon');
+            expect(eveParser.showTotal('Zydrine')).toEqual(
+                '20 Zydrine');
+            done();
+        });
+    });
+    it("contains all components", function (done)
+    {
+        eveParser.stream.on('complete', () =>
+        {
+            var totals = Object.keys(eveParser.getTotals());
+            expect(totals).toContain('Tritanium');
+            expect(totals).toContain('Pyerite');
+            expect(totals).toContain('Mexallon');
+            expect(totals).toContain('Nocxium');
+            expect(totals).toContain('Zydrine');
+            expect(totals).toContain('Isogen');
+            done();
+        });
+    })
+});
