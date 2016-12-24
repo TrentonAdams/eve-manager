@@ -13,10 +13,10 @@
  *
  * @constructor
  */
-class Parser {
+class BaseParser {
     constructor()
     {
-        this.name = "Default Parser";
+        this.name = "Default BaseParser";
         this.removeCharacters = /[,\r\n]/g;
         this.itemCount = "";
         this.itemName = "";
@@ -87,7 +87,7 @@ class Parser {
  * @constructor
  */
 
-class BlueprintParser extends Parser {
+class BlueprintParser extends BaseParser {
     constructor()
     {
         super();
@@ -114,7 +114,7 @@ module.exports.BlueprintParser = BlueprintParser;
  *
  * @constructor
  */
-class InventoryListParser extends Parser {
+class InventoryListParser extends BaseParser {
     constructor()
     {
         super();
