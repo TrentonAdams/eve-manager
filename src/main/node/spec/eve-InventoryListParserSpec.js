@@ -7,6 +7,8 @@ describe('InventoryListParser is valid', function ()
 {
     var inputLineWithSpaces = "Integrity Response Drones  1,000  Blah   1,400 m3";
     var inputLineWithTabs = "Integrity Response Drones	1,000	Blah			1,400 m3";
+    var inputLineWithDecimals = "Integrity Response Drones	1,000	Blah			1,400.23 m3";
+
     var parser = new InventoryListParser();
     /*
      many of these tests are here just to make it easy to identify problems in
@@ -28,6 +30,9 @@ describe('InventoryListParser is valid', function ()
         expect(match[3]).toEqual("Integrity Response Drones");
         expect(match[1]).toEqual("1,000");*/
         match = inputLineWithTabs.match(parser.regex);
+        expect(match[1]).toEqual("Integrity Response Drones");
+        expect(match[2]).toEqual("1,000");
+        match = inputLineWithDecimals.match(parser.regex);
         expect(match[1]).toEqual("Integrity Response Drones");
         expect(match[2]).toEqual("1,000");
     });

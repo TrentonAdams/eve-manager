@@ -22,7 +22,7 @@
 const BlueprintParser = function ()
 {
     this.name = "BlueprintParser";
-    const removeCommas = /[,]/g;
+    const removeCommas = /[,\r\n]/g;
     const sanitizeMaterials = /[,]/g;
     // number only at the beginning of the strong
     this.itemCount = "^((?:[-]{0,1}(?:\\d+)(?:,\\d)*){1,})";
@@ -77,7 +77,7 @@ var InventoryListParser = function ()
     this.itemName = "^([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
     this.itemCount = "([-]{0,1}\\d+(?:,\\d+)*)";
     this.regex = this.itemName +
-    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)* m3$";
+    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
@@ -99,7 +99,7 @@ var InventoryListParser = function ()
         var match = line.match(this.regex);
         //console.log('matches-line: ', line);
         //console.log('matches-regex: ', this.regex);
-        //console.log('matches-match: ', match, ', length: ', match.length);
+        //console.log('matches-match: ', match);
         return match && match.length == 3;
     };
 };
