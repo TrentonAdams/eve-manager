@@ -9,6 +9,69 @@
  */
 
 /**
+ * Base parser object.
+ * @constructor
+ */
+var Parser = {};
+
+Parser.prototype = {
+    name: "Default Parser",
+    removeCharacters: /[,\r\n]/g,
+    itemCount: "",
+    itemName: "",
+    regex: "",
+    /**
+     * Parses the input.  The regex set by your object *must* return only two
+     * capture groups, the count and the item name.  That way, this base method
+     * will always return the correct data (though possibly in the wrong order,
+     * depending on the input order you're handling.
+     *
+     * Since the order of the count and the item name may vary, it may be
+     * necessary to override the parse() function.  It returns
+     * [match[1], match[2]]; by default.  You'll need to override it to swap
+     * those if necessary.  You can do this by calling the original, and
+     * return it's results in swapped order.
+     *
+     * @param line the input line
+     * @returns {*[]}
+     */
+    parse: function (line)
+    {
+        var inputLine = line.replace(this.removeCharacters, '');
+        var match = inputLine.match(this.regex);
+        //console.log('parse-inputLine: ', inputLine);
+        //console.log('parse-match: ', match);
+        if (match && match.length == 3)
+        {   // ignore everything but a perfect match.
+            //console.log([match[1], match[5]]);
+            // e.g. ['1000', 'Integrity Response Drones']
+            return [match[1], match[2]];
+        }
+        else
+        {
+            //console.log([match[1], match[5]]);
+            return ['0', 'Invalid Input: ' + inputLine];
+        }
+    },
+
+    /**
+     * Your "this.regex" must return only two capture groups, one for count
+     * and one for the item name.
+     *
+     * @param line the line to match.
+     * @returns true if this parser can parse the line;
+     */
+    matches: function (line)
+    {   // ignore everything but a perfect match.
+        var match = line.match(this.regex);
+        //console.log('matches-line: ', line);
+        //console.log('matches-regex: ', this.regex);
+        //console.log('matches-match: ', match);
+        return match && match.length == 3;
+    }
+};
+
+/**
  * Parses blueprint materials in the form of...
  *
  * 1000 x Tritanium
@@ -19,39 +82,19 @@
  *
  * @constructor
  */
-const BlueprintParser = function ()
+
+var BlueprintParser = function ()
 {
+    this.prototype = Parser.prototype;
     this.name = "BlueprintParser";
-    const removeCommas = /[,\r\n]/g;
-    const sanitizeMaterials = /[,]/g;
     // number only at the beginning of the strong
     this.itemCount = "^((?:[-]{0,1}(?:\\d+)(?:,\\d)*){1,})";
     // any alphabetic string, including optional spaces, at the end
     this.itemName = " x ([a-zA-Z\\-]+(?:\\s+[a-zA-Z\\-]+)*)$";
     this.regex = this.itemCount + this.itemName;
-    this.parse = function (line)
-    {
-        var inputLine = line.replace(removeCommas, '');
-        var match = inputLine.match(this.regex);
-        //console.log('BlueprintParser.parse(): ', match);
-        if (match && match.length == 3)
-        {   // ignore everything but a perfect match.
-            //console.log([match[1], match[5]]);
-            // e.g. ['1000', 'Integrity Response Drones']
-            return [match[1], match[2]];
-        }
-        else
-        {
-            //console.log([match[1], match[5]]);
-            return ['0','Invalid Input: ' + inputLine];
-        }
-    };
-    this.matches = function (line)
-    {   // ignore everything but a perfect match.
-        var match = line.match(this.regex);
-        return match && match.length == 3;
-    };
 };
+
+BlueprintParser.prototype = Parser.prototype;
 
 module.exports.BlueprintParser = BlueprintParser;
 
@@ -69,40 +112,26 @@ module.exports.BlueprintParser = BlueprintParser;
  */
 var InventoryListParser = function ()
 {
+    this.prototype = Parser.prototype;
     this.name = "InventoryListParser";
-    const removeCommas = /[,\r\n]/g;
     // 4 main groups, item, count, category (ignored), and m3 (ignored)
     // We use non-capture groups so that the match array only has the items we
     // need.  This is defined by (?:regex here).  Note the '?:'
     this.itemName = "^([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
     this.itemCount = "([-]{0,1}\\d+(?:,\\d+)*)";
     this.regex = this.itemName +
-    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
+        "\\s*" + this.itemCount +
+        "\\s*[a-zA-Z]+(?:\\s+[a-zA-Z]+)*\\s*\\d+(?:,\\d+)*(?:.\d*)* m3$";
     this.parse = function (line)
     {
-        var inputLine = line.replace(removeCommas, '');
-        var match = inputLine.match(this.regex);
-        //console.log('parse-inputLine: ', inputLine);
-        //console.log('parse-match: ', match);
-        if (match && match.length == 3)
-        {   // ignore everything but a perfect match.
-            // e.g. ['1000', 'Integrity Response Drones']
-            return [match[2], match[1]];
-        }
-        else
-        {
-            return ['0','Invalid Input: ' + inputLine];
-        }
-    };
-    this.matches = function (line)
-    {
-        var match = line.match(this.regex);
-        //console.log('matches-line: ', line);
-        //console.log('matches-regex: ', this.regex);
-        //console.log('matches-match: ', match);
-        return match && match.length == 3;
+        var match = Parser.prototype.parse.call(this, line);
+        //console.log(match);
+        //console.log([match[1], match[0]]);
+        return [match[1], match[0]];
     };
 };
+
+InventoryListParser.prototype = Parser.prototype;
 
 module.exports.InventoryListParser = InventoryListParser;
 
@@ -135,11 +164,11 @@ var EveParser = function (stream)
      */
     this.parse = function parse()
     {
-        stream.pipe(split2()).on('data', function(input)
+        stream.pipe(split2()).on('data', function (input)
         {
             //console.log(input);
             parseLine(input);
-        }).on('end', function()
+        }).on('end', function ()
         {
             for (var line = 0; line < materials.length; line++)
             {
