@@ -33,13 +33,16 @@ const BlueprintParser = function ()
     {
         var inputLine = line.replace(removeCommas, '');
         var match = inputLine.match(this.regex);
+        //console.log('BlueprintParser.parse()');
         if (match && match.length == 7)
         {   // ignore everything but a perfect match.
-            //console.log(match);
+            //console.log([match[1], match[5]]);
+            // e.g. ['1000', 'Integrity Response Drones']
             return [match[1], match[5]];
         }
         else
         {
+            //console.log([match[1], match[5]]);
             return ['0','Invalid Input: ' + inputLine];
         }
     };
@@ -67,23 +70,36 @@ module.exports.BlueprintParser = BlueprintParser;
 var InventoryListParser = function ()
 {
     this.name = "InventoryListParser";
-    const removeCommas = /[,]/g;
-    this.inventoryItem = /([a-zA-z]+(\s+[a-zA-z]+)*)/;
-    this.inventoryCount = /([-]{0,1}\d+(,\d+)*)/;
-    const regex = /(.+) *(\d+)(,\d)?.*/;
-//    const regex = /[a-zA-Z]*\t(\d+)(,\d)?.*/;
+    const removeCommas = /[,\r\n]/g;
+    // 4 main groups, item, count, category (ignored), and m3 (ignored)
+//    this.regex = "^([a-zA-z]+(\\s+[a-zA-z]+)*)\\s*([-]{0,1}\\d+(,\\d+)*)\\s*([a-zA-z]+(\\s+[a-zA-z]+)*)\\s*(\\d+(,\\d+)*) m3$";
+    this.itemName = "^([a-zA-Z]+(\\s+[a-zA-Z]+)*)";
+    this.itemCount = "([-]{0,1}\\d+(,\\d+)*)";
+    this.regex = this.itemName +
+    "\\s*" + this.itemCount + "\\s*[a-zA-Z]+(\\s+[a-zA-Z]+)*\\s*\\d+(,\\d+)* m3$";
     this.parse = function (line)
     {
         var inputLine = line.replace(removeCommas, '');
-        var itemMatch = this.inventoryItem.exec(inputLine);
-        var countMatch = this.inventoryCount.exec(inputLine);
-        //console.log(inputLine);
-        // e.g. ['1000', 'Integrity Response Drones']
-        return [countMatch[1], itemMatch[1]];
+        var match = inputLine.match(this.regex);
+        //console.log('parse-inputLine: ', inputLine);
+        //console.log('parse-match: ', match);
+        if (match && match.length == 7)
+        {   // ignore everything but a perfect match.
+            // e.g. ['1000', 'Integrity Response Drones']
+            return [match[3], match[1]];
+        }
+        else
+        {
+            return ['0','Invalid Input: ' + inputLine];
+        }
     };
     this.matches = function (line)
     {
-        return line.match(regex);
+        var match = line.match(this.regex);
+        //console.log('matches-line: ', line);
+        //console.log('matches-regex: ', this.regex);
+        //console.log('matches-match: ', match, ', length: ', match.length);
+        return match && match.length == 7;
     };
 };
 
@@ -131,6 +147,7 @@ var EveParser = function (stream)
                 //console.log("name: %s, count: %s", matName, matCount);
                 sumMaterialsByName(totals, matName, matCount);
             }
+            materials = null;
             stream.emit('complete');
         });
     };

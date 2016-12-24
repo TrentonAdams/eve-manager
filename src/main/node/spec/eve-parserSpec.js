@@ -14,85 +14,6 @@ describe("can create EveParser", function ()
     });
 });
 
-describe('BlueprintParser is valid', function ()
-{
-    var inputLineWithSpaces = "1,000 x Integrity Response Drones";
-    var parser = new BlueprintParser();
-    /*
-     many of these tests are here just to make it easy to identify problems in
-     parsing.  They are listed in order of dependency.  In other words,
-     the dependant ones are below those they depend on to be working.
-
-     Ironically, there's more testing code than there is actual parsing code.
-     */
-
-    it('blueprint items match', function ()
-    {
-        expect(parser.matches(inputLineWithSpaces)).toBeTruthy();
-    });
-
-    it('line components retrievable', function ()
-    {
-        var match = [0, 0];
-        match = parser.parse(inputLineWithSpaces);
-        expect(match[0]).toEqual("1000");
-        expect(match[1]).toEqual("Integrity Response Drones");
-
-        match = inputLineWithSpaces.match(parser.itemCount);
-        expect(match[1]).toEqual("1,000");
-        match = inputLineWithSpaces.match(parser.itemName);
-        expect(match[1]).toEqual("Integrity Response Drones");
-    });
-
-    it('parsing successful', function ()
-    {
-        expect(parser.parse(inputLineWithSpaces)).toEqual(
-            ['1000', 'Integrity Response Drones']);
-    });
-});
-
-
-describe('InventoryListParser is valid', function ()
-{
-    var inputLineWithSpaces = "Integrity Response Drones  1,000  Blah   1,400 m3\n";
-    var inputLineWithTabs = "Integrity Response Drones	1,000	Blah			1,400 m3\n";
-    var inventoryParser = new InventoryListParser();
-    /*
-     many of these tests are here just to make it easy to identify problems in
-     parsing.  They are listed in order of dependency.  In other words,
-     the dependant ones are below those they depend on to be working.
-
-     Ironically, there's more testing code than there is actual parsing code.
-     */
-
-    it('inventory items match', function ()
-    {
-        expect(inventoryParser.parse(inputLineWithSpaces)[1]).toEqual(
-            "Integrity Response Drones");
-        expect(inventoryParser.parse(inputLineWithTabs)[1]).toEqual(
-            "Integrity Response Drones");
-    });
-    it('line components retrievable', function ()
-    {
-        var match = [0, 0];
-        match = inventoryParser.inventoryItem.exec(inputLineWithSpaces);
-        expect(match[1]).toEqual("Integrity Response Drones");
-        match = inventoryParser.inventoryCount.exec(inputLineWithSpaces);
-        expect(match[1]).toEqual("1,000");
-        match = inventoryParser.inventoryItem.exec(inputLineWithTabs);
-        expect(match[1]).toEqual("Integrity Response Drones");
-        match = inventoryParser.inventoryCount.exec(inputLineWithTabs);
-        expect(match[1]).toEqual("1,000");
-    });
-    it('parsing successful', function ()
-    {
-        expect(inventoryParser.parse(inputLineWithTabs)).toEqual(
-            ['1000', 'Integrity Response Drones']);
-        expect(inventoryParser.parse(inputLineWithSpaces)).toEqual(
-            ['1000', 'Integrity Response Drones']);
-    });
-});
-
 for (var index = 0; index < EveParser.parsers.length; index++)
 {
     var parser = EveParser.parsers[index];
@@ -112,9 +33,9 @@ for (var index = 0; index < EveParser.parsers.length; index++)
 
                 if (parser.name === 'BlueprintParser')
                 {
-                    testStream.push("1000 Tritanium\n500 Pyerite\n" +
-                        "250 Mexallon\n100 Isogen\n50 Nocxium\n20 Zydrine\n" +
-                        "-1 Nocxium\n1000 Tritanium\n100 Isogen\n");
+                    testStream.push("1000 x Tritanium\n500 x Pyerite\n" +
+                        "250 x Mexallon\n100 x Isogen\n50 x Nocxium\n20 x Zydrine\n" +
+                        "-1 x Nocxium\n1000 x Tritanium\n100 x Isogen\n");
                 }
                 else if (parser.name === 'InventoryListParser')
                 {
