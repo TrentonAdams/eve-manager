@@ -1,9 +1,0 @@
-1000 x Tritanium
-500 x Pyerite
-250 x Mexallon
-100 x Isogen
-50 x Nocxium
-20 x Zydrine
-1000 x Tritanium
-100 x Isogen
--100 x Tritanium
