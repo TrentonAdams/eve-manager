@@ -1,6 +1,5 @@
 "use strict";
 var stream = require('stream');
-var fs = require('fs');
 var EveParser = require('../eve-parser.js').EveParser;
 var InventoryListParser = require('../eve-parser.js').InventoryListParser;
 var BlueprintParser = require('../eve-parser.js').BlueprintParser;

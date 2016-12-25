@@ -9,8 +9,11 @@
  */
 
 /**
- * Base parser object.
+ * Base parser object.  The "match()" should not require any overriding, as
+ * it simply takes the "regex" property you define in your inherited class, and
+ * matches it against a line with "this.removeCharacters" removed from the line.
  *
+ * The parse() function may need overriding, as per it's docs.
  * @constructor
  */
 class BaseParser {
@@ -32,8 +35,14 @@ class BaseParser {
      * Since the order of the count and the item name may vary, it may be
      * necessary to override the parse() function.  It returns
      * [match[1], match[2]]; by default.  You'll need to override it to swap
-     * those if necessary.  You can do this by calling the original, and
-     * return it's results in swapped order.
+     * those if necessary, by calling super.parse(line) and swapping the results
+     * as a return.
+     *
+     * An acceptable return for a parse that fails would be return
+     * ['0', 'Invalid Input: ' + inputLine]; and that is what is currently
+     * returned on parse failures.  However, if your this.regex is properly
+     * setup, the parsing should be successful.  If it's not, you need to
+     * revisit your this.regex or match() if you've overridden it.
      *
      * @param line the input line
      * @returns {*[]}
@@ -212,7 +221,7 @@ var EveParser = function (stream)
         }
         //console.log($this.matchedParser.name);
         if (matchedParser !== undefined)
-        {
+        {   // no parser means silently ignore.
             //console.log($this.matchedParser.parse(input));
             materials.push(matchedParser.parse(input));
         }
