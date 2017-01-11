@@ -1,3 +1,4 @@
+// It's just a-spec.js so that it's loaded first, and changes the reporter
 var JasmineConsoleReporter = require('jasmine-console-reporter');
 var reporter = new JasmineConsoleReporter({
     colors: 1,           // (0|false)|(1|true)|2 
