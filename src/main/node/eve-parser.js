@@ -299,6 +299,8 @@ var EveParser = function (stream)
     };
 };
 
-EveParser.parsers = [new BlueprintParser(), new InventoryListParser()];
+EveParser.parsers = [
+    new BlueprintParser(), new InventoryListParser(),
+    new ItemThenCountParser()];
 
 module.exports.EveParser = EveParser;

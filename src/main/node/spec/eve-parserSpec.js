@@ -49,6 +49,23 @@ for (var index = 0; index < EveParser.parsers.length; index++)
                         "Tritanium	1000	Blah			1,400 m3\n" +
                         "Isogen	100	Advanced Commodities			7,400 m3\n");
                 }
+                else if (parser.name === 'ItemThenCountParser')
+                {
+                    testStream.push(
+                        "Tritanium	1000\n" +
+                        "Pyerite	500\n" +
+                        "Mexallon	250\n" +
+                        "Isogen	100\n" +
+                        "Nocxium	50\n" +
+                        "Nocxium	-1\n" +
+                        "Zydrine	20\n" +
+                        "Tritanium	1000\n" +
+                        "Isogen	100\n");
+                }
+                else
+                {
+                    fail('unknown parser');
+                }
 
                 testStream.push(null);
                 eveParser = new EveParser(testStream);
