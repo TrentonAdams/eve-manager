@@ -18,12 +18,12 @@ describe('InventoryListParser is valid', function ()
      Ironically, there's more testing code than there is actual parsing code.
      */
 
-    it('inventory items match', function ()
+    it('InventoryListParser items match', function ()
     {
         //expect(parser.matches(inputLineWithSpaces)).toBeTruthy();
         expect(parser.matches(inputLineWithTabs)).toBeTruthy();
     });
-    it('inventory line components retrievable', function ()
+    it('InventoryListParser line components retrievable', function ()
     {
         var match = [0, 0];
         /*match = inputLineWithSpaces.match(parser.regex);
@@ -36,7 +36,7 @@ describe('InventoryListParser is valid', function ()
         expect(match[1]).toEqual("Integrity Response Drones");
         expect(match[2]).toEqual("1,000");
     });
-    it('inventory parsing successful', function ()
+    it('InventoryListParser parsing successful', function ()
     {
         expect(parser.parse(inputLineWithTabs)).toEqual(
             ['1000', 'Integrity Response Drones']);

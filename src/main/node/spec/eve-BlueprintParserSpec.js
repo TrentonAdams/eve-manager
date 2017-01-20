@@ -17,12 +17,12 @@ describe('BlueprintParser is valid', function ()
      Ironically, there's more testing code than there is actual parsing code.
      */
 
-    it('blueprint items match', function ()
+    it('BlueprintParser  items match', function ()
     {
         expect(parser.matches(inputLineWithSpaces)).toBeTruthy();
     });
 
-    it('line components retrievable', function ()
+    it('BlueprintParser line components retrievable', function ()
     {
         var match = [0, 0];
         match = parser.parse(inputLineWithSpaces);
@@ -35,7 +35,7 @@ describe('BlueprintParser is valid', function ()
         expect(match[1]).toEqual("Integrity Response Drones");
     });
 
-    it('parsing successful', function ()
+    it('BlueprintParser parsing successful', function ()
     {
         expect(parser.parse(inputLineWithSpaces)).toEqual(
             ['1000', 'Integrity Response Drones']);

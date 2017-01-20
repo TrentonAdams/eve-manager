@@ -210,11 +210,12 @@ class CountThenItemParser extends BaseParser {
     {
         super();
         this.name = "CountThenItemParser";
-        // 4 main groups, item, count, category (ignored), and m3 (ignored)
+        // 2 main groups, item, count
         // We use non-capture groups so that the match array only has the items we
         // need.  This is defined by (?:regex here).  Note the '?:'
         this.itemCount = "^([-]{0,1}\\d+(?:,\\d+)*)";
-        this.itemName = "((?<!\\sx\\s)[a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
+        // alphabetic sequence with possible but not required spaces
+        this.itemName = "([a-zA-Z]+(?:\\s+[a-zA-Z]+)*)";
         this.regex = this.itemCount + "\\s*" + this.itemName + "$";
     }
 
@@ -340,6 +341,6 @@ var EveParser = function (stream)
 
 EveParser.parsers = [
     new BlueprintParser(), new InventoryListParser(),
-    new ItemThenCountParser()];
+    new ItemThenCountParser(), new CountThenItemParser()];
 
 module.exports.EveParser = EveParser;
