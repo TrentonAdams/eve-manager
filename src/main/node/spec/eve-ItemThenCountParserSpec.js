@@ -18,7 +18,7 @@ describe('ItemThenCountParser is valid', function ()
      Ironically, there's more testing code than there is actual parsing code.
      */
 
-    it('inventory items match', function ()
+    it('items match', function ()
     {
         //expect(parser.matches(inputLineWithSpaces)).toBeTruthy();
         for (var index = 0; index < inputLines.length; index++)

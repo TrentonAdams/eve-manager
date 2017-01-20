@@ -15,7 +15,7 @@ describe("can create EveParser", function ()
 
 for (var index = 0; index < EveParser.parsers.length; index++)
 {
-    var parser = EveParser.parsers[index];
+    var extparser = EveParser.parsers[index];
     //console.log(parser);
     (function (parser)
     {   // closure required or parser gets shared and each run is the same as
@@ -25,51 +25,8 @@ for (var index = 0; index < EveParser.parsers.length; index++)
             var eveParser;
             beforeEach(function ()
             {
-                var testStream = new stream.Readable();
-                testStream._read = function noop()
-                {
-                };
-
-                if (parser.name === 'BlueprintParser')
-                {
-                    testStream.push("1000 x Tritanium\n500 x Pyerite\n" +
-                        "250 x Mexallon\n100 x Isogen\n50 x Nocxium\n20 x Zydrine\n" +
-                        "-1 x Nocxium\n1000 x Tritanium\n100 x Isogen\n");
-                }
-                else if (parser.name === 'InventoryListParser')
-                {
-                    testStream.push(
-                        "Tritanium	1000	Blah			1,400 m3\n" +
-                        "Pyerite	500	Advanced Commodities			7,100 m3\n" +
-                        "Mexallon	250	Advanced Commodities			1,900 m3\n" +
-                        "Isogen	100	Advanced Commodities			7,400 m3\n" +
-                        "Nocxium	50	Advanced Commodities			400 m3\n" +
-                        "Nocxium	-1	Advanced Commodities			400 m3\n" +
-                        "Zydrine	20	Advanced Commodities			7,400 m3\n" +
-                        "Tritanium	1000	Blah			1,400 m3\n" +
-                        "Isogen	100	Advanced Commodities			7,400 m3\n");
-                }
-                else if (parser.name === 'ItemThenCountParser')
-                {
-                    testStream.push(
-                        "Tritanium	1000\n" +
-                        "Pyerite	500\n" +
-                        "Mexallon	250\n" +
-                        "Isogen	100\n" +
-                        "Nocxium	50\n" +
-                        "Nocxium	-1\n" +
-                        "Zydrine	20\n" +
-                        "Tritanium	1000\n" +
-                        "Isogen	100\n");
-                }
-                else
-                {
-                    fail('unknown parser');
-                }
-
-                testStream.push(null);
-                eveParser = new EveParser(testStream);
-                eveParser.parse();
+                // initialize the parser each iteration.
+                initializeTest();
             });
 
             it("1000 + 1000 Tritanium is 2000", function (done)
@@ -125,9 +82,72 @@ for (var index = 0; index < EveParser.parsers.length; index++)
                     expect(totals).toContain('Isogen');
                     done();
                 });
-            })
+            });
+
+            function initializeTest()
+            {
+                //console.log(parser.name);
+                var testStream = new stream.Readable();
+                testStream._read = function noop()
+                {
+                };
+
+                if (parser.name === 'BlueprintParser')
+                {
+                    testStream.push("1000 x Tritanium\n500 x Pyerite\n" +
+                        "250 x Mexallon\n100 x Isogen\n50 x Nocxium\n20 x Zydrine\n" +
+                        "-1 x Nocxium\n1000 x Tritanium\n100 x Isogen\n");
+                }
+                else if (parser.name === 'InventoryListParser')
+                {
+                    testStream.push(
+                        "Tritanium	1000	Blah			1,400 m3\n" +
+                        "Pyerite	500	Advanced Commodities			7,100 m3\n" +
+                        "Mexallon	250	Advanced Commodities			1,900 m3\n" +
+                        "Isogen	100	Advanced Commodities			7,400 m3\n" +
+                        "Nocxium	50	Advanced Commodities			400 m3\n" +
+                        "Nocxium	-1	Advanced Commodities			400 m3\n" +
+                        "Zydrine	20	Advanced Commodities			7,400 m3\n" +
+                        "Tritanium	1000	Blah			1,400 m3\n" +
+                        "Isogen	100	Advanced Commodities			7,400 m3\n");
+                }
+                else if (parser.name === 'ItemThenCountParser')
+                {
+                    testStream.push(
+                        "Tritanium	1000\n" +
+                        "Pyerite	500\n" +
+                        "Mexallon	250\n" +
+                        "Isogen	100\n" +
+                        "Nocxium	50\n" +
+                        "Nocxium	-1\n" +
+                        "Zydrine	20\n" +
+                        "Tritanium	1000\n" +
+                        "Isogen	100\n");
+                }
+                else if (parser.name === 'CountThenItemParser')
+                {
+                    testStream.push(
+                        "1000   Tritanium\n" +
+                        "500    Pyerite\n" +
+                        "250    Mexallon\n" +
+                        "100    Isogen\n" +
+                        "50 Nocxium\n" +
+                        "-1 Nocxium\n" +
+                        "20 Zydrine\n" +
+                        "1000   Tritanium\n" +
+                        "100    Isogen\n");
+                }
+                else
+                {
+                    fail('unknown parser');
+                }
+
+                testStream.push(null);
+                eveParser = new EveParser(testStream);
+                eveParser.parse();
+            }
         });
-    })(parser);
+    })(extparser);
 }
 
 describe("multi-format parsing", function ()
