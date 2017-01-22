@@ -1,8 +1,8 @@
 "use strict";
 var stream = require('stream');
 var fs = require('fs');
-var parsers = (require('../eve-parser.js').EveParser.parsers);
-var EveParser = require('../eve-parser.js');
+var parsers = (require('../index.js').EveParser.parsers);
+var EveParser = require('../index.js');
 var blueprintParser = new EveParser.BlueprintParser();
 var countThenItemParser = new EveParser.CountThenItemParser();
 var itemThenCountParser = new EveParser.ItemThenCountParser();

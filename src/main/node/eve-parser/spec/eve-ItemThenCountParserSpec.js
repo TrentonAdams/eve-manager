@@ -1,7 +1,7 @@
 "use strict";
 var stream = require('stream');
 var fs = require('fs');
-var ItemThenCountParser = require('../eve-parser.js').ItemThenCountParser;
+var ItemThenCountParser = require('../index.js').ItemThenCountParser;
 
 describe('ItemThenCountParser is valid', function ()
 {

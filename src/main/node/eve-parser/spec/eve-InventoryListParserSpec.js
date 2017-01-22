@@ -1,7 +1,7 @@
 "use strict";
 var stream = require('stream');
 var fs = require('fs');
-var InventoryListParser = require('../eve-parser.js').InventoryListParser;
+var InventoryListParser = require('../index.js').InventoryListParser;
 
 describe('InventoryListParser is valid', function ()
 {
