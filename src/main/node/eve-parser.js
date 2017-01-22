@@ -1,17 +1,8 @@
 "use strict";
-/*
- 24,889 x Tritanium
- 7,444 x Pyerite
- 744 x Mexallon
- 444 x Isogen
- 50 x Nocxium
- 22 x Zydrine
- */
-
 /**
  * Base parser object.  The "match()" should not require any overriding, as
  * it simply takes the "regex" property you define in your inherited class, and
- * matches it against a line with "this.removeCharacters" removed from the line.
+ * matches it against a line.
  *
  * The parse() function may need overriding, as per it's docs.
  * @constructor
