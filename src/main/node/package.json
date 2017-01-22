@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/TrentonAdams/eve-manager#readme",
   "dependencies": {
+    "eve-parser": "^1.0.0",
     "fs": "0.0.1-security",
     "grunt": "^1.0.1"
   },

@@ -90,8 +90,8 @@ var schematicMapper = function (schematics, types)
             //console.log('typeID:', currentSchematic.typeID);
             if (schematicID == 131)
             {
-                console.log('currentSchematic:', currentSchematic);
-                console.log('mappedSchematic:', mappedSchematic);
+                //console.log('currentSchematic:', currentSchematic);
+                //console.log('mappedSchematic:', mappedSchematic);
             }
             //console.log('type:', type);
             //console.log(types[schematic.typeID]);
