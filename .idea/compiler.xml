@@ -34,7 +34,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="eve-manufacturing-manager" target="1.7" />
+      <module name="eve-manufacturing-manager" target="1.8" />
       <module name="simple-service" target="1.7" />
     </bytecodeTargetLevel>
   </component>

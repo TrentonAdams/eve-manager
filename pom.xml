@@ -98,12 +98,12 @@
       <groupId>org.glassfish.jersey.ext</groupId>
       <artifactId>jersey-bean-validation</artifactId>
       <version>${jersey.version}</version>
-<!--      <exclusions>
-        <exclusion>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-validator</artifactId>
-        </exclusion>
-      </exclusions>-->
+      <!--      <exclusions>
+              <exclusion>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+              </exclusion>
+            </exclusions>-->
     </dependency>
 
     <dependency>
@@ -146,6 +146,12 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-configuration2</artifactId>
+      <version>2.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.9</version>
@@ -153,9 +159,9 @@
     </dependency>
 
     <dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-        <version>3.0.1</version>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>3.0.1</version>
       <exclusions>
         <exclusion>
           <artifactId>xercesImpl</artifactId>
@@ -167,19 +173,19 @@
 
   <build>
     <finalName>eve</finalName>
-<!--    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.tomcat.maven</groupId>
-          <artifactId>tomcat7-maven-plugin</artifactId>
-          <version>2.2</version>
-          <configuration>
-            <mode>context</mode>
-            <contextFile>${basedir}/target/classes/context.xml</contextFile>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>-->
+    <!--    <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.tomcat.maven</groupId>
+              <artifactId>tomcat7-maven-plugin</artifactId>
+              <version>2.2</version>
+              <configuration>
+                <mode>context</mode>
+                <contextFile>${basedir}/target/classes/context.xml</contextFile>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>-->
     <plugins>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
@@ -196,8 +202,8 @@
         <version>2.5.1</version>
         <inherited>true</inherited>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -276,7 +282,7 @@
             <argument>-classpath</argument>
             <!-- automatically creates the classpath using all project dependencies,
                  also adding the project build directory -->
-            <classpath/>
+            <classpath />
             <argument>org.openqa.selenium.example.Selenium2Example</argument>
           </arguments>
         </configuration>
@@ -296,32 +302,32 @@
       </plugin>
 
       <plugin>
-          <groupId>org.apache.openjpa</groupId>
-          <artifactId>openjpa-maven-plugin</artifactId>
-          <version>2.2.1</version>
-          <configuration>
-              <includes>**/entities/*.class</includes>
-              <excludes>**/entities/XML*.class</excludes>
-              <addDefaultConstructor>true</addDefaultConstructor>
-              <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
-          </configuration>
-          <executions>
-              <execution>
-                  <id>enhancer</id>
-                  <phase>process-classes</phase>
-                  <goals>
-                      <goal>enhance</goal>
-                  </goals>
-              </execution>
-          </executions>
-          <dependencies>
-              <dependency>
-                  <groupId>org.apache.openjpa</groupId>
-                  <artifactId>openjpa</artifactId>
-                  <!-- set the version to be the same as the level in your runtime -->
-                  <version>2.3.0</version>
-              </dependency>
-          </dependencies>
+        <groupId>org.apache.openjpa</groupId>
+        <artifactId>openjpa-maven-plugin</artifactId>
+        <version>2.2.1</version>
+        <configuration>
+          <includes>**/entities/*.class</includes>
+          <excludes>**/entities/XML*.class</excludes>
+          <addDefaultConstructor>true</addDefaultConstructor>
+          <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>enhancer</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>enhance</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.openjpa</groupId>
+            <artifactId>openjpa</artifactId>
+            <!-- set the version to be the same as the level in your runtime -->
+            <version>2.3.0</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
 
