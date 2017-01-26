@@ -129,6 +129,13 @@ public class Authentication implements IPageModel
     @Template(name = MainView.INDEX_JSP)
     public Authentication validate(@QueryParam("code") final String eveSsoCode)
     {
+        /*
+         * TODO encode client_id and secret key
+         * TODO call the oauth token url to get access_token/refresh_token
+         * TODO call the verify url to get the accounts.
+         * TODO write a common generified eve caller, which caches entities
+         *      for eve's requested timeouts.
+         */
         final Base64.Encoder encoder = Base64.getEncoder();
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
