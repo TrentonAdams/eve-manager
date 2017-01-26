@@ -2,7 +2,7 @@ package com.github.trentonadams.eve.features.apikeys.services.views;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
-import com.github.trentonadams.eve.app.model.PageModel;
+import com.github.trentonadams.eve.app.model.IPageModel;
 import com.github.trentonadams.eve.features.apikeys.entities.ApiKey;
 import com.github.trentonadams.eve.features.apikeys.services.FormPostApiKeysImpl;
 import com.github.trentonadams.eve.features.apikeys.services.PostApiKeys;
@@ -40,7 +40,7 @@ import static okhttp3.internal.Internal.logger;
  * @author Trenton D. Adams
  */
 @Path("/api-keys")
-public class ApiKeysServiceView implements PageModel
+public class ApiKeysServiceView implements IPageModel
 {
     private static final String SAMPLE_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
@@ -90,7 +90,7 @@ public class ApiKeysServiceView implements PageModel
     @GET
     @Produces(MediaType.TEXT_HTML)
     @Template(name = MainView.INDEX_JSP)
-    public PageModel getService()
+    public IPageModel getService()
     {
         page = API_KEYS_JSP;
         return this;

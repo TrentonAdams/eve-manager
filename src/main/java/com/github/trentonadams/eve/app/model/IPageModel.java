@@ -13,8 +13,12 @@ package com.github.trentonadams.eve.app.model;
  *
  * @author Trenton D. Adams
  */
-public interface PageModel
+public interface IPageModel
 {
+    /**
+     * The location
+     * @return
+     */
     String getPage();
 
     void setPage(String page);

@@ -38,9 +38,9 @@ public class Hk2ConsumerTest
             SpecialClassInterface.class);
         specialClassInstance.setField1("field1 value");
         specialClassInstance.setField2("field2 value");
-        System.out.println(specialClassInstance);
+        //System.out.println(specialClassInstance);
 
 
-        System.out.println(locator.getService(Hk2Consumer.class));
+        //System.out.println(locator.getService(Hk2Consumer.class));
     }
 }

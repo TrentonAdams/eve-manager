@@ -37,7 +37,7 @@ public class ApiKeyTest
             validator.validate(apiKey);
 
         assertEquals(1, constraintViolations.size());
-        System.out.println(constraintViolations.iterator().next().getMessage());
+//        System.out.println(constraintViolations.iterator().next().getMessage());
         assertEquals(
             "Key ID must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()
@@ -54,7 +54,7 @@ public class ApiKeyTest
             validator.validate(apiKey);
 
         assertEquals(1, constraintViolations.size());
-        System.out.println(constraintViolations.iterator().next().getMessage());
+        //System.out.println(constraintViolations.iterator().next().getMessage());
         assertEquals(
             "Key ID must be an integer.", // from ValidationMessages.properties
             constraintViolations.iterator().next().getMessage()

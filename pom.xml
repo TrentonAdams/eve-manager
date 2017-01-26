@@ -156,21 +156,40 @@
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
         <version>3.0.1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xercesImpl</artifactId>
+          <groupId>xerces</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
   <build>
     <finalName>eve</finalName>
-    <pluginManagement>
+<!--    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.tomcat.maven</groupId>
           <artifactId>tomcat7-maven-plugin</artifactId>
           <version>2.2</version>
+          <configuration>
+            <mode>context</mode>
+            <contextFile>${basedir}/target/classes/context.xml</contextFile>
+          </configuration>
         </plugin>
       </plugins>
-    </pluginManagement>
+    </pluginManagement>-->
     <plugins>
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <mode>context</mode>
+          <contextFile>${basedir}/target/classes/context.xml</contextFile>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -235,6 +254,7 @@
             <artifactId>openjpa</artifactId>
             <version>2.4.1</version>
           </dependency>
+
         </dependencies>
       </plugin>
 

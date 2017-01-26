@@ -65,6 +65,6 @@ public class MyResourceConfig extends ResourceConfig
         });
 //        property(MvcFeature.TEMPLATE_BASE_PATH, "WEB-INF/jsp/");
         register(JspMvcFeature.class);
-//        register(DeclarativeLinkingFeature.class);
+        //register(DeclarativeLinkingFeature.class);
     }
 }

@@ -1,7 +1,7 @@
 package com.github.trentonadams.eve;
 
 import com.github.trentonadams.eve.app.HttpSessionFactory;
-import com.github.trentonadams.eve.app.model.PageModel;
+import com.github.trentonadams.eve.app.model.IPageModel;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 import org.glassfish.jersey.server.mvc.Template;
@@ -32,7 +32,7 @@ import java.util.List;
  * @author Trenton D. Adams
  */
 @Path("/rest")
-public class MainView implements PageModel
+public class MainView implements IPageModel
 {
     public static final String message = "HAHAHA";
     public static final String INDEX_JSP = "/WEB-INF/jsp/index.jsp";

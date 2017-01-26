@@ -12,4 +12,16 @@
         value="org.apache.derby.jdbc.EmbeddedDriver" />
     </properties>
   </persistence-unit>
+  <persistence-unit name="authtokens">
+    <class>com.github.trentonadams.eve.features.auth.entities.AuthTokens</class>
+    <properties>
+      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
+      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
+      <property name="openjpa.ConnectionURL"
+        value="jdbc:derby:${project.build.directory}/testdb;create=true" />
+      <property name="openjpa.ConnectionDriverName"
+        value="org.apache.derby.jdbc.EmbeddedDriver" />
+    </properties>
+  </persistence-unit>
+
 </persistence>
