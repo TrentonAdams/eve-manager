@@ -36,6 +36,22 @@ import java.util.Base64;
 public class Authentication implements IPageModel
 {
     /**
+     * Eve SSO secret key
+     */
+    private final String secretKey;
+    /**
+     * Eve SSO client id
+     */
+    private final String clientId;
+    /**
+     * Base64 encoding of client id and secret key, for the purpose of basic
+     * auth in the form of...
+     * <p>
+     * client_id:secret_key
+     */
+    private final String basicAuthCredentials;
+
+    /**
      * Eve access scopes.  Configured in eve.properties.
      */
     private String[] scopes;
@@ -47,6 +63,7 @@ public class Authentication implements IPageModel
 
     @Context
     private UriInfo serviceUri;
+    private String code;
 
     public Authentication()
     {
@@ -61,6 +78,11 @@ public class Authentication implements IPageModel
         {
             final Configuration config = builder.getConfiguration();
             scopes = config.getStringArray("auth.sso.scopes");
+            secretKey = config.getString("auth.sso.secret_key");
+            clientId = config.getString("auth.sso.client_id");
+            final Base64.Encoder encoder = Base64.getEncoder();
+            basicAuthCredentials = new String(encoder.encode(
+                String.format("%s:%s", clientId, secretKey).getBytes()));
         }
         catch (ConfigurationException e)
         {
@@ -102,8 +124,7 @@ public class Authentication implements IPageModel
             final URIBuilder uriBuilder = new URIBuilder(ssoUrl);
             uriBuilder.addParameter("redirect_uri",
                 validateUri.toASCIIString());
-            uriBuilder.addParameter("client_id",
-                "6d249270a0e14b25829df15789500671");
+            uriBuilder.addParameter("client_id", clientId);
             uriBuilder.addParameter("scope", String.join(" ", scopes));
             return Response.temporaryRedirect(uriBuilder.build()).build();
         }
@@ -136,8 +157,13 @@ public class Authentication implements IPageModel
          * TODO write a common generified eve caller, which caches entities
          *      for eve's requested timeouts.
          */
-        final Base64.Encoder encoder = Base64.getEncoder();
+        this.code = eveSsoCode;
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
+    }
+
+    public String getCode()
+    {
+        return code;
     }
 }
