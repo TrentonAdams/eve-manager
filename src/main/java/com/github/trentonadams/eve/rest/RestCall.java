@@ -8,8 +8,8 @@ import org.glassfish.jersey.message.MessageProperties;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.*;
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 
 /**
@@ -218,24 +218,53 @@ public abstract class RestCall<T>
     }
 
     /**
-     * Sets up a logging filter to log the request
+     * Sets up a logging filter to log the request and response.  The basic
+     * urls go to the info log, any headers or entities go to the debug.
      *
      * @param newClient
      */
     private void registerRequestLoggingFilter(final Client newClient)
     {
-        newClient.register(new ClientRequestFilter()
+        newClient.register((ClientRequestFilter) clientRequestContext ->
         {
-            @Override
-            public void filter(final ClientRequestContext clientRequestContext)
-                throws IOException
+            StringBuilder sb = new StringBuilder();
+            sb.append(logPrefix).append(": request-headers: ");
+            final MultivaluedMap<String, Object> headers =
+                clientRequestContext.getHeaders();
+            for (String headerName : headers.keySet())
             {
-                logger.info(
-                    logPrefix + ": uri-" + clientRequestContext.getUri());
-                logger.info(String.format("%s request entity-%s", logPrefix,
-                    stringifyEntity(clientRequestContext.getEntity())));
+                for (Object value : headers.get(headerName))
+                {
+                    sb.append(headerName).append(": ").append(
+                        value.toString()).append(
+                        "; ");
+                }
             }
+            logger.debug(logPrefix + ": " + sb.toString());
+            logger.info(logPrefix + ": uri-" + clientRequestContext.getUri());
+            logger.debug(String.format("%s request entity-%s", logPrefix,
+                stringifyEntity(clientRequestContext.getEntity())));
         });
+
+        // simply log the headers
+        newClient.register(
+            (ClientResponseFilter) (requestContext, responseContext) ->
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.append(logPrefix).append(": response-headers: ");
+                final MultivaluedMap<String, String> headers =
+                    responseContext.getHeaders();
+                for (String headerName : headers.keySet())
+                {
+                    for (String value : headers.get(headerName))
+                    {
+                        sb.append(headerName).append(": ").append(value).append(
+                            "; ");
+                    }
+                }
+                logger.debug(sb.toString());
+                logger.info(logPrefix + ": uri-" + requestContext.getUri());
+            });
     }
 
     private String stringifyEntity(final Object entity)

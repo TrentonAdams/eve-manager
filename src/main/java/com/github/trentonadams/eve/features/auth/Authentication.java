@@ -158,8 +158,6 @@ public class Authentication implements IPageModel
     public Authentication validate(@QueryParam("code") final String eveSsoCode)
     {
         /*
-         * TODO call the oauth token url to get access_token/refresh_token
-         * TODO call the verify url to get the accounts.
          * TODO write a common generified eve caller, which caches entities
          *      for eve's requested timeouts.
          */
