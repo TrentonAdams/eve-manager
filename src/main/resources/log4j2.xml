@@ -7,7 +7,12 @@
   <Filter type="ThresholdFilter" level="trace"/>
 
   <Appenders>
-    <Appender type="File" name="File" fileName="${filename}">
+    <Appender type="File" name="info" fileName="${filename}">
+      <Layout type="PatternLayout">
+        <Pattern>%5p | %-40c{2} | %-4L | %d{yyyy-MM-dd}T%d{HH:mm:ss} | %m%n</Pattern>
+      </Layout>
+    </Appender>
+    <Appender type="File" name="debug" fileName="${filename}.debug">
       <Layout type="PatternLayout">
         <Pattern>%5p | %-40c{2} | %-4L | %d{yyyy-MM-dd}T%d{HH:mm:ss} | %m%n</Pattern>
       </Layout>
@@ -15,8 +20,11 @@
   </Appenders>
 
   <Loggers>
-    <Root level="trace">
-      <AppenderRef ref="File"/>
+    <Root level="info">
+      <AppenderRef ref="info"/>
+    </Root>
+    <Root level="debug">
+      <AppenderRef ref="debug"/>
     </Root>
   </Loggers>
 
