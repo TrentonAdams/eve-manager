@@ -36,27 +36,12 @@ import java.util.Base64;
 @Path("/auth")
 public class Authentication implements IPageModel
 {
-    /**
-     * Eve SSO secret key
-     */
     private final String secretKey;
-    /**
-     * Eve SSO client id
-     */
     private final String clientId;
-    /**
-     * Base64 encoding of client id and secret key, for the purpose of basic
-     * auth in the form of...
-     * <p>
-     * client_id:secret_key
-     */
     private final String basicAuthCredentials;
     private final String ssoTokenUrl;
     private final String ssoVerifyUrl;
 
-    /**
-     * Eve access scopes.  Configured in eve.properties.
-     */
     private String[] scopes;
 
     private String page;
@@ -81,15 +66,15 @@ public class Authentication implements IPageModel
         try
         {
             final Configuration config = builder.getConfiguration();
-            scopes = config.getStringArray("auth.sso.scopes");
+            setScopes(config.getStringArray("auth.sso.scopes"));
             secretKey = config.getString("auth.sso.secret_key");
             clientId = config.getString("auth.sso.client_id");
-            ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
+            setSsoAuthorizeUrl(config.getString("auth.sso.url.authorize"));
             ssoTokenUrl = config.getString("auth.sso.url.token");
             ssoVerifyUrl = config.getString("auth.sso.url.verify");
             final Base64.Encoder encoder = Base64.getEncoder();
             basicAuthCredentials = new String(encoder.encode(
-                String.format("%s:%s", clientId, secretKey).getBytes()));
+                String.format("%s:%s", getClientId(), getSecretKey()).getBytes()));
         }
         catch (ConfigurationException e)
         {
@@ -123,16 +108,16 @@ public class Authentication implements IPageModel
     @GET
     public Response redirect()
     {
-        final URI validateUri = serviceUri.getRequestUriBuilder().path(
+        final URI validateUri = getServiceUri().getRequestUriBuilder().path(
             "/validate")
             .build();
         try
         {
-            final URIBuilder uriBuilder = new URIBuilder(ssoAuthorizeUrl);
+            final URIBuilder uriBuilder = new URIBuilder(getSsoAuthorizeUrl());
             uriBuilder.addParameter("redirect_uri",
                 validateUri.toASCIIString());
-            uriBuilder.addParameter("client_id", clientId);
-            uriBuilder.addParameter("scope", String.join(" ", scopes));
+            uriBuilder.addParameter("client_id", getClientId());
+            uriBuilder.addParameter("scope", String.join(" ", getScopes()));
             return Response.temporaryRedirect(uriBuilder.build()).build();
         }
         catch (URISyntaxException e)
@@ -161,7 +146,7 @@ public class Authentication implements IPageModel
          * TODO write a common generified eve caller, which caches entities
          *      for eve's requested timeouts.
          */
-        this.code = eveSsoCode;
+        this.setCode(eveSsoCode);
 
         validateCode(eveSsoCode);
         obtainCharacter();
@@ -179,7 +164,7 @@ public class Authentication implements IPageModel
             protected void initialize()
             {
                 super.initialize();
-                webServiceUrl = ssoVerifyUrl;
+                webServiceUrl = getSsoVerifyUrl();
                 logPrefix = "evesso-verify: ";
             }
 
@@ -188,11 +173,11 @@ public class Authentication implements IPageModel
             public Response httpMethodCall(final WebTarget target)
             {
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Bearer " + tokens.getAccessToken())
+                ).header("Authorization", "Bearer " + getTokens().getAccessToken())
                     .get();
             }
         };
-        character = restCall.invoke();
+        setCharacter(restCall.invoke());
     }
 
     /**
@@ -202,6 +187,11 @@ public class Authentication implements IPageModel
      */
     private void validateCode(@QueryParam("code") final String eveSsoCode)
     {
+        validateEveCode(eveSsoCode);
+    }
+
+    private void validateEveCode(final @QueryParam("code") String eveSsoCode)
+    {
         final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
             "Error validating authentication")
         {
@@ -209,7 +199,7 @@ public class Authentication implements IPageModel
             protected void initialize()
             {
                 super.initialize();
-                webServiceUrl = ssoTokenUrl;
+                webServiceUrl = getSsoTokenUrl();
                 logPrefix = "evesso: ";
             }
 
@@ -218,14 +208,14 @@ public class Authentication implements IPageModel
             public Response httpMethodCall(final WebTarget target)
             {
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Basic " + basicAuthCredentials).post(
+                ).header("Authorization", "Basic " + getBasicAuthCredentials()).post(
                     Entity.form(
                         new Form().param("grant_type", "authorization_code")
                             .param("code", eveSsoCode)));
             }
         };
 
-        tokens = restCall.invoke();
+        setTokens(restCall.invoke());
     }
 
     public String getCode()
@@ -241,5 +231,91 @@ public class Authentication implements IPageModel
     public Character getCharacter()
     {
         return character;
+    }
+
+    /**
+     * Eve SSO secret key
+     */
+    public String getSecretKey()
+    {
+        return secretKey;
+    }
+
+    /**
+     * Eve SSO client id
+     */
+    public String getClientId()
+    {
+        return clientId;
+    }
+
+    /**
+     * Base64 encoding of client id and secret key, for the purpose of basic
+     * auth in the form of...
+     * <p>
+     * client_id:secret_key
+     */
+    public String getBasicAuthCredentials()
+    {
+        return basicAuthCredentials;
+    }
+
+    public String getSsoTokenUrl()
+    {
+        return ssoTokenUrl;
+    }
+
+    public String getSsoVerifyUrl()
+    {
+        return ssoVerifyUrl;
+    }
+
+    /**
+     * Eve access scopes.  Configured in eve.properties.
+     */
+    public String[] getScopes()
+    {
+        return scopes;
+    }
+
+    public void setScopes(String[] scopes)
+    {
+        this.scopes = scopes;
+    }
+
+    public String getSsoAuthorizeUrl()
+    {
+        return ssoAuthorizeUrl;
+    }
+
+    public void setSsoAuthorizeUrl(String ssoAuthorizeUrl)
+    {
+        this.ssoAuthorizeUrl = ssoAuthorizeUrl;
+    }
+
+    public UriInfo getServiceUri()
+    {
+        return serviceUri;
+    }
+
+    public void setServiceUri(UriInfo serviceUri)
+    {
+        this.serviceUri = serviceUri;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public void setTokens(
+        AuthTokens tokens)
+    {
+        this.tokens = tokens;
+    }
+
+    public void setCharacter(Character character)
+    {
+        this.character = character;
     }
 }
