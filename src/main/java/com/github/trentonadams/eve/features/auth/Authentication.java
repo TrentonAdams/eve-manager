@@ -52,6 +52,7 @@ public class Authentication implements IPageModel
      */
     private final String basicAuthCredentials;
     private final String ssoTokenUrl;
+    private final String ssoVerifyUrl;
 
     /**
      * Eve access scopes.  Configured in eve.properties.
@@ -66,6 +67,7 @@ public class Authentication implements IPageModel
     private UriInfo serviceUri;
     private String code;
     private AuthTokens tokens;
+    private Character character;
 
     public Authentication()
     {
@@ -84,6 +86,7 @@ public class Authentication implements IPageModel
             clientId = config.getString("auth.sso.client_id");
             ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
             ssoTokenUrl = config.getString("auth.sso.url.token");
+            ssoVerifyUrl = config.getString("auth.sso.url.verify");
             final Base64.Encoder encoder = Base64.getEncoder();
             basicAuthCredentials = new String(encoder.encode(
                 String.format("%s:%s", clientId, secretKey).getBytes()));
@@ -163,9 +166,35 @@ public class Authentication implements IPageModel
         this.code = eveSsoCode;
 
         validateCode(eveSsoCode);
+        obtainCharacter();
 
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
+    }
+
+    private void obtainCharacter()
+    {
+        final RestCall<Character> restCall = new RestCall<Character>(
+            "Error validating authentication")
+        {
+            @Override
+            protected void initialize()
+            {
+                super.initialize();
+                webServiceUrl = ssoVerifyUrl;
+                logPrefix = "evesso-verify: ";
+            }
+
+            @SuppressWarnings("ChainedMethodCall")
+            @Override
+            public Response httpMethodCall(final WebTarget target)
+            {
+                return target.request(MediaType.APPLICATION_JSON
+                ).header("Authorization", "Bearer " + tokens.getAccessToken())
+                    .get();
+            }
+        };
+        character = restCall.invoke();
     }
 
     /**
@@ -209,5 +238,10 @@ public class Authentication implements IPageModel
     public AuthTokens getTokens()
     {
         return tokens;
+    }
+
+    public Character getCharacter()
+    {
+        return character;
     }
 }

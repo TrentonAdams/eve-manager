@@ -232,7 +232,7 @@ public abstract class RestCall<T>
             {
                 logger.info(
                     logPrefix + ": uri-" + clientRequestContext.getUri());
-                logger.info(String.format("%s entity-%s", logPrefix,
+                logger.info(String.format("%s request entity-%s", logPrefix,
                     stringifyEntity(clientRequestContext.getEntity())));
             }
         });
@@ -245,6 +245,6 @@ public abstract class RestCall<T>
             final Form form = (Form) entity;
             return form.asMap().toString();
         }
-        return null;
+        return "none";
     }
 } // END MonerisJAXRSCall class
