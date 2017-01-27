@@ -33,6 +33,13 @@ public class AuthTokens
     @XmlElement(name = "refresh_token")
     private String refreshToken;
 
+    @NotNull(message = "Token type is required")
+    @XmlElement(name = "token_type")
+    private String tokenType;
+
+    @XmlElement(name = "expires_in")
+    private int expiresIn;
+
     @XmlTransient
     public String getAccessToken()
     {
@@ -73,6 +80,28 @@ public class AuthTokens
             "characterId='" + characterId + '\'' +
             ", accessToken='" + accessToken + '\'' +
             ", refreshToken='" + refreshToken + '\'' +
+            ", tokenType='" + tokenType + '\'' +
+            ", expiresIn=" + expiresIn +
             '}';
+    }
+
+    public String getTokenType()
+    {
+        return tokenType;
+    }
+
+    public void setTokenType(final String tokenType)
+    {
+        this.tokenType = tokenType;
+    }
+
+    public int getExpiresIn()
+    {
+        return expiresIn;
+    }
+
+    public void setExpiresIn(final int expiresIn)
+    {
+        this.expiresIn = expiresIn;
     }
 }

@@ -10,15 +10,13 @@ import javax.ws.rs.client.*;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.lang.reflect.ParameterizedType;
 
 /**
- * Just a base class for moneris calls. Really it's only purposes are to create
- * consistent logging of information we want (currently student ID), forcing
- * the mime-type for the response to application/xml, and to simplify the
- * two types of calls to moneris using generics and an anonymous class for
- * each.
+ * Just a base class for rest calls. Really it's only purposes are to use as a
+ * way of handling generic entity response types, use consistent logging of
+ * request/response, registering of desired filters, and provide consistent
+ * cleanup of resources.
  * <p/>
  * Created :  2015-12-24T13:30 MST
  *
@@ -28,7 +26,7 @@ public abstract class RestCall<T>
 { // BEGIN MonerisJAXRSCall class
     private static Logger logger = LogManager.getLogger(RestCall.class);
     /**
-     * The web service URL
+     * The base web service URL
      */
     protected String webServiceUrl;
 
@@ -69,7 +67,6 @@ public abstract class RestCall<T>
     protected void initialize()
     {
         logPrefix = "";
-        final StringWriter sw = new StringWriter();
     }
 
     /**
@@ -96,7 +93,8 @@ public abstract class RestCall<T>
     public T invoke()
     {
         initialize();
-        Client newClient = newClient();
+        Response response = null;
+        final Client newClient = newClient();
         try
         {
             T entity = null;
@@ -108,7 +106,7 @@ public abstract class RestCall<T>
             final long after;
 
             before = System.currentTimeMillis();
-            final Response response = httpMethodCall(target);
+            response = httpMethodCall(target);
             // we buffer the entity, so it can be accessed repeatedly for
             // logging and general usage. This will always return true
             // in this case, so we don't check it. -tda-
@@ -139,7 +137,6 @@ public abstract class RestCall<T>
                 entity = handleEntity(response);
             }
 
-            response.close();   // cleanup socket NOW
             return entity;
         }
         catch (final IllegalStateException | ProcessingException e)
@@ -148,6 +145,10 @@ public abstract class RestCall<T>
         }
         finally
         {
+            if (response != null)
+            {
+                response.close();   // cleanup socket NOW
+            }
             if (newClient != null)
             {
                 newClient.close();

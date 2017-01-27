@@ -168,6 +168,11 @@ public class Authentication implements IPageModel
         return this;
     }
 
+    /**
+     * Validates the eve sso code by calling the auth.sso.url.authorize url
+     *
+     * @param eveSsoCode the code from eve sso
+     */
     private void validateCode(@QueryParam("code") final String eveSsoCode)
     {
         final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
