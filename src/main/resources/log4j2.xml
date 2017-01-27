@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="XMLConfigTest"
+  packages="org.apache.logging.log4j.test">
+  <Properties>
+    <Property name="filename">/tmp/eve-manager/eve-manager.log</Property>
+  </Properties>
+  <Filter type="ThresholdFilter" level="trace"/>
+
+  <Appenders>
+    <Appender type="File" name="File" fileName="${filename}">
+      <Layout type="PatternLayout">
+        <Pattern>%5p | %-40c{2} | %-4L | %d{yyyy-MM-dd}T%d{HH:mm:ss} | %m%n</Pattern>
+      </Layout>
+    </Appender>
+  </Appenders>
+
+  <Loggers>
+    <Root level="trace">
+      <AppenderRef ref="File"/>
+    </Root>
+  </Loggers>
+
+</Configuration>
