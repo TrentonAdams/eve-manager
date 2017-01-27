@@ -12,8 +12,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Just a base class for moneris calls. Really it's only purposes are to create
@@ -30,32 +28,10 @@ public abstract class RestCall<T>
 { // BEGIN MonerisJAXRSCall class
     private static Logger logger = LogManager.getLogger(RestCall.class);
     /**
-     * An outdated way of specifying a query path that gets appended to the
-     * {@link #webServiceUrl}.  Pass an empty string if you're implementing the
-     * {@link #initialize()} method with a {@link #webServiceUrl} override.
-     */
-    private final String queryPath;
-    /**
      * The web service URL
      */
     protected String webServiceUrl;
-    /**
-     * A token if using the {securityToken} template in the url.  May be empty
-     * if not used.  used for the purpose of adding extra security where you'd
-     * need to know the specially unique url.  That way, these can be configured
-     * per client as well.  An example use might be..
-     * <p/>
-     * https://myservice.example.com/rest/{securityToken}/acall
-     * <p/>
-     * https://myservice.example.com/rest/{securityToken}/anothercall
-     * <p/>
-     * Where they get replaced as...
-     * <p/>
-     * https://myservice.example.com/rest/8a530886-3ae5-11e5-865e-080027f5cec1/acall
-     * <p/>
-     * https://myservice.example.com/rest/8a530886-3ae5-11e5-865e-080027f5cec1/anothercall
-     */
-    protected String webServiceToken;
+
     /**
      * If any response filters are needed, overwrite this to implement them.
      * e.g. moneris does not return the Content-Type (mime type) header for it's
@@ -74,12 +50,10 @@ public abstract class RestCall<T>
     private String genericError;
 
     /**
-     * @param queryPath    the path to base calls on
      * @param genericError error to display
      */
-    public RestCall(final String queryPath, final String genericError)
+    public RestCall(final String genericError)
     {
-        this.queryPath = queryPath;
         this.genericError = genericError;
     }
 
@@ -94,22 +68,8 @@ public abstract class RestCall<T>
      */
     protected void initialize()
     {
-        webServiceToken = "";
         logPrefix = "";
         final StringWriter sw = new StringWriter();
-        responseFilter = new ClientResponseFilter()
-        {
-
-            @Override
-            public void filter(final ClientRequestContext clientRequestContext,
-                final ClientResponseContext clientResponseContext)
-                throws IOException
-            {
-                final List values = new ArrayList();
-                values.add("application/xml");
-                clientResponseContext.getHeaders().put("Content-Type", values);
-            }
-        };
     }
 
     /**
@@ -184,8 +144,6 @@ public abstract class RestCall<T>
         }
         catch (final IllegalStateException | ProcessingException e)
         {
-            logger.error(
-                "an error occurred calling the web service: " + queryPath, e);
             throw new RestException(genericError, e);
         }
         finally
@@ -199,6 +157,7 @@ public abstract class RestCall<T>
 
     /**
      * Generates a new client,
+     *
      * @return
      */
     private Client newClient()
@@ -233,7 +192,8 @@ public abstract class RestCall<T>
         try
         {
             entity = response.readEntity(
-                (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+                (Class<T>) ((ParameterizedType) getClass()
+                    .getGenericSuperclass()).getActualTypeArguments()[0]);
         }
         catch (Throwable e)
         {

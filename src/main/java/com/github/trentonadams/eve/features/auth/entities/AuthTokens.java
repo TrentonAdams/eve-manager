@@ -3,7 +3,9 @@ package com.github.trentonadams.eve.features.auth.entities;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,11 +26,14 @@ public class AuthTokens
     private String characterId;
 
     @NotNull(message = "Access token is required")
+    @XmlElement(name = "access_token")
     private String accessToken;
 
     @NotNull(message = "Refresh token is required")
+    @XmlElement(name = "refresh_token")
     private String refreshToken;
 
+    @XmlTransient
     public String getAccessToken()
     {
         return accessToken;
@@ -39,6 +44,7 @@ public class AuthTokens
         this.accessToken = accessToken;
     }
 
+    @XmlTransient
     public String getRefreshToken()
     {
         return refreshToken;
@@ -49,6 +55,7 @@ public class AuthTokens
         this.refreshToken = refreshToken;
     }
 
+    @XmlTransient
     public String getCharacterId()
     {
         return characterId;

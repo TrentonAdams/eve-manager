@@ -2,6 +2,8 @@ package com.github.trentonadams.eve.features.auth;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.model.IPageModel;
+import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
+import com.github.trentonadams.eve.rest.RestCall;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -13,10 +15,9 @@ import org.apache.http.client.utils.URIBuilder;
 import org.glassfish.jersey.server.mvc.Template;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -50,6 +51,7 @@ public class Authentication implements IPageModel
      * client_id:secret_key
      */
     private final String basicAuthCredentials;
+    private final String ssoTokenUrl;
 
     /**
      * Eve access scopes.  Configured in eve.properties.
@@ -58,12 +60,12 @@ public class Authentication implements IPageModel
 
     private String page;
 
-    private String ssoUrl = "https://login.eveonline.com/oauth/authorize?" +
-        "grant_type=refresh_token&response_type=code&realm=ESI&state=evesso";
+    private String ssoAuthorizeUrl;
 
     @Context
     private UriInfo serviceUri;
     private String code;
+    private AuthTokens tokens;
 
     public Authentication()
     {
@@ -80,6 +82,8 @@ public class Authentication implements IPageModel
             scopes = config.getStringArray("auth.sso.scopes");
             secretKey = config.getString("auth.sso.secret_key");
             clientId = config.getString("auth.sso.client_id");
+            ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
+            ssoTokenUrl = config.getString("auth.sso.url.token");
             final Base64.Encoder encoder = Base64.getEncoder();
             basicAuthCredentials = new String(encoder.encode(
                 String.format("%s:%s", clientId, secretKey).getBytes()));
@@ -121,7 +125,7 @@ public class Authentication implements IPageModel
             .build();
         try
         {
-            final URIBuilder uriBuilder = new URIBuilder(ssoUrl);
+            final URIBuilder uriBuilder = new URIBuilder(ssoAuthorizeUrl);
             uriBuilder.addParameter("redirect_uri",
                 validateUri.toASCIIString());
             uriBuilder.addParameter("client_id", clientId);
@@ -151,19 +155,54 @@ public class Authentication implements IPageModel
     public Authentication validate(@QueryParam("code") final String eveSsoCode)
     {
         /*
-         * TODO encode client_id and secret key
          * TODO call the oauth token url to get access_token/refresh_token
          * TODO call the verify url to get the accounts.
          * TODO write a common generified eve caller, which caches entities
          *      for eve's requested timeouts.
          */
         this.code = eveSsoCode;
+
+        validateCode(eveSsoCode);
+
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
+    }
+
+    private void validateCode(@QueryParam("code") final String eveSsoCode)
+    {
+        final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
+            "Error validating authentication")
+        {
+            @Override
+            protected void initialize()
+            {
+                super.initialize();
+                webServiceUrl = ssoTokenUrl;
+                logPrefix = "evesso: ";
+            }
+
+            @SuppressWarnings("ChainedMethodCall")
+            @Override
+            public Response httpMethodCall(final WebTarget target)
+            {
+                return target.request(MediaType.APPLICATION_JSON
+                ).header("Authorization", "Basic " + basicAuthCredentials).post(
+                    Entity.form(
+                        new Form().param("grant_type", "authorization_code")
+                            .param("code", eveSsoCode)));
+            }
+        };
+
+        tokens = restCall.invoke();
     }
 
     public String getCode()
     {
         return code;
+    }
+
+    public AuthTokens getTokens()
+    {
+        return tokens;
     }
 }

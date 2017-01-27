@@ -3,3 +3,4 @@
   </p>
 
 <p>code: ${model.code}</p>
+<p>tokens: ${model.tokens}</p>
