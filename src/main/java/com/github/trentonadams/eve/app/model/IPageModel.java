@@ -20,6 +20,4 @@ public interface IPageModel
      * @return
      */
     String getPage();
-
-    void setPage(String page);
 }

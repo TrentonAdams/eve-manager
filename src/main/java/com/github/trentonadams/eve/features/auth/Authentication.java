@@ -2,16 +2,17 @@ package com.github.trentonadams.eve.features.auth;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.model.IPageModel;
-import org.apache.http.client.utils.URIBuilder;
 import org.glassfish.jersey.server.mvc.Template;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,13 +46,6 @@ public class Authentication implements IPageModel
         return page;
     }
 
-    @Override
-    public void setPage(final String page)
-    {
-
-        this.page = page;
-    }
-
     /**
      * If not authenticated, handles a simple redirect to authenticate with Eve
      * SSO.
@@ -66,23 +60,9 @@ public class Authentication implements IPageModel
     public Response redirect()
     {
         final URI validateUri = getServiceUri().getRequestUriBuilder().path(
-            "/validate")
-            .build();
-        try
-        {
-            final URIBuilder uriBuilder = new URIBuilder(
-                eveAuthenticator.getSsoAuthorizeUrl());
-            uriBuilder.addParameter("redirect_uri",
-                validateUri.toASCIIString());
-            uriBuilder.addParameter("client_id", eveAuthenticator.getClientId());
-            uriBuilder.addParameter("scope", String.join(" ",
-                eveAuthenticator.getScopes()));
-            return Response.temporaryRedirect(uriBuilder.build()).build();
-        }
-        catch (URISyntaxException e)
-        {
-            throw new WebApplicationException(e);
-        }
+            "/validate").build();
+
+        return Response.temporaryRedirect(eveAuthenticator.getAuthUrl(validateUri)).build();
     }
 
     /**
@@ -114,11 +94,6 @@ public class Authentication implements IPageModel
     public UriInfo getServiceUri()
     {
         return serviceUri;
-    }
-
-    public void setServiceUri(UriInfo serviceUri)
-    {
-        this.serviceUri = serviceUri;
     }
 
     public EveAuthenticator getEveAuthenticator()

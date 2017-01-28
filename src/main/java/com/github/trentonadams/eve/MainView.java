@@ -112,7 +112,7 @@ public class MainView implements IPageModel
     @Template(name = INDEX_JSP)
     public MainView getService()
     {
-        setPage("/WEB-INF/jsp/default-view.jsp");
+        page = "/WEB-INF/jsp/default-view.jsp";
         return this;
     }
 
@@ -127,9 +127,4 @@ public class MainView implements IPageModel
         return page;
     }
 
-    @Override
-    public void setPage(final String page)
-    {
-        this.page = page;
-    }
 }

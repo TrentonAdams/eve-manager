@@ -220,10 +220,4 @@ public class ApiKeysServiceView implements IPageModel
         return page;
     }
 
-    @Override
-    public void setPage(final String page)
-    {
-        this.page = page;
-    }
-
 }
