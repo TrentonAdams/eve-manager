@@ -23,9 +23,7 @@
     <Root level="info">
       <AppenderRef ref="info"/>
     </Root>
-    <Root level="debug">
-      <AppenderRef ref="debug"/>
-    </Root>
+    <AppenderRef ref="debug"/>
   </Loggers>
 
 </Configuration>

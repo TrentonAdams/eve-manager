@@ -95,10 +95,12 @@ public final class EveAuthenticator
 
     /**
      * Validates the given eve code against the eve sso server.  We obtain
-     * an access_token and refresh_token.
+     * an access_token and refresh_token for continued access to eve apis.
      *
      * @param eveSsoCode the code from the query parameter after returning from
      *                   eve sso.
+     *
+     * @throws RestException if an error communicating with eve sso occurs.
      */
     void validateEveCode(final @QueryParam("code") String eveSsoCode)
     {
@@ -120,7 +122,7 @@ public final class EveAuthenticator
                 return target.request(MediaType.APPLICATION_JSON
                 ).header("Authorization", "Basic " + basicAuthCredentials)
                     .post(Entity.form(
-                        new Form().param("grant_type", "authorization_code")
+                        new Form().param("grant_tye", "authorization_code")
                             .param("code", eveSsoCode)));
             }
         };
@@ -176,6 +178,9 @@ public final class EveAuthenticator
         }
     }
 
+    /**
+     * Represents an eve Character obtained from the eve sso verify call.
+     */
     @XmlRootElement
     public static class Character
     {

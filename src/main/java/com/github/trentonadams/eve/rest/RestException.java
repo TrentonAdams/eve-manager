@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.rest;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -9,14 +10,14 @@ import javax.ws.rs.core.Response;
  *
  * @author trenta
  */
-public class RestException extends RuntimeException
+public class RestException extends WebApplicationException
 {   // BEGIN ExamSpaceException class
     private String url;
     private Response.StatusType statusInfo;
 
     public RestException(final String message, final Throwable throwable)
     {
-        super(message, throwable);
+        super(message, throwable, Response.serverError().build());
     }
 
     public RestException()
