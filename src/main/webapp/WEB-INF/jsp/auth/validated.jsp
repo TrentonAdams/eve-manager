@@ -3,4 +3,4 @@
   Your eve session is established.
   </p>
 
-<p>character: ${model.eveAuthenticator.character}</p>
+<p>character: ${eveAuthenticator.character}</p>

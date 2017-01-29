@@ -107,6 +107,9 @@
         <c:when test="${model.page == '/WEB-INF/jsp/auth/validated.jsp'}">
           <jsp:include page="/WEB-INF/jsp/auth/validated.jsp"/>
         </c:when>
+        <c:when test="${model.page == '/WEB-INF/jsp/auth/failure.jsp'}">
+          <jsp:include page="/WEB-INF/jsp/auth/failure.jsp"/>
+        </c:when>
         <c:when test="${model.page == '/WEB-INF/jsp/error.jsp'}">
           <jsp:include page="/WEB-INF/jsp/error.jsp"/>
         </c:when>

@@ -11,6 +11,8 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -27,8 +29,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
+/**
+ * TODO look into possibly making a generic wrapper around eve calls
+ */
 public final class EveAuthenticator
 {
+    private static Logger logger = LogManager.getLogger(EveAuthenticator.class);
+
     private String secretKey;
     private String clientId;
     private String basicAuthCredentials;
@@ -38,6 +45,7 @@ public final class EveAuthenticator
     private String ssoAuthorizeUrl;
     private AuthTokens tokens;
     private Character character;
+    private boolean newInstance;
 
     EveAuthenticator()
     {
@@ -102,8 +110,9 @@ public final class EveAuthenticator
      *
      * @throws RestException if an error communicating with eve sso occurs.
      */
-    void validateEveCode(final @QueryParam("code") String eveSsoCode)
+    boolean validateEveCode(final @QueryParam("code") String eveSsoCode)
     {
+        boolean success = true;
         final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
             "Error validating authentication")
         {
@@ -127,11 +136,19 @@ public final class EveAuthenticator
             }
         };
 
-        tokens = restCall.invoke();
+        try
+        {
+            tokens = restCall.invoke();
+            // Go get the associated character and put it in our instance variable.
+            queryCharacter();
+            character.setTokens(tokens);
+        }
+        catch (RestException e)
+        {
+            success = false;
+        }
 
-        // Go get the associated character and put it in our instance variable.
-        queryCharacter();
-        character.setTokens(tokens);
+        return success;
     }
 
     public AuthTokens getTokens()
@@ -172,6 +189,16 @@ public final class EveAuthenticator
         {
             throw new RestException(e);
         }
+    }
+
+    public boolean isNewInstance()
+    {
+        return newInstance;
+    }
+
+    public void setNewInstance(final boolean newInstance)
+    {
+        this.newInstance = newInstance;
     }
 
     /**
