@@ -51,12 +51,10 @@ public class Authentication implements IPageModel
         if (eveAuthenticator == null)
         {   // setup new instance, as the session doesn't have it.
             this.eveAuthenticator = new EveAuthenticator();
-            this.eveAuthenticator.setNewInstance(true);
         }
         else
         {
             this.eveAuthenticator = eveAuthenticator;
-            this.eveAuthenticator.setNewInstance(false);
         }
     }
 
@@ -70,9 +68,9 @@ public class Authentication implements IPageModel
      * If not authenticated, handles a simple redirect to authenticate with Eve
      * SSO.
      * <p>
-     * If authenticated already, quickly verifies existing access_token, then
-     * refresh_token, by doing a simple account read.  If that fails, the above
-     * redirect to Eve SSO will occur.
+     * If authenticated already, quickly verifies existing access_token. If
+     * the access_token is no longer valid, then refresh_token is used to get
+     * another.  If that fails, the above redirect to Eve SSO will occur.
      *
      * @return the temporary redirect.
      */
@@ -81,14 +79,19 @@ public class Authentication implements IPageModel
     {
         logger.info(
             "eveAuthenticator is new: " + eveAuthenticator.isNewInstance());
-        // TODO an access check to see if we're authenticated as per the javadoc
-        // TODO provide a mechanism to obtain keys by providing a url to use
-        // TODO create unit tests to send a fake access key followed up with a refresh token.
-        // TODO provide separate configuration for eve client_id
-        final URI validateUri = serviceUri.getRequestUriBuilder().path(
-            "/validate").build();
+        final URI uri;
+        if (!eveAuthenticator.authValid())
+        {
+            final URI validateUri = serviceUri.getRequestUriBuilder().path(
+                "/validate").build();
+            uri = eveAuthenticator.getAuthUrl(validateUri);
+        }
+        else
+        {
+            uri = serviceUri.getRequestUriBuilder().path("/complete").build();
+        }
 
-        return Response.seeOther(eveAuthenticator.getAuthUrl(validateUri))
+        return Response.seeOther(uri)
             .build();
     }
 

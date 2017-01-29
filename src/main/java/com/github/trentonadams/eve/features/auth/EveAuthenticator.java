@@ -30,7 +30,18 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 
 /**
+ * TODO try to use refresh_token if access_token fails.
+ * <p>
+ * TODO provide a mechanism to obtain keys by providing a url to use from a unit
+ * test.
+ * <p>
+ * TODO create unit tests to send a fake access key followed up with a refresh
+ * token.
+ * <p>
  * TODO look into possibly making a generic wrapper around eve calls
+ * <p>
+ * TODO make all eve objects inherit from an error object, so that when there's
+ * a problem we get a valid result instead of an exception.
  */
 public final class EveAuthenticator
 {
@@ -49,6 +60,7 @@ public final class EveAuthenticator
 
     EveAuthenticator()
     {
+        newInstance = true;
         final Parameters params = new Parameters();
         final FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
             new FileBasedConfigurationBuilder<FileBasedConfiguration>(
@@ -76,6 +88,13 @@ public final class EveAuthenticator
         }
     }
 
+    /**
+     * Makes a call to the eve server with the current access_token to grab the
+     * character.  Also used as a check that the access token is valid.
+     *
+     * @throws RestException if an error occurred.  Currently this even means if
+     *                       the access_token is not valid.
+     */
     private void queryCharacter()
     {
         final RestCall<Character> restCall = new RestCall<Character>(
@@ -142,6 +161,7 @@ public final class EveAuthenticator
             // Go get the associated character and put it in our instance variable.
             queryCharacter();
             character.setTokens(tokens);
+            newInstance = false;
         }
         catch (RestException e)
         {
@@ -196,9 +216,27 @@ public final class EveAuthenticator
         return newInstance;
     }
 
-    public void setNewInstance(final boolean newInstance)
+    /**
+     * Checks to see if the current authenticated session, if any, is valid.
+     *
+     * @return true if valid, false otherwise
+     */
+    public boolean authValid()
     {
-        this.newInstance = newInstance;
+        boolean sessionValid = false;
+        try
+        {
+            if (!newInstance)
+            {   // session previously established, see if it's still valid.
+                queryCharacter();
+                sessionValid = true;
+            }
+        }
+        catch (RestException e)
+        {
+            logger.warn("access_token not valid", e);
+        }
+        return sessionValid;
     }
 
     /**
