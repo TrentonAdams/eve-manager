@@ -3,6 +3,4 @@
   Your eve session is established.
   </p>
 
-<p>code: ${model.eveAuthenticator.code}</p>
-<p>tokens: ${model.eveAuthenticator.tokens}</p>
 <p>character: ${model.eveAuthenticator.character}</p>

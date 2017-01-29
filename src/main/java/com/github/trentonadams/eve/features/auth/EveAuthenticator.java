@@ -22,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.beans.Transient;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -35,7 +36,6 @@ public final class EveAuthenticator
     private String ssoVerifyUrl;
     private String[] scopes;
     private String ssoAuthorizeUrl;
-    private String code;
     private AuthTokens tokens;
     private Character character;
 
@@ -122,7 +122,7 @@ public final class EveAuthenticator
                 return target.request(MediaType.APPLICATION_JSON
                 ).header("Authorization", "Basic " + basicAuthCredentials)
                     .post(Entity.form(
-                        new Form().param("grant_tye", "authorization_code")
+                        new Form().param("grant_type", "authorization_code")
                             .param("code", eveSsoCode)));
             }
         };
@@ -131,11 +131,7 @@ public final class EveAuthenticator
 
         // Go get the associated character and put it in our instance variable.
         queryCharacter();
-    }
-
-    public String getCode()
-    {
-        return code;
+        character.setTokens(tokens);
     }
 
     public AuthTokens getTokens()
@@ -198,6 +194,8 @@ public final class EveAuthenticator
         private String characterOwnerHash;
         @XmlElement(name = "IntellectualProperty")
         private String intellectualProperty;
+        @XmlTransient
+        private AuthTokens tokens;
 
         @XmlTransient
         public int getCharacterID()
@@ -287,7 +285,19 @@ public final class EveAuthenticator
                 ", tokenType='" + tokenType + '\'' +
                 ", characterOwnerHash='" + characterOwnerHash + '\'' +
                 ", intellectualProperty='" + intellectualProperty + '\'' +
+                ", tokens=" + tokens +
                 '}';
+        }
+
+        public void setTokens(final AuthTokens tokens)
+        {
+            this.tokens = tokens;
+        }
+
+        @Transient
+        public AuthTokens getTokens()
+        {
+            return tokens;
         }
     }
 }
