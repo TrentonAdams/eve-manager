@@ -88,8 +88,8 @@ public class Authentication implements IPageModel
         final URI validateUri = serviceUri.getRequestUriBuilder().path(
             "/validate").build();
 
-        return Response.seeOther(
-            eveAuthenticator.getAuthUrl(validateUri)).build();
+        return Response.seeOther(eveAuthenticator.getAuthUrl(validateUri))
+            .build();
     }
 
     /**
@@ -102,22 +102,21 @@ public class Authentication implements IPageModel
      */
     @GET
     @Path("/validate")
-    public Response validate(@QueryParam("cod") final String eveSsoCode)
+    public Response validate(@QueryParam("code") final String eveSsoCode)
     {
+        final URI uri;
         if (eveAuthenticator.validateEveCode(eveSsoCode))
         {
             session.setAttribute("eveAuthenticator", eveAuthenticator);
-            return Response.seeOther(
-                serviceUri.getBaseUriBuilder().path("/auth/complete").build())
-                .build();
+            uri = serviceUri.getBaseUriBuilder().path("/auth/complete").build();
         }
         else
         {
-            return Response.seeOther(
-                serviceUri.getBaseUriBuilder().path("/auth/failure").build())
-                .build();
+            uri = serviceUri.getBaseUriBuilder().path("/auth/failure").build();
 
         }
+
+        return Response.seeOther(uri).build();
     }
 
     @GET
