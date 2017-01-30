@@ -69,6 +69,9 @@ public class EveAuthenticatorTest
         throws IOException, InterruptedException
     {
         String outputFormat = "********* %s *********";
+        System.out.println(String.format(outputFormat,
+            "Ensure that you have setup your testauth.sso.* properties for " +
+                "the test version of eve.properties "));
         System.out.println(
             String.format(outputFormat,
                 "Go to : " + eveAuthenticator.getAuthUrl(returnUrl)));
