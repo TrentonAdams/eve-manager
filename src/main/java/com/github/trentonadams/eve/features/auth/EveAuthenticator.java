@@ -82,7 +82,7 @@ public final class EveAuthenticator
                 String.format("%s:%s", clientId, secretKey)
                     .getBytes()));
         }
-        catch (ConfigurationException e)
+        catch (final ConfigurationException e)
         {
             throw new WebApplicationException(e);
         }
@@ -97,6 +97,10 @@ public final class EveAuthenticator
      */
     private void queryCharacter()
     {
+        assert tokens != null : "queryCharacter shouldn't be called unless " +
+            "you're sure the tokens exist (though they may not be valid); this " +
+            "is a programming error";
+
         final RestCall<Character> restCall = new RestCall<Character>(
             "Error validating authentication")
         {
@@ -105,7 +109,7 @@ public final class EveAuthenticator
             {
                 super.initialize();
                 webServiceUrl = ssoVerifyUrl;
-                logPrefix = "evesso-verify: ";
+                logPrefix = "evesso-queryCharacter: ";
             }
 
             @SuppressWarnings("ChainedMethodCall")
@@ -140,7 +144,7 @@ public final class EveAuthenticator
             {
                 super.initialize();
                 webServiceUrl = ssoTokenUrl;
-                logPrefix = "evesso: ";
+                logPrefix = "evesso-validateEveCode: ";
             }
 
             @SuppressWarnings("ChainedMethodCall")
@@ -163,27 +167,12 @@ public final class EveAuthenticator
             character.setTokens(tokens);
             newInstance = false;
         }
-        catch (RestException e)
+        catch (final RestException e)
         {
             success = false;
         }
 
         return success;
-    }
-
-    public AuthTokens getTokens()
-    {
-        return tokens;
-    }
-
-    public Character getCharacter()
-    {
-        return character;
-    }
-
-    public void setCharacter(Character character)
-    {
-        this.character = character;
     }
 
     /**
@@ -205,7 +194,7 @@ public final class EveAuthenticator
             uriBuilder.addParameter("scope", String.join(" ", scopes));
             return uriBuilder.build();
         }
-        catch (URISyntaxException e)
+        catch (final URISyntaxException e)
         {
             throw new RestException(e);
         }
@@ -232,11 +221,82 @@ public final class EveAuthenticator
                 sessionValid = true;
             }
         }
-        catch (RestException e)
+        catch (final RestException e)
         {
-            logger.warn("access_token not valid", e);
+            logger.warn("access_token not valid, attempting refresh", e);
+            sessionValid = refreshToken();
         }
         return sessionValid;
+    }
+
+    /**
+     * Attempts to refresh the access_token.
+     * <p>
+     * Assumption: the tokens exist; i.e. authentication was previously
+     * established.
+     */
+    private boolean refreshToken()
+    {
+        assert tokens != null : "refreshToken shouldn't be called unless " +
+            "you're sure the tokens are not null; this " +
+            "is a programming error";
+
+        boolean tokenRefreshed = false;
+        final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
+            "Error validating authentication")
+        {
+            @Override
+            protected void initialize()
+            {
+                super.initialize();
+                webServiceUrl = ssoTokenUrl;
+                logPrefix = "evesso-refresh_token: ";
+            }
+
+            @SuppressWarnings("ChainedMethodCall")
+            @Override
+            public Response httpMethodCall(final WebTarget target)
+            {   // use refresh_token to get another access_token
+                return target.request(MediaType.APPLICATION_JSON
+                ).header("Authorization", "Basic " + basicAuthCredentials)
+                    .post(Entity.form(
+                        new Form().param("grant_type", "refresh_token")
+                            .param("refresh_token", tokens.getRefreshToken())));
+            }
+        };
+
+        try
+        {
+            // 1. refresh the token
+            // 2. check that the new access_token is valid by grabbing character
+            // 3. set tokenRefreshed variable to true
+            tokens = restCall.invoke();
+            queryCharacter();
+            tokenRefreshed = tokens != null;
+        }
+        catch (final RestException e)
+        {
+            logger.warn("refresh_token failed", e);
+        }
+
+        return tokenRefreshed;
+    }
+
+//    Property based set/get methods
+
+    public AuthTokens getTokens()
+    {
+        return tokens;
+    }
+
+    public Character getCharacter()
+    {
+        return character;
+    }
+
+    public void setCharacter(final Character character)
+    {
+        this.character = character;
     }
 
     /**

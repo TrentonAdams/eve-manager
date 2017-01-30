@@ -196,7 +196,7 @@ public abstract class RestCall<T>
                 (Class<T>) ((ParameterizedType) getClass()
                     .getGenericSuperclass()).getActualTypeArguments()[0]);
         }
-        catch (Throwable e)
+        catch (final Throwable e)
         {
             /*
               This is a hack to work around STUPID web services that return a
@@ -227,13 +227,13 @@ public abstract class RestCall<T>
     {
         newClient.register((ClientRequestFilter) clientRequestContext ->
         {
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             sb.append(logPrefix).append(": request-headers: ");
             final MultivaluedMap<String, Object> headers =
                 clientRequestContext.getHeaders();
-            for (String headerName : headers.keySet())
+            for (final String headerName : headers.keySet())
             {
-                for (Object value : headers.get(headerName))
+                for (final Object value : headers.get(headerName))
                 {
                     sb.append(headerName).append(": ").append(
                         value.toString()).append(
@@ -250,13 +250,13 @@ public abstract class RestCall<T>
         newClient.register(
             (ClientResponseFilter) (requestContext, responseContext) ->
             {
-                StringBuilder sb = new StringBuilder();
+                final StringBuilder sb = new StringBuilder();
                 sb.append(logPrefix).append(": response-headers: ");
                 final MultivaluedMap<String, String> headers =
                     responseContext.getHeaders();
-                for (String headerName : headers.keySet())
+                for (final String headerName : headers.keySet())
                 {
-                    for (String value : headers.get(headerName))
+                    for (final String value : headers.get(headerName))
                     {
                         sb.append(headerName).append(": ").append(value).append(
                             "; ");

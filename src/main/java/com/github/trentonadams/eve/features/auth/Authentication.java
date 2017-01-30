@@ -9,10 +9,7 @@ import org.glassfish.jersey.server.mvc.Template;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,7 +17,9 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 /**
- * Created by IntelliJ IDEA.
+ * JAX-RS implementation that simply handles authentication.  Mostly it handles
+ * the path patterns and delegates the eve authentication to {@link
+ * EveAuthenticator}
  * <p>
  * Created :  25/01/17 1:07 PM MST
  * <p>
@@ -44,6 +43,8 @@ public class Authentication implements IPageModel
 
     @Context
     private UriInfo serviceUri;
+    private String message;
+    private AuthStatus authStatus;
 
     @SessionAttributeInject(attributeName = "eveAuthenticator")
     public Authentication(final EveAuthenticator eveAuthenticator)
@@ -111,6 +112,7 @@ public class Authentication implements IPageModel
         if (eveAuthenticator.validateEveCode(eveSsoCode))
         {
             session.setAttribute("eveAuthenticator", eveAuthenticator);
+            session.setMaxInactiveInterval(-1);
             uri = serviceUri.getBaseUriBuilder().path("/auth/complete").build();
         }
         else
@@ -128,6 +130,8 @@ public class Authentication implements IPageModel
     @Template(name = MainView.INDEX_JSP)
     public Authentication complete()
     {
+        authStatus = eveAuthenticator.authValid() ? AuthStatus.ESTABLISHED :
+            AuthStatus.INVALID;
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
     }
@@ -147,5 +151,20 @@ public class Authentication implements IPageModel
     public EveAuthenticator getEveAuthenticator()
     {
         return eveAuthenticator;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public AuthStatus getAuthStatus()
+    {
+        return authStatus;
+    }
+
+    enum AuthStatus
+    {
+        ESTABLISHED, INVALID
     }
 }
