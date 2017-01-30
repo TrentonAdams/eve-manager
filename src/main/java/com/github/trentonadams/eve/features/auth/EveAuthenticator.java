@@ -133,7 +133,7 @@ public final class EveAuthenticator
      *
      * @throws RestException if an error communicating with eve sso occurs.
      */
-    boolean validateEveCode(final @QueryParam("code") String eveSsoCode)
+    boolean validateEveCode(@QueryParam("code") final String eveSsoCode)
     {
         boolean success = true;
         final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
@@ -302,6 +302,7 @@ public final class EveAuthenticator
     /**
      * Represents an eve Character obtained from the eve sso verify call.
      */
+    @SuppressWarnings("unused")
     @XmlRootElement
     public static class Character
     {
@@ -414,15 +415,18 @@ public final class EveAuthenticator
                 '}';
         }
 
-        public void setTokens(final AuthTokens tokens)
-        {
-            this.tokens = tokens;
-        }
-
         @Transient
         public AuthTokens getTokens()
         {
             return tokens;
         }
+
+        public void setTokens(final AuthTokens tokens)
+        {
+            this.tokens = tokens;
+        }
     }
+
+    // TEST only code below this
+
 }
