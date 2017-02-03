@@ -32,6 +32,8 @@ import java.util.Base64;
 /**
  * TODO look into possibly making a generic wrapper around eve calls
  * <p>
+ * TODO provide client caching.  Use JCS and look at JAXRS book
+ * <p>
  * TODO This class currently only supports authenticating a single character.
  * Refactor for support for multiple characters.
  */
