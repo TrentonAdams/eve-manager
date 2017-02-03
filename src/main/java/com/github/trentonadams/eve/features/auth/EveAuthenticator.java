@@ -223,7 +223,8 @@ public final class EveAuthenticator
         }
         catch (final RestException e)
         {
-            logger.warn("access_token not valid, attempting refresh", e);
+            logger.warn("access_token not valid, attempting refresh");
+            logger.debug("access_token not valid, attempting refresh", e);
             sessionValid = refreshToken();
         }
         return sessionValid;

@@ -16,6 +16,11 @@ Alternatively, run the following...
 
 And install the war in target/ manually into your servlet container.
 
+== Unit Tests ==
+To run the unit tests, you need to ensure that you've...
+
+# setup a test application on the [https://developers.eveonline.com eve developer site] with the validate url of http://localhost:9090/myapp/testauth/validate
+# setup testauth.sso.* properties in your settings.xml, as used in the  src/test/resources/eve.properties file
 
 == JS Libraries ==
 === jQuery ===

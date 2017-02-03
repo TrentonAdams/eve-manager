@@ -71,14 +71,18 @@ public class EveAuthenticatorTest
         String outputFormat = "********* %s *********";
         System.out.println(String.format(outputFormat,
             "Ensure that you have setup your testauth.sso.* properties for " +
-                "the test version of eve.properties "));
+                "the test version of eve.properties"));
+        System.out.println(String.format(outputFormat,
+            "Also ensure you've setup an application for " +
+                "http://localhost:9090/myapp/testauth/validate on the " +
+                "https://developers.eveonline.com site "));
         System.out.println(
             String.format(outputFormat,
                 "Go to : " + eveAuthenticator.getAuthUrl(returnUrl)));
 
         System.out.println("Waiting for authentication in browser: ");
         do
-        {
+        {   // simply wait for the user to go to eve auth and back.
             System.out.print('.');
             Thread.sleep(1000);
         }
