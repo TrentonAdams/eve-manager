@@ -20,10 +20,12 @@
   </Appenders>
 
   <Loggers>
+    <Logger name="com.github.trentonadams" level="debug">
+      <AppenderRef ref="debug"/>
+    </Logger>
     <Root level="info">
       <AppenderRef ref="info"/>
     </Root>
-    <AppenderRef ref="debug"/>
   </Loggers>
 
 </Configuration>
