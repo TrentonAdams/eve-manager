@@ -2,8 +2,9 @@ package com.github.trentonadams.eve.features.auth;
 
 import com.github.trentonadams.eve.app.Main;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.ws.rs.client.Client;
@@ -25,12 +26,12 @@ import java.net.URI;
  */
 public class EveAuthenticatorTest
 {
-    private EveAuthenticator eveAuthenticator;
-    private HttpServer server;
-    private WebTarget target;
+    private static EveAuthenticator eveAuthenticator;
+    private static HttpServer server;
+    private static WebTarget target;
 
-    @Before
-    public void setUp() throws Exception
+    @BeforeClass
+    public static void setUp() throws Exception
     {
         eveAuthenticator = new EveAuthenticator();
         // start the server
@@ -45,19 +46,22 @@ public class EveAuthenticatorTest
         // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
 
         target = c.target(Main.BASE_URI);
+        eveAuthenticator.validateEveCode(retrieveEveCode(
+            URI.create("http://localhost:9090/myapp/testauth/validate")));
     }
 
-    @After
-    public void tearDown() throws Exception
+    @AfterClass
+    public static void tearDown() throws Exception
     {
         server.shutdownNow();
     }
 
     @Test
-    public void validateEveCode() throws Exception
+    public void testRefreshToken() throws Exception
     {
-        eveAuthenticator.validateEveCode(retrieveEveCode(
-            URI.create("http://localhost:9090/myapp/testauth/validate")));
+        eveAuthenticator.tokens.setAccessToken("blah");
+        Assert.assertEquals("Auth should still be valid when access_token " +
+            "is not", true, eveAuthenticator.authValid());
     }
 
     /**
@@ -65,7 +69,7 @@ public class EveAuthenticatorTest
      *
      * @return the eve code to validate.
      */
-    String retrieveEveCode(final URI returnUrl)
+    static String retrieveEveCode(final URI returnUrl)
         throws IOException, InterruptedException
     {
         String outputFormat = "********* %s *********";

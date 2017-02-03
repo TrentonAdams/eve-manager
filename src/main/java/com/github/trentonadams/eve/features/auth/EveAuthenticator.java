@@ -30,31 +30,32 @@ import java.net.URISyntaxException;
 import java.util.Base64;
 
 /**
- * TODO try to use refresh_token if access_token fails.
- * <p>
- * TODO provide a mechanism to obtain keys by providing a url to use from a unit
- * test.
- * <p>
- * TODO create unit tests to send a fake access key followed up with a refresh
- * token.
- * <p>
  * TODO look into possibly making a generic wrapper around eve calls
  * <p>
- * TODO make all eve objects inherit from an error object, so that when there's
- * a problem we get a valid result instead of an exception.
  */
 public final class EveAuthenticator
 {
-    private static Logger logger = LogManager.getLogger(EveAuthenticator.class);
+    private static final Logger logger = LogManager.getLogger(
+        EveAuthenticator.class);
 
-    private String secretKey;
-    private String clientId;
-    private String basicAuthCredentials;
-    private String ssoTokenUrl;
-    private String ssoVerifyUrl;
-    private String[] scopes;
-    private String ssoAuthorizeUrl;
-    private AuthTokens tokens;
+    /**
+     * setup your application keys on https://developer.eveonline.com
+     */
+    private final String eveAppClientId;
+    /**
+     * setup your application keys on https://developer.eveonline.com
+     */
+    private final String[] eveAppPermissionScopes;
+    private final String eveAppSecretAndIdBase64;
+    private final String ssoTokenUrl;
+    private final String ssoVerifyUrl;
+    private final String ssoAuthorizeUrl;
+
+    /**
+     * package private so that a unit test can manipulate.  Please DO NOT
+     * use this variable for anything else but testing.
+     */
+    @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
     private Character character;
     private boolean newInstance;
 
@@ -71,15 +72,16 @@ public final class EveAuthenticator
         try
         {
             final Configuration config = builder.getConfiguration();
-            scopes = config.getStringArray("auth.sso.scopes");
-            secretKey = config.getString("auth.sso.secret_key");
-            clientId = config.getString("auth.sso.client_id");
+            eveAppPermissionScopes = config.getStringArray("auth.sso.scopes");
+            final String eveAppSecretKey = config.getString(
+                "auth.sso.secret_key");
+            eveAppClientId = config.getString("auth.sso.client_id");
             ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
             ssoTokenUrl = config.getString("auth.sso.url.token");
             ssoVerifyUrl = config.getString("auth.sso.url.verify");
             final Base64.Encoder encoder = Base64.getEncoder();
-            basicAuthCredentials = new String(encoder.encode(
-                String.format("%s:%s", clientId, secretKey)
+            eveAppSecretAndIdBase64 = new String(encoder.encode(
+                String.format("%s:%s", eveAppClientId, eveAppSecretKey)
                     .getBytes()));
         }
         catch (final ConfigurationException e)
@@ -152,7 +154,7 @@ public final class EveAuthenticator
             public Response httpMethodCall(final WebTarget target)
             {
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Basic " + basicAuthCredentials)
+                ).header("Authorization", "Basic " + eveAppSecretAndIdBase64)
                     .post(Entity.form(
                         new Form().param("grant_type", "authorization_code")
                             .param("code", eveSsoCode)));
@@ -178,20 +180,21 @@ public final class EveAuthenticator
     /**
      * Construct a proper eve sso url.
      *
-     * @param validateUri the return url to finish authentication after
-     *                    returning from eve sso.
+     * @param ourValidateUri the return url to finish authentication after
+     *                       returning from eve sso.
      *
      * @return the final url to redirect to for eve sso.
      */
-    URI getAuthUrl(final URI validateUri)
+    URI getAuthUrl(final URI ourValidateUri)
     {
         try
         {
             final URIBuilder uriBuilder = new URIBuilder(ssoAuthorizeUrl);
             uriBuilder.addParameter("redirect_uri",
-                validateUri.toASCIIString());
-            uriBuilder.addParameter("client_id", clientId);
-            uriBuilder.addParameter("scope", String.join(" ", scopes));
+                ourValidateUri.toASCIIString());
+            uriBuilder.addParameter("client_id", eveAppClientId);
+            uriBuilder.addParameter("scope", String.join(" ",
+                eveAppPermissionScopes));
             return uriBuilder.build();
         }
         catch (final URISyntaxException e)
@@ -259,7 +262,7 @@ public final class EveAuthenticator
             public Response httpMethodCall(final WebTarget target)
             {   // use refresh_token to get another access_token
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Basic " + basicAuthCredentials)
+                ).header("Authorization", "Basic " + eveAppSecretAndIdBase64)
                     .post(Entity.form(
                         new Form().param("grant_type", "refresh_token")
                             .param("refresh_token", tokens.getRefreshToken())));
@@ -302,6 +305,9 @@ public final class EveAuthenticator
 
     /**
      * Represents an eve Character obtained from the eve sso verify call.
+     * <p>
+     * TODO make all eve objects inherit from an error object, so that when
+     * there's a problem we get a valid result instead of an exception.
      */
     @SuppressWarnings("unused")
     @XmlRootElement

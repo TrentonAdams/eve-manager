@@ -47,7 +47,7 @@ public class Authentication implements IPageModel
     private AuthStatus authStatus;
 
     @SessionAttributeInject(attributeName = "eveAuthenticator")
-    public Authentication(final EveAuthenticator eveAuthenticator)
+    Authentication(final EveAuthenticator eveAuthenticator)
     {
         if (eveAuthenticator == null)
         {   // setup new instance, as the session doesn't have it.
