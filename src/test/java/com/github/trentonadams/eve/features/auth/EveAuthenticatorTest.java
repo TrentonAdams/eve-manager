@@ -64,6 +64,13 @@ public class EveAuthenticatorTest
             "is not", true, eveAuthenticator.authValid());
     }
 
+    @Test
+    public void testGetLocation() throws Exception
+    {
+        Assert.assertEquals("Location should be available", true,
+            eveAuthenticator.getLocation() != null);
+    }
+
     /**
      * Retrieves an eve online code.
      *

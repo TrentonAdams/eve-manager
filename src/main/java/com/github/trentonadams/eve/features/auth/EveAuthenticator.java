@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.features.auth;
 
+import com.github.trentonadams.eve.features.api.LocationInfo;
 import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.RestCall;
 import com.github.trentonadams.eve.rest.RestException;
@@ -50,6 +51,7 @@ public final class EveAuthenticator
     private final String ssoTokenUrl;
     private final String ssoVerifyUrl;
     private final String ssoAuthorizeUrl;
+    private final String esiLocationUrl;
 
     /**
      * package private so that a unit test can manipulate.  Please DO NOT
@@ -79,6 +81,7 @@ public final class EveAuthenticator
             ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
             ssoTokenUrl = config.getString("auth.sso.url.token");
             ssoVerifyUrl = config.getString("auth.sso.url.verify");
+            esiLocationUrl = config.getString("auth.esi.location.url");
             final Base64.Encoder encoder = Base64.getEncoder();
             eveAppSecretAndIdBase64 = new String(encoder.encode(
                 String.format("%s:%s", eveAppClientId, eveAppSecretKey)
@@ -124,6 +127,36 @@ public final class EveAuthenticator
             }
         };
         character = restCall.invoke();
+    }
+
+    /**
+     * TODO finish making properties plop character id in url.  Perhaps commons config can do that?
+     *
+     * @return
+     */
+    LocationInfo getLocation()
+    {
+        final RestCall<LocationInfo> restCall = new RestCall<LocationInfo>(
+            "Error getting location information")
+        {
+            @Override
+            protected void initialize()
+            {
+                super.initialize();
+                webServiceUrl = esiLocationUrl;
+                logPrefix = "esi-getLocation: ";
+            }
+
+            @SuppressWarnings("ChainedMethodCall")
+            @Override
+            public Response httpMethodCall(final WebTarget target)
+            {
+                return target.request(MediaType.APPLICATION_JSON
+                ).header("Authorization", "Bearer " + tokens.getAccessToken())
+                    .get();
+            }
+        };
+        return restCall.invoke();
     }
 
     /**
@@ -305,9 +338,6 @@ public final class EveAuthenticator
 
     /**
      * Represents an eve Character obtained from the eve sso verify call.
-     * <p>
-     * TODO make all eve objects inherit from an error object, so that when
-     * there's a problem we get a valid result instead of an exception.
      */
     @SuppressWarnings("unused")
     @XmlRootElement

@@ -10,6 +10,7 @@ import javax.ws.rs.client.*;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 
 /**
@@ -173,7 +174,7 @@ public abstract class RestCall<T>
         {
             newClient.register(responseFilter);
         }
-        registerRequestLoggingFilter(newClient);
+        registerRequestLoggingFilters(newClient);
         return newClient;
     }
 
@@ -212,6 +213,7 @@ public abstract class RestCall<T>
              */
             final String tmpEntity = response.readEntity(String.class);
             logger.error(logPrefix + "unusual response - " + tmpEntity);
+            logger.debug(logPrefix + "unusual response - " + tmpEntity, e);
             throw new RestException(e);
         }
         return entity;
@@ -223,7 +225,52 @@ public abstract class RestCall<T>
      *
      * @param newClient
      */
-    private void registerRequestLoggingFilter(final Client newClient)
+    private void registerRequestLoggingFilters(final Client newClient)
+    {
+        registerRequestLogger(newClient);
+        registerResponseLogger(newClient);
+        registerResponseCaching(newClient);
+    }
+
+    private void registerResponseCaching(final Client newClient)
+    {
+        newClient.register(new ClientResponseFilter()
+        {
+            @Override
+            public void filter(final ClientRequestContext requestContext,
+                final ClientResponseContext responseContext) throws IOException
+            {
+                final MultivaluedMap<String, String> headers =
+                    responseContext.getHeaders();
+
+            }
+        });
+    }
+
+    private void registerResponseLogger(final Client newClient)
+    {
+        // simply log the headers
+        newClient.register(
+            (ClientResponseFilter) (requestContext, responseContext) ->
+            {
+                final StringBuilder sb = new StringBuilder();
+                sb.append(logPrefix).append(": response-headers: ");
+                final MultivaluedMap<String, String> headers =
+                    responseContext.getHeaders();
+                for (final String headerName : headers.keySet())
+                {
+                    for (final String value : headers.get(headerName))
+                    {
+                        sb.append(headerName).append(": ").append(value).append(
+                            "; ");
+                    }
+                }
+                logger.debug(sb.toString());
+                logger.info(logPrefix + ": uri-" + requestContext.getUri());
+            });
+    }
+
+    private void registerRequestLogger(final Client newClient)
     {
         newClient.register((ClientRequestFilter) clientRequestContext ->
         {
@@ -245,26 +292,6 @@ public abstract class RestCall<T>
             logger.debug(String.format("%s request entity-%s", logPrefix,
                 stringifyEntity(clientRequestContext.getEntity())));
         });
-
-        // simply log the headers
-        newClient.register(
-            (ClientResponseFilter) (requestContext, responseContext) ->
-            {
-                final StringBuilder sb = new StringBuilder();
-                sb.append(logPrefix).append(": response-headers: ");
-                final MultivaluedMap<String, String> headers =
-                    responseContext.getHeaders();
-                for (final String headerName : headers.keySet())
-                {
-                    for (final String value : headers.get(headerName))
-                    {
-                        sb.append(headerName).append(": ").append(value).append(
-                            "; ");
-                    }
-                }
-                logger.debug(sb.toString());
-                logger.info(logPrefix + ": uri-" + requestContext.getUri());
-            });
     }
 
     private String stringifyEntity(final Object entity)
