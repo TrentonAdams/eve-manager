@@ -11,7 +11,6 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -86,25 +85,21 @@ public final class EveAuthenticator
             ssoVerifyUrl = config.getString("auth.sso.url.verify");
             ;
             final EveAuthenticator myThis = this;
-            config.getInterpolator().addDefaultLookup(new Lookup()
+            config.getInterpolator().addDefaultLookup(s ->
             {
-                @Override
-                public Object lookup(final String s)
-                {
-                    assert myThis.getCharacter() != null:"This lookup should " +
-                        "only occur if we're in a place where the character " +
-                        "ID is already known";
+                assert myThis.getCharacter() != null:"This lookup should " +
+                    "only occur if we're in a place where the character " +
+                    "ID is already known";
 
-                    Object value = null;
-                    switch (s)
-                    {
-                        case "live.character.id":
-                            value = myThis.getCharacter().getCharacterID();
-                            break;
-                        default:
-                    }
-                    return value;
+                Object value = null;
+                switch (s)
+                {
+                    case "live.character.id":
+                        value = myThis.getCharacter().getCharacterID();
+                        break;
+                    default:
                 }
+                return value;
             });
 
             final Base64.Encoder encoder = Base64.getEncoder();
