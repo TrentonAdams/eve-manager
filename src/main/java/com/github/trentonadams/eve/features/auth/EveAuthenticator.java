@@ -11,6 +11,7 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.interpol.Lookup;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,6 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.beans.Transient;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -51,7 +51,6 @@ public final class EveAuthenticator
     private final String ssoTokenUrl;
     private final String ssoVerifyUrl;
     private final String ssoAuthorizeUrl;
-    private final String esiLocationUrl;
 
     /**
      * package private so that a unit test can manipulate.  Please DO NOT
@@ -60,7 +59,11 @@ public final class EveAuthenticator
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
     private Character character;
     private boolean newInstance;
+    private Configuration config;
 
+    /**
+     * Currently all we do is read configurations.
+     */
     EveAuthenticator()
     {
         newInstance = true;
@@ -73,7 +76,7 @@ public final class EveAuthenticator
                         new DefaultListDelimiterHandler(',')));
         try
         {
-            final Configuration config = builder.getConfiguration();
+            config = builder.getConfiguration();
             eveAppPermissionScopes = config.getStringArray("auth.sso.scopes");
             final String eveAppSecretKey = config.getString(
                 "auth.sso.secret_key");
@@ -81,7 +84,29 @@ public final class EveAuthenticator
             ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
             ssoTokenUrl = config.getString("auth.sso.url.token");
             ssoVerifyUrl = config.getString("auth.sso.url.verify");
-            esiLocationUrl = config.getString("auth.esi.location.url");
+            ;
+            final EveAuthenticator myThis = this;
+            config.getInterpolator().addDefaultLookup(new Lookup()
+            {
+                @Override
+                public Object lookup(final String s)
+                {
+                    assert myThis.getCharacter() != null:"This lookup should " +
+                        "only occur if we're in a place where the character " +
+                        "ID is already known";
+
+                    Object value = null;
+                    switch (s)
+                    {
+                        case "live.character.id":
+                            value = myThis.getCharacter().getCharacterID();
+                            break;
+                        default:
+                    }
+                    return value;
+                }
+            });
+
             final Base64.Encoder encoder = Base64.getEncoder();
             eveAppSecretAndIdBase64 = new String(encoder.encode(
                 String.format("%s:%s", eveAppClientId, eveAppSecretKey)
@@ -143,7 +168,7 @@ public final class EveAuthenticator
             protected void initialize()
             {
                 super.initialize();
-                webServiceUrl = esiLocationUrl;
+                webServiceUrl = config.getString("esi.location.url");
                 logPrefix = "esi-getLocation: ";
             }
 
@@ -199,7 +224,6 @@ public final class EveAuthenticator
             tokens = restCall.invoke();
             // Go get the associated character and put it in our instance variable.
             queryCharacter();
-            character.setTokens(tokens);
             newInstance = false;
         }
         catch (final RestException e)
@@ -357,8 +381,6 @@ public final class EveAuthenticator
         private String characterOwnerHash;
         @XmlElement(name = "IntellectualProperty")
         private String intellectualProperty;
-        @XmlTransient
-        private AuthTokens tokens;
 
         @XmlTransient
         public int getCharacterID()
@@ -410,6 +432,20 @@ public final class EveAuthenticator
             return tokenType;
         }
 
+        @Override
+        public String toString()
+        {
+            return "Character{" +
+                "characterID=" + characterID +
+                ", characterName='" + characterName + '\'' +
+                ", expiresOn='" + expiresOn + '\'' +
+                ", scopes='" + scopes + '\'' +
+                ", tokenType='" + tokenType + '\'' +
+                ", characterOwnerHash='" + characterOwnerHash + '\'' +
+                ", intellectualProperty='" + intellectualProperty + '\'' +
+                '}';
+        }
+
         public void setTokenType(final String tokenType)
         {
             this.tokenType = tokenType;
@@ -437,31 +473,6 @@ public final class EveAuthenticator
             this.intellectualProperty = intellectualProperty;
         }
 
-        @Override
-        public String toString()
-        {
-            return "Character{" +
-                "characterID=" + characterID +
-                ", characterName='" + characterName + '\'' +
-                ", expiresOn='" + expiresOn + '\'' +
-                ", scopes='" + scopes + '\'' +
-                ", tokenType='" + tokenType + '\'' +
-                ", characterOwnerHash='" + characterOwnerHash + '\'' +
-                ", intellectualProperty='" + intellectualProperty + '\'' +
-                ", tokens=" + tokens +
-                '}';
-        }
-
-        @Transient
-        public AuthTokens getTokens()
-        {
-            return tokens;
-        }
-
-        public void setTokens(final AuthTokens tokens)
-        {
-            this.tokens = tokens;
-        }
     }
 
     // TEST only code below this
