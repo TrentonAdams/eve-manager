@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.features.auth;
 
+import com.github.trentonadams.eve.features.api.EveError;
 import com.github.trentonadams.eve.features.api.LocationInfo;
 import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.RestCall;
@@ -360,7 +361,7 @@ public final class EveAuthenticator
      */
     @SuppressWarnings("unused")
     @XmlRootElement
-    public static class Character
+    public static class Character extends EveError
     {
         @XmlElement(name = "CharacterID")
         private int characterID;

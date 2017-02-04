@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.rest;
 
+import com.github.trentonadams.eve.features.api.EveError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;
@@ -123,8 +124,19 @@ public abstract class RestCall<T>
                         target.getUri(), response.getStatus(),
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
+                EveError eveError = null;
+                try
+                {
+                    eveError = response.readEntity(EveError.class);
+                }
+                catch (Throwable e)
+                {   // really don't care, text version already logged
+                    eveError = new EveError();
+                    eveError.setError("eve-error");
+                    eveError.setError("Unable to read EveError entity");
+                }
                 final RestException restException = new RestException(
-                    genericError);
+                    genericError + " " + eveError.getErrorDescription());
                 restException.setStatusInfo(response.getStatusInfo());
                 throw restException;
             }
