@@ -27,9 +27,9 @@ import java.time.format.DateTimeFormatter;
  *
  * @author trenta
  */
-public abstract class RestCall<T>
+public abstract class EveCall<T>
 { // BEGIN MonerisJAXRSCall class
-    private static Logger logger = LogManager.getLogger(RestCall.class);
+    private static Logger logger = LogManager.getLogger(EveCall.class);
     /**
      * The base web service URL
      */
@@ -55,7 +55,7 @@ public abstract class RestCall<T>
     /**
      * @param genericError error to display
      */
-    public RestCall(final String genericError)
+    public EveCall(final String genericError)
     {
         this.genericError = genericError;
     }
@@ -152,6 +152,15 @@ public abstract class RestCall<T>
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
                 entity = handleEntity(response);
+                if (entity instanceof EveError)
+                {
+                    final String warning = String.valueOf(response.getHeaders().getFirst(
+                        "Warning"));
+                    if (warning != null)
+                    {
+                        ((EveError) entity).setApiWarning(warning);
+                    }
+                }
             }
 
             return entity;

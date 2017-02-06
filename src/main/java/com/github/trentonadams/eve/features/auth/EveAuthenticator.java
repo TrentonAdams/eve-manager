@@ -1,8 +1,9 @@
 package com.github.trentonadams.eve.features.auth;
 
+import com.github.trentonadams.eve.features.api.EveCharacter;
 import com.github.trentonadams.eve.features.api.LocationInfo;
 import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
-import com.github.trentonadams.eve.rest.RestCall;
+import com.github.trentonadams.eve.rest.EveCall;
 import com.github.trentonadams.eve.rest.RestException;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
@@ -123,7 +124,7 @@ public final class EveAuthenticator
             "you're sure the tokens exist (though they may not be valid); this " +
             "is a programming error";
 
-        final RestCall<OAuthCharacter> restCall = new RestCall<OAuthCharacter>(
+        final EveCall<OAuthCharacter> eveCall = new EveCall<OAuthCharacter>(
             "Error validating authentication")
         {
             @Override
@@ -143,20 +144,20 @@ public final class EveAuthenticator
                     .get();
             }
         };
-        OAuthCharacter = restCall.invoke();
+        OAuthCharacter = eveCall.invoke();
     }
 
-/*    private EveError getCharacter(final OAuthCharacter character)
+    public EveCharacter getEveCharacter(final OAuthCharacter character)
     {
-        final RestCall<OAuthCharacter> restCall = new RestCall<OAuthCharacter>(
+        final EveCall<EveCharacter> eveCall = new EveCall<EveCharacter>(
             "Error validating authentication")
         {
             @Override
             protected void initialize()
             {
                 super.initialize();
-                webServiceUrl = ssoVerifyUrl;
-                logPrefix = "evesso-queryCharacter: ";
+                webServiceUrl = config.getString("esi.character.url");
+                logPrefix = "evesso-getEveCharacter: ";
             }
 
             @SuppressWarnings("ChainedMethodCall")
@@ -168,11 +169,12 @@ public final class EveAuthenticator
                     .get();
             }
         };
-        OAuthCharacter = restCall.invoke();
-    }*/
+        return eveCall.invoke();
+    }
+
     LocationInfo getLocation()
     {
-        final RestCall<LocationInfo> restCall = new RestCall<LocationInfo>(
+        final EveCall<LocationInfo> eveCall = new EveCall<LocationInfo>(
             "Error getting location information")
         {
             @Override
@@ -192,7 +194,7 @@ public final class EveAuthenticator
                     .get();
             }
         };
-        return restCall.invoke();
+        return eveCall.invoke();
     }
 
     /**
@@ -207,7 +209,7 @@ public final class EveAuthenticator
     boolean validateEveCode(@QueryParam("code") final String eveSsoCode)
     {
         boolean success = true;
-        final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
+        final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
             "Error validating authentication")
         {
             @Override
@@ -232,7 +234,7 @@ public final class EveAuthenticator
 
         try
         {
-            tokens = restCall.invoke();
+            tokens = eveCall.invoke();
             // Go get the associated character and put it in our instance variable.
             queryCharacter();
             newInstance = false;
@@ -314,7 +316,7 @@ public final class EveAuthenticator
             "is a programming error";
 
         boolean tokenRefreshed = false;
-        final RestCall<AuthTokens> restCall = new RestCall<AuthTokens>(
+        final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
             "Error validating authentication")
         {
             @Override
@@ -342,7 +344,7 @@ public final class EveAuthenticator
             // 1. refresh the token
             // 2. check that the new access_token is valid by grabbing character
             // 3. set tokenRefreshed variable to true
-            tokens = restCall.invoke();
+            tokens = eveCall.invoke();
             queryCharacter();
             tokenRefreshed = tokens != null;
         }

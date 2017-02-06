@@ -1,6 +1,8 @@
 package com.github.trentonadams.eve.features.auth;
 
 import com.github.trentonadams.eve.app.Main;
+import com.github.trentonadams.eve.features.api.EveCharacter;
+import com.github.trentonadams.eve.features.api.LocationInfo;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -26,6 +28,8 @@ import java.net.URI;
  */
 public class EveAuthenticatorTest
 {
+    private static final String DEPRECATED_API =
+        "The eve api in use is either deprecated or removed";
     private static EveAuthenticator eveAuthenticator;
     private static HttpServer server;
     private static WebTarget target;
@@ -67,8 +71,26 @@ public class EveAuthenticatorTest
     @Test
     public void testGetLocation() throws Exception
     {
+        final LocationInfo location = eveAuthenticator.getLocation();
         Assert.assertEquals("Location should be available", true,
-            eveAuthenticator.getLocation() != null);
+            location != null);
+        if (location != null)
+        {
+            Assert.assertNull(DEPRECATED_API, location.getApiWarning());
+        }
+    }
+
+    @Test
+    public void testGetEveCharacter()
+    {
+        final OAuthCharacter oAuthCharacter =
+            eveAuthenticator.getOAuthCharacter();
+        final EveCharacter eveCharacter = eveAuthenticator.getEveCharacter(
+            oAuthCharacter);
+        Assert.assertEquals("Eve character names should match",
+            eveCharacter.getName(),
+            oAuthCharacter.getCharacterName());
+        Assert.assertEquals(DEPRECATED_API, eveCharacter.getApiWarning());
     }
 
     /**

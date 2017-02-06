@@ -1,8 +1,7 @@
 package com.github.trentonadams.eve.features.api;
 
-import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,20 +14,28 @@ import java.util.Map;
  *
  * @author Trenton D. Adams
  */
-public class Example
+@XmlRootElement
+public class EveCharacter extends EveError
 {
 
+    @XmlElement(name = "ancestry_id")
     private long ancestryId;
+    @XmlElement(name = "birthday")
     private String birthday;
+    @XmlElement(name = "bloodline_id")
     private long bloodlineId;
+    @XmlElement(name = "corporation_id")
     private long corporationId;
+    @XmlElement(name = "description")
     private String description;
+    @XmlElement(name = "gender")
     private String gender;
+    @XmlElement(name = "name")
     private String name;
+    @XmlElement(name = "race_id")
     private long raceId;
-    @Valid
-    private Map<String, Object> additionalProperties =
-        new HashMap<String, Object>();
+    @XmlElement(name = "security_status")
+    private double securityStatus;
 
     public long getAncestryId()
     {
@@ -110,14 +117,13 @@ public class Example
         this.raceId = raceId;
     }
 
-    public Map<String, Object> getAdditionalProperties()
+    public double getSecurityStatus()
     {
-        return this.additionalProperties;
+        return securityStatus;
     }
 
-    public void setAdditionalProperty(final String name, final Object value)
+    public void setSecurityStatus(final double securityStatus)
     {
-        this.additionalProperties.put(name, value);
+        this.securityStatus = securityStatus;
     }
-
 }

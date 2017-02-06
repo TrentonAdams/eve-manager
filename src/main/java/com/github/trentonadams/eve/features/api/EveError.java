@@ -28,10 +28,14 @@ public class EveError
     private String errorDescription;
 
     @XmlTransient
+    private String apiWarning;
+
+    @XmlTransient
     public String getError()
     {
         return error;
     }
+
 
     public void setError(final String error)
     {
@@ -47,5 +51,15 @@ public class EveError
     public void setErrorDescription(final String errorDescription)
     {
         this.errorDescription = errorDescription;
+    }
+
+    public String getApiWarning()
+    {
+        return apiWarning;
+    }
+
+    public void setApiWarning(final String apiWarning)
+    {
+        this.apiWarning = apiWarning;
     }
 }
