@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Trenton D. Adams
  */
 @XmlRootElement
-public class EveError
+public class EveType
 {
     @XmlElement(name = "error")
     private String error;
