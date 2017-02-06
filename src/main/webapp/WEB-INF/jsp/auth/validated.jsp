@@ -2,7 +2,7 @@
 
 <%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.features.auth.EveAuthenticator"--%>
 
-<c:set var="character" value="${eveAuthenticator.character}"/>
+<c:set var="character" value="${eveAuthenticator.OAuthCharacter}"/>
 <p>
 <c:choose>
   <c:when test="${model.authStatus == 'ESTABLISHED'}">
@@ -21,5 +21,5 @@
 </c:choose>
 </p>
 
-<p>character: ${eveAuthenticator.character}</p>
+<p>character: ${eveAuthenticator.OAuthCharacter}</p>
 <p>tokens: ${eveAuthenticator.tokens}</p>

@@ -13,6 +13,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Just a base class for rest calls. Really it's only purposes are to use as a
@@ -125,6 +128,7 @@ public abstract class RestCall<T>
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
                 EveError eveError = null;
+                //noinspection NestedTryStatement
                 try
                 {
                     eveError = response.readEntity(EveError.class);
@@ -133,10 +137,10 @@ public abstract class RestCall<T>
                 {   // really don't care, text version already logged
                     eveError = new EveError();
                     eveError.setError("eve-error");
-                    eveError.setError("Unable to read EveError entity");
+                    eveError.setError("Unable to read Eve entity");
                 }
                 final RestException restException = new RestException(
-                    genericError + " " + eveError.getErrorDescription());
+                    genericError + ' ' + eveError.getErrorDescription());
                 restException.setStatusInfo(response.getStatusInfo());
                 throw restException;
             }
@@ -170,17 +174,16 @@ public abstract class RestCall<T>
     }
 
     /**
-     * Generates a new client,
+     * Generates a new client with XML security disabled
      *
-     * @return
+     * @return the new client
      */
     private Client newClient()
     {
         Client newClient = null;
         final ClientConfig config = new ClientConfig();
         // TODO make this configurable
-        config.property(MessageProperties.XML_SECURITY_DISABLE,
-            Boolean.TRUE);
+        config.property(MessageProperties.XML_SECURITY_DISABLE, Boolean.TRUE);
         newClient = ClientBuilder.newClient(config);
         if (responseFilter != null)
         {
@@ -235,7 +238,7 @@ public abstract class RestCall<T>
      * Sets up a logging filter to log the request and response.  The basic
      * urls go to the info log, any headers or entities go to the debug.
      *
-     * @param newClient
+     * @param newClient the jax-rs client
      */
     private void registerRequestLoggingFilters(final Client newClient)
     {
@@ -244,6 +247,11 @@ public abstract class RestCall<T>
         registerResponseCaching(newClient);
     }
 
+    /**
+     * Incomplete.
+     *
+     * @param newClient
+     */
     private void registerResponseCaching(final Client newClient)
     {
         newClient.register(new ClientResponseFilter()
@@ -254,7 +262,21 @@ public abstract class RestCall<T>
             {
                 final MultivaluedMap<String, String> headers =
                     responseContext.getHeaders();
+                final String expiresHeaders = headers.getFirst("expires");
+                if (expiresHeaders != null && !"-1".equals(expiresHeaders))
+                {
 
+                    final ZonedDateTime expiresDateTime =
+                        ZonedDateTime.from(
+                            DateTimeFormatter.RFC_1123_DATE_TIME.parse(
+                                expiresHeaders));
+                    logger.info("expires: " + expiresHeaders);
+                    logger.info("expires: " + expiresDateTime.getZone());
+                    logger.info("expires: " + expiresDateTime.withZoneSameInstant(
+                        ZoneId.systemDefault()));
+                    logger.info("equal: " + expiresDateTime.withZoneSameInstant(
+                        ZoneId.systemDefault()).isEqual(expiresDateTime));
+                }
             }
         });
     }

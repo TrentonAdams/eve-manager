@@ -1,6 +1,5 @@
 package com.github.trentonadams.eve.features.auth;
 
-import com.github.trentonadams.eve.features.api.EveError;
 import com.github.trentonadams.eve.features.api.LocationInfo;
 import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.RestCall;
@@ -23,9 +22,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
@@ -57,7 +53,7 @@ public final class EveAuthenticator
      * use this variable for anything else but testing.
      */
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
-    private Character character;
+    private OAuthCharacter OAuthCharacter;
     private boolean newInstance;
     private Configuration config;
 
@@ -88,7 +84,7 @@ public final class EveAuthenticator
             final EveAuthenticator myThis = this;
             config.getInterpolator().addDefaultLookup(s ->
             {
-                assert myThis.getCharacter() != null:"This lookup should " +
+                assert myThis.getOAuthCharacter() != null:"This lookup should " +
                     "only occur if we're in a place where the character " +
                     "ID is already known";
 
@@ -96,7 +92,7 @@ public final class EveAuthenticator
                 switch (s)
                 {
                     case "live.character.id":
-                        value = myThis.getCharacter().getCharacterID();
+                        value = myThis.getOAuthCharacter().getCharacterID();
                         break;
                     default:
                 }
@@ -127,7 +123,7 @@ public final class EveAuthenticator
             "you're sure the tokens exist (though they may not be valid); this " +
             "is a programming error";
 
-        final RestCall<Character> restCall = new RestCall<Character>(
+        final RestCall<OAuthCharacter> restCall = new RestCall<OAuthCharacter>(
             "Error validating authentication")
         {
             @Override
@@ -147,14 +143,33 @@ public final class EveAuthenticator
                     .get();
             }
         };
-        character = restCall.invoke();
+        OAuthCharacter = restCall.invoke();
     }
 
-    /**
-     * TODO finish making properties plop character id in url.  Perhaps commons config can do that?
-     *
-     * @return
-     */
+/*    private EveError getCharacter(final OAuthCharacter character)
+    {
+        final RestCall<OAuthCharacter> restCall = new RestCall<OAuthCharacter>(
+            "Error validating authentication")
+        {
+            @Override
+            protected void initialize()
+            {
+                super.initialize();
+                webServiceUrl = ssoVerifyUrl;
+                logPrefix = "evesso-queryCharacter: ";
+            }
+
+            @SuppressWarnings("ChainedMethodCall")
+            @Override
+            public Response httpMethodCall(final WebTarget target)
+            {
+                return target.request(MediaType.APPLICATION_JSON
+                ).header("Authorization", "Bearer " + tokens.getAccessToken())
+                    .get();
+            }
+        };
+        OAuthCharacter = restCall.invoke();
+    }*/
     LocationInfo getLocation()
     {
         final RestCall<LocationInfo> restCall = new RestCall<LocationInfo>(
@@ -346,131 +361,13 @@ public final class EveAuthenticator
         return tokens;
     }
 
-    public Character getCharacter()
+    public OAuthCharacter getOAuthCharacter()
     {
-        return character;
+        return OAuthCharacter;
     }
 
-    public void setCharacter(final Character character)
+    public void setOAuthCharacter(final OAuthCharacter OAuthCharacter)
     {
-        this.character = character;
+        this.OAuthCharacter = OAuthCharacter;
     }
-
-    /**
-     * Represents an eve Character obtained from the eve sso verify call.
-     */
-    @SuppressWarnings("unused")
-    @XmlRootElement
-    public static class Character extends EveError
-    {
-        @XmlElement(name = "CharacterID")
-        private int characterID;
-        @XmlElement(name = "CharacterName")
-        private String characterName;
-        @XmlElement(name = "ExpiresOn")
-        private String expiresOn;
-        @XmlElement(name = "Scopes")
-        private String scopes;
-        @XmlElement(name = "TokenType")
-        private String tokenType;
-        @XmlElement(name = "CharacterOwnerHash")
-        private String characterOwnerHash;
-        @XmlElement(name = "IntellectualProperty")
-        private String intellectualProperty;
-
-        @XmlTransient
-        public int getCharacterID()
-        {
-            return characterID;
-        }
-
-        public void setCharacterID(final int characterID)
-        {
-            this.characterID = characterID;
-        }
-
-        @XmlTransient
-        public String getCharacterName()
-        {
-            return characterName;
-        }
-
-        public void setCharacterName(final String characterName)
-        {
-            this.characterName = characterName;
-        }
-
-        @XmlTransient
-        public String getExpiresOn()
-        {
-            return expiresOn;
-        }
-
-        public void setExpiresOn(final String expiresOn)
-        {
-            this.expiresOn = expiresOn;
-        }
-
-        @XmlTransient
-        public String getScopes()
-        {
-            return scopes;
-        }
-
-        public void setScopes(final String scopes)
-        {
-            this.scopes = scopes;
-        }
-
-        @XmlTransient
-        public String getTokenType()
-        {
-            return tokenType;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Character{" +
-                "characterID=" + characterID +
-                ", characterName='" + characterName + '\'' +
-                ", expiresOn='" + expiresOn + '\'' +
-                ", scopes='" + scopes + '\'' +
-                ", tokenType='" + tokenType + '\'' +
-                ", characterOwnerHash='" + characterOwnerHash + '\'' +
-                ", intellectualProperty='" + intellectualProperty + '\'' +
-                '}';
-        }
-
-        public void setTokenType(final String tokenType)
-        {
-            this.tokenType = tokenType;
-        }
-
-        @XmlTransient
-        public String getCharacterOwnerHash()
-        {
-            return characterOwnerHash;
-        }
-
-        public void setCharacterOwnerHash(final String characterOwnerHash)
-        {
-            this.characterOwnerHash = characterOwnerHash;
-        }
-
-        @XmlTransient
-        public String getIntellectualProperty()
-        {
-            return intellectualProperty;
-        }
-
-        public void setIntellectualProperty(final String intellectualProperty)
-        {
-            this.intellectualProperty = intellectualProperty;
-        }
-
-    }
-
-    // TEST only code below this
-
 }

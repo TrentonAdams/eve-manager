@@ -5,7 +5,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Created by IntelliJ IDEA.
+ * Creates a generic eve error for error responses from the ESI.  This is the
+ * standard json error object which looks something like the following example.
+ * <p>
+ * {"error":"error-code", "error_description":"Invalid Token"}
  * <p>
  * Created :  03/02/17 11:35 PM MST
  * <p>
@@ -23,12 +26,6 @@ public class EveError
 
     @XmlElement(name = "error_description")
     private String errorDescription;
-
-    public EveError()
-    {
-        this.error = error;
-        this.errorDescription = errorDescription;
-    }
 
     @XmlTransient
     public String getError()
