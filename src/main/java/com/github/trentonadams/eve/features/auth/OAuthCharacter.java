@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.features.auth;
 
-import com.github.trentonadams.eve.features.api.EveError;
+import com.github.trentonadams.eve.features.api.EveType;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @SuppressWarnings("unused")
 @XmlRootElement
-public class OAuthCharacter extends EveError
+public class OAuthCharacter extends EveType
 {
     @XmlElement(name = "CharacterID")
     private int characterID;

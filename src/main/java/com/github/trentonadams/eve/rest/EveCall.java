@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.rest;
 
-import com.github.trentonadams.eve.features.api.EveError;
+import com.github.trentonadams.eve.features.api.EveType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;
@@ -127,20 +127,20 @@ public abstract class EveCall<T>
                         target.getUri(), response.getStatus(),
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
-                EveError eveError = null;
+                EveType EveType = null;
                 //noinspection NestedTryStatement
                 try
                 {
-                    eveError = response.readEntity(EveError.class);
+                    EveType = response.readEntity(EveType.class);
                 }
                 catch (Throwable e)
                 {   // really don't care, text version already logged
-                    eveError = new EveError();
-                    eveError.setError("eve-error");
-                    eveError.setError("Unable to read Eve entity");
+                    EveType = new EveType();
+                    EveType.setError("eve-error");
+                    EveType.setError("Unable to read Eve entity");
                 }
                 final RestException restException = new RestException(
-                    genericError + ' ' + eveError.getErrorDescription());
+                    genericError + ' ' + EveType.getErrorDescription());
                 restException.setStatusInfo(response.getStatusInfo());
                 throw restException;
             }
@@ -152,13 +152,13 @@ public abstract class EveCall<T>
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
                 entity = handleEntity(response);
-                if (entity instanceof EveError)
+                if (entity instanceof EveType)
                 {
                     final String warning = String.valueOf(response.getHeaders().getFirst(
                         "Warning"));
                     if (warning != null)
                     {
-                        ((EveError) entity).setApiWarning(warning);
+                        ((EveType) entity).setApiWarning(warning);
                     }
                 }
             }

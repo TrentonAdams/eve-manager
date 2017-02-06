@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Trenton D. Adams
  */
 @XmlRootElement
-public class EveCharacter extends EveError
+public class EveCharacter extends EveType
 {
 
     @XmlElement(name = "ancestry_id")

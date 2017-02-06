@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Trenton D. Adams
  */
 @XmlRootElement
-public final class LocationInfo extends EveError
+public final class LocationInfo extends EveType
 {
     @XmlElement(name = "solar_system_id")
     private long solarSystemId;
