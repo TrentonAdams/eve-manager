@@ -137,7 +137,7 @@ public abstract class EveCall<T>
                 {   // really don't care, text version already logged
                     EveType = new EveType();
                     EveType.setError("eve-error");
-                    EveType.setError("Unable to read Eve entity");
+                    EveType.setErrorDescription("Unable to read Eve entity");
                 }
                 final RestException restException = new RestException(
                     genericError + ' ' + EveType.getErrorDescription());
@@ -156,7 +156,7 @@ public abstract class EveCall<T>
                 {
                     final String warning = String.valueOf(response.getHeaders().getFirst(
                         "Warning"));
-                    if (warning != null)
+                    if (!"null".equals(warning))
                     {
                         ((EveType) entity).setApiWarning(warning);
                     }

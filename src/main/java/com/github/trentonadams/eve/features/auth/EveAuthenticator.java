@@ -149,6 +149,10 @@ public final class EveAuthenticator
 
     public EveCharacter getEveCharacter(final OAuthCharacter character)
     {
+        assert tokens != null : "getEveCharacter shouldn't be called unless " +
+            "you're sure the tokens exist and are valid; this " +
+            "is a programming error";
+
         final EveCall<EveCharacter> eveCall = new EveCall<EveCharacter>(
             "Error validating authentication")
         {

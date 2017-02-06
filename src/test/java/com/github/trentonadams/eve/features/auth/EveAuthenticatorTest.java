@@ -29,7 +29,7 @@ import java.net.URI;
 public class EveAuthenticatorTest
 {
     private static final String DEPRECATED_API =
-        "The eve api in use is either deprecated or removed";
+        "The eve api endpoint is either deprecated or removed";
     private static EveAuthenticator eveAuthenticator;
     private static HttpServer server;
     private static WebTarget target;
@@ -90,7 +90,7 @@ public class EveAuthenticatorTest
         Assert.assertEquals("Eve character names should match",
             eveCharacter.getName(),
             oAuthCharacter.getCharacterName());
-        Assert.assertEquals(DEPRECATED_API, eveCharacter.getApiWarning());
+        Assert.assertNull(DEPRECATED_API, eveCharacter.getApiWarning());
     }
 
     /**
