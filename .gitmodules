@@ -1,0 +1,3 @@
+[submodule "src/main/webapp/eve-parser"]
+	path = src/main/webapp/eve-parser
+	url = git@github.com:TrentonAdams/eve-parser.git
