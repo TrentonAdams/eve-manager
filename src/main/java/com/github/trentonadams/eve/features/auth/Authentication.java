@@ -69,14 +69,15 @@ public class Authentication implements IPageModel
      * If not authenticated, handles a simple redirect to authenticate with Eve
      * SSO.
      * <p>
-     * If authenticated already, quickly verifies existing access_token. If
-     * the access_token is no longer valid, then refresh_token is used to get
-     * another.  If that fails, the above redirect to Eve SSO will occur.
+     * If authenticated already, quickly verifies existing access_token. If the
+     * access_token is no longer valid, then refresh_token is used to get
+     * another.  If that fails, the above redirect to Eve SSO will occur,
+     * otherwise we redirect to the complete page.
      *
      * @return the temporary redirect.
      */
     @GET
-    public Response redirectToEveSso()
+    public Response validateEveSession()
     {
         logger.info(
             "eveAuthenticator is new: " + eveAuthenticator.isNewInstance());

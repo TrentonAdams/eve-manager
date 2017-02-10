@@ -85,7 +85,8 @@ public final class EveAuthenticator
             final EveAuthenticator myThis = this;
             config.getInterpolator().addDefaultLookup(s ->
             {
-                assert myThis.getOAuthCharacter() != null:"This lookup should " +
+                assert
+                    myThis.getOAuthCharacter() != null : "This lookup should " +
                     "only occur if we're in a place where the character " +
                     "ID is already known";
 
@@ -144,6 +145,14 @@ public final class EveAuthenticator
         OAuthCharacter = eveCall.invoke();
     }
 
+    /**
+     * Retrieves the eve character object.
+     *
+     * @param character {@link OAuthCharacter} that the {@link EveCharacter} is
+     *                  associated with.
+     *
+     * @return the {@link EveCharacter}
+     */
     public EveCharacter getEveCharacter(final OAuthCharacter character)
     {
         assert tokens != null : "getEveCharacter shouldn't be called unless " +
@@ -170,7 +179,7 @@ public final class EveAuthenticator
         return eveCall.invoke();
     }
 
-    LocationInfo getLocation()
+    public LocationInfo getLocation()
     {
         final EveCall<LocationInfo> eveCall = new EveCall<LocationInfo>(
         )
