@@ -4,7 +4,6 @@ import com.github.trentonadams.eve.features.api.EveType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.message.MessageProperties;
 
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.*;
@@ -29,7 +28,7 @@ import java.time.format.DateTimeFormatter;
  * @author trenta
  */
 public abstract class EveCall<T>
-{ // BEGIN MonerisJAXRSCall class
+{ // BEGIN EveCall class
     private static Logger logger = LogManager.getLogger(EveCall.class);
     private URI webServiceUrl;
 
@@ -57,20 +56,24 @@ public abstract class EveCall<T>
      *
      * @return the http in the form of a JAXRS {@link Response}
      */
-    public abstract Response httpMethodCall(
-        final WebTarget target);
+    public abstract Response httpMethodCall(final WebTarget target);
 
     /**
      * Invokes the web service query, calling the sub class' {@link
      * #httpMethodCall(WebTarget)} to form the query and call the HTTP method
      * desired.
+     * <p>
+     * There's not a lot that can be done to enhance this methods, so it cannot
+     * be overridden.    In the future, we may provide optional initialization
+     * techniques, like setter methods to be able to override filters, and what
+     * not.
      *
      * @return the entity requested, or null if there was a problem or there was
      * no entity returned.
      *
-     * @throws RestException if errors occur communicating with moneris
+     * @throws RestException if errors occur communicating with the web service
      */
-    public T invoke()
+    public final T invoke()
     {
         Response response = null;
         final Client newClient = newClient();
@@ -128,8 +131,9 @@ public abstract class EveCall<T>
                 entity = handleEntity(response);
                 if (entity instanceof EveType)
                 {
-                    final String warning = String.valueOf(response.getHeaders().getFirst(
-                        "Warning"));
+                    final String warning = String.valueOf(
+                        response.getHeaders().getFirst(
+                            "Warning"));
                     if (!"null".equals(warning))
                     {
                         ((EveType) entity).setApiWarning(warning);
@@ -166,7 +170,7 @@ public abstract class EveCall<T>
         Client newClient = null;
         final ClientConfig config = new ClientConfig();
         // TODO make this configurable
-        config.property(MessageProperties.XML_SECURITY_DISABLE, Boolean.TRUE);
+        //config.property(MessageProperties.XML_SECURITY_DISABLE, Boolean.TRUE);
         newClient = ClientBuilder.newClient(config);
         if (responseFilter != null)
         {
@@ -184,7 +188,8 @@ public abstract class EveCall<T>
      *
      * @return the entity or null
      *
-     * @throws RestException if errors occur communicating with moneris
+     * @throws RestException if errors occur communicating with the web
+     *                       service.
      */
     protected T handleEntity(final Response response)
     {
@@ -254,8 +259,9 @@ public abstract class EveCall<T>
                                 expiresHeaders));
                     logger.info("expires: " + expiresHeaders);
                     logger.info("expires: " + expiresDateTime.getZone());
-                    logger.info("expires: " + expiresDateTime.withZoneSameInstant(
-                        ZoneId.systemDefault()));
+                    logger.info(
+                        "expires: " + expiresDateTime.withZoneSameInstant(
+                            ZoneId.systemDefault()));
                     logger.info("equal: " + expiresDateTime.withZoneSameInstant(
                         ZoneId.systemDefault()).isEqual(expiresDateTime));
                 }
@@ -359,4 +365,4 @@ public abstract class EveCall<T>
     {
         this.genericError = genericError;
     }
-} // END MonerisJAXRSCall class
+} // END EveCall class
