@@ -13,6 +13,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
+import java.net.URI;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,10 +31,7 @@ import java.time.format.DateTimeFormatter;
 public abstract class EveCall<T>
 { // BEGIN MonerisJAXRSCall class
     private static Logger logger = LogManager.getLogger(EveCall.class);
-    /**
-     * The base web service URL
-     */
-    protected String webServiceUrl;
+    private URI webServiceUrl;
 
     /**
      * If any response filters are needed, overwrite this to implement them.
@@ -41,37 +39,14 @@ public abstract class EveCall<T>
      * xml response, so we filter it so that it does.
      */
     protected ClientResponseFilter responseFilter;
-    /**
-     * The prefix for all log messages that go out as part of this JAXRSCall
-     * base class.
-     */
-    protected String logPrefix;
+    private String logPrefix;
 
-    /**
-     * A generic error message if we're not able to be more specific.
-     */
     private String genericError;
 
     /**
-     * @param genericError error to display
      */
-    public EveCall(final String genericError)
+    public EveCall()
     {
-        this.genericError = genericError;
-    }
-
-    /**
-     * Sub classes overloading this method MUST call this before any of their
-     * initialization.
-     * <p/>
-     * Sets the client response filter for the Jersey JAXRS call to force the
-     * incoming mime-type to application/xml.  The odd time, moneris will have
-     * an obscure error and return HTML instead, but we're not coding around
-     * that, cause we really can't.
-     */
-    protected void initialize()
-    {
-        logPrefix = "";
     }
 
     /**
@@ -97,7 +72,6 @@ public abstract class EveCall<T>
      */
     public T invoke()
     {
-        initialize();
         Response response = null;
         final Client newClient = newClient();
         try
@@ -133,7 +107,7 @@ public abstract class EveCall<T>
                 {
                     EveType = response.readEntity(EveType.class);
                 }
-                catch (Throwable e)
+                catch (final Throwable e)
                 {   // really don't care, text version already logged
                     EveType = new EveType();
                     EveType.setError("eve-error");
@@ -274,7 +248,6 @@ public abstract class EveCall<T>
                 final String expiresHeaders = headers.getFirst("expires");
                 if (expiresHeaders != null && !"-1".equals(expiresHeaders))
                 {
-
                     final ZonedDateTime expiresDateTime =
                         ZonedDateTime.from(
                             DateTimeFormatter.RFC_1123_DATE_TIME.parse(
@@ -345,5 +318,45 @@ public abstract class EveCall<T>
             return form.asMap().toString();
         }
         return "none";
+    }
+
+    /**
+     * The base web service URL
+     */
+    public URI getWebServiceUrl()
+    {
+        return webServiceUrl;
+    }
+
+    public void setWebServiceUrl(final URI webServiceUrl)
+    {
+        this.webServiceUrl = webServiceUrl;
+    }
+
+    /**
+     * The prefix for all log messages that go out as part of this JAXRSCall
+     * base class.
+     */
+    public String getLogPrefix()
+    {
+        return logPrefix;
+    }
+
+    public void setLogPrefix(final String logPrefix)
+    {
+        this.logPrefix = logPrefix;
+    }
+
+    /**
+     * A generic error message if we're not able to be more specific.
+     */
+    public String getGenericError()
+    {
+        return genericError;
+    }
+
+    public void setGenericError(String genericError)
+    {
+        this.genericError = genericError;
     }
 } // END MonerisJAXRSCall class

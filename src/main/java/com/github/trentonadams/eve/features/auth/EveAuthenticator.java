@@ -125,16 +125,8 @@ public final class EveAuthenticator
             "is a programming error";
 
         final EveCall<OAuthCharacter> eveCall = new EveCall<OAuthCharacter>(
-            "Error validating authentication")
+        )
         {
-            @Override
-            protected void initialize()
-            {
-                super.initialize();
-                webServiceUrl = ssoVerifyUrl;
-                logPrefix = "evesso-queryCharacter: ";
-            }
-
             @SuppressWarnings("ChainedMethodCall")
             @Override
             public Response httpMethodCall(final WebTarget target)
@@ -144,6 +136,11 @@ public final class EveAuthenticator
                     .get();
             }
         };
+        eveCall.setGenericError("Error validating authentication");
+        eveCall.setWebServiceUrl(
+            URI.create(ssoVerifyUrl));
+        eveCall.setLogPrefix("evesso-queryCharacter: ");
+
         OAuthCharacter = eveCall.invoke();
     }
 
@@ -154,16 +151,8 @@ public final class EveAuthenticator
             "is a programming error";
 
         final EveCall<EveCharacter> eveCall = new EveCall<EveCharacter>(
-            "Error validating authentication")
+        )
         {
-            @Override
-            protected void initialize()
-            {
-                super.initialize();
-                webServiceUrl = config.getString("esi.character.url");
-                logPrefix = "evesso-getEveCharacter: ";
-            }
-
             @SuppressWarnings("ChainedMethodCall")
             @Override
             public Response httpMethodCall(final WebTarget target)
@@ -173,22 +162,19 @@ public final class EveAuthenticator
                     .get();
             }
         };
+
+        eveCall.setGenericError("Error validating authentication");
+        eveCall.setWebServiceUrl(
+            URI.create(config.getString("esi.character.url")));
+        eveCall.setLogPrefix("evesso-getEveCharacter: ");
         return eveCall.invoke();
     }
 
     LocationInfo getLocation()
     {
         final EveCall<LocationInfo> eveCall = new EveCall<LocationInfo>(
-            "Error getting location information")
+        )
         {
-            @Override
-            protected void initialize()
-            {
-                super.initialize();
-                webServiceUrl = config.getString("esi.location.url");
-                logPrefix = "esi-getLocation: ";
-            }
-
             @SuppressWarnings("ChainedMethodCall")
             @Override
             public Response httpMethodCall(final WebTarget target)
@@ -198,6 +184,10 @@ public final class EveAuthenticator
                     .get();
             }
         };
+        eveCall.setWebServiceUrl(
+            URI.create(config.getString("esi.location.url")));
+        eveCall.setLogPrefix("esi-getLocation: ");
+        eveCall.setGenericError("Error getting location information");
         return eveCall.invoke();
     }
 
@@ -214,16 +204,8 @@ public final class EveAuthenticator
     {
         boolean success = true;
         final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
-            "Error validating authentication")
+        )
         {
-            @Override
-            protected void initialize()
-            {
-                super.initialize();
-                webServiceUrl = ssoTokenUrl;
-                logPrefix = "evesso-validateEveCode: ";
-            }
-
             @SuppressWarnings("ChainedMethodCall")
             @Override
             public Response httpMethodCall(final WebTarget target)
@@ -235,6 +217,10 @@ public final class EveAuthenticator
                             .param("code", eveSsoCode)));
             }
         };
+
+        eveCall.setWebServiceUrl(URI.create(ssoTokenUrl));
+        eveCall.setLogPrefix("evesso-validateEveCode: ");
+        eveCall.setGenericError("Error validating authentication");
 
         try
         {
@@ -312,6 +298,8 @@ public final class EveAuthenticator
      * <p>
      * Assumption: the tokens exist; i.e. authentication was previously
      * established.
+     *
+     * @return true if the access_token has been refreshed
      */
     private boolean refreshToken()
     {
@@ -320,17 +308,8 @@ public final class EveAuthenticator
             "is a programming error";
 
         boolean tokenRefreshed = false;
-        final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
-            "Error validating authentication")
+        final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>()
         {
-            @Override
-            protected void initialize()
-            {
-                super.initialize();
-                webServiceUrl = ssoTokenUrl;
-                logPrefix = "evesso-refresh_token: ";
-            }
-
             @SuppressWarnings("ChainedMethodCall")
             @Override
             public Response httpMethodCall(final WebTarget target)
@@ -342,6 +321,10 @@ public final class EveAuthenticator
                             .param("refresh_token", tokens.getRefreshToken())));
             }
         };
+
+        eveCall.setWebServiceUrl(URI.create(ssoTokenUrl));
+        eveCall.setLogPrefix("evesso-refresh_token: ");
+        eveCall.setGenericError("Error validating authentication");
 
         try
         {
