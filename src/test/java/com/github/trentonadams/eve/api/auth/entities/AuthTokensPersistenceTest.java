@@ -1,4 +1,4 @@
-package com.github.trentonadams.eve.features.auth.entities;
+package com.github.trentonadams.eve.api.auth.entities;
 
 import junit.framework.Assert;
 import org.junit.After;

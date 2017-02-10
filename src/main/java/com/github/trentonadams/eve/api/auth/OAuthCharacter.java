@@ -1,6 +1,6 @@
-package com.github.trentonadams.eve.features.auth;
+package com.github.trentonadams.eve.api.auth;
 
-import com.github.trentonadams.eve.features.api.EveType;
+import com.github.trentonadams.eve.api.EveType;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

@@ -1,4 +1,4 @@
-package com.github.trentonadams.eve.features.auth;
+package com.github.trentonadams.eve.api.auth;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;

@@ -1,4 +1,4 @@
-package com.github.trentonadams.eve.features.auth;
+package com.github.trentonadams.eve.api.auth;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

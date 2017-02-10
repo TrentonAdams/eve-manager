@@ -13,7 +13,7 @@
     </properties>
   </persistence-unit>
   <persistence-unit name="authtokens">
-    <class>com.github.trentonadams.eve.features.auth.entities.AuthTokens</class>
+    <class>com.github.trentonadams.eve.api.auth.entities.AuthTokens</class>
     <properties>
       <property name="openjpa.DynamicEnhancementAgent" value="false"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />

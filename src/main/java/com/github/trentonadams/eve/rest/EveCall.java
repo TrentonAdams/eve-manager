@@ -1,6 +1,6 @@
 package com.github.trentonadams.eve.rest;
 
-import com.github.trentonadams.eve.features.api.EveType;
+import com.github.trentonadams.eve.api.EveType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;

@@ -1,8 +1,8 @@
-package com.github.trentonadams.eve.features.auth;
+package com.github.trentonadams.eve.api.auth;
 
 import com.github.trentonadams.eve.app.Main;
-import com.github.trentonadams.eve.features.api.EveCharacter;
-import com.github.trentonadams.eve.features.api.LocationInfo;
+import com.github.trentonadams.eve.api.EveCharacter;
+import com.github.trentonadams.eve.api.LocationInfo;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.AfterClass;
 import org.junit.Assert;

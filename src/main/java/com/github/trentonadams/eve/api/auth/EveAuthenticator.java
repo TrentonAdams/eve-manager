@@ -1,8 +1,8 @@
-package com.github.trentonadams.eve.features.auth;
+package com.github.trentonadams.eve.api.auth;
 
-import com.github.trentonadams.eve.features.api.EveCharacter;
-import com.github.trentonadams.eve.features.api.LocationInfo;
-import com.github.trentonadams.eve.features.auth.entities.AuthTokens;
+import com.github.trentonadams.eve.api.EveCharacter;
+import com.github.trentonadams.eve.api.LocationInfo;
+import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.EveCall;
 import com.github.trentonadams.eve.rest.RestException;
 import org.apache.commons.configuration2.Configuration;

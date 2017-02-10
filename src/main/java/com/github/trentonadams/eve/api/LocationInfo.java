@@ -1,4 +1,4 @@
-package com.github.trentonadams.eve.features.api;
+package com.github.trentonadams.eve.api;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
