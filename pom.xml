@@ -339,6 +339,14 @@
       </plugin>
 
       <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <warSourceExcludes>node_modules/**,node/**</warSourceExcludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <!-- Use the latest released version:
@@ -355,6 +363,13 @@
             <phase>generate-resources</phase>
           </execution>
           <execution>
+            <id>npm</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+          </execution>
+          <execution>
             <id>bower install</id>
             <goals>
               <goal>bower</goal>
@@ -363,6 +378,7 @@
         </executions>
         <configuration>
           <nodeVersion>v4.6.0</nodeVersion>
+          <npmVersion>3.10.8</npmVersion>
           <workingDirectory>${basedir}/src/main/webapp</workingDirectory>
         </configuration>
       </plugin>

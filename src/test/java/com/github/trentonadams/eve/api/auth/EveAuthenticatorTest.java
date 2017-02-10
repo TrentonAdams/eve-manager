@@ -1,17 +1,11 @@
 package com.github.trentonadams.eve.api.auth;
 
-import com.github.trentonadams.eve.app.Main;
 import com.github.trentonadams.eve.api.EveCharacter;
 import com.github.trentonadams.eve.api.LocationInfo;
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import java.io.IOException;
 import java.net.URI;
 
@@ -26,38 +20,21 @@ import java.net.URI;
  *
  * @author Trenton D. Adams
  */
-public class EveAuthenticatorTest
+public class EveAuthenticatorTest extends JerseyTest
 {
     private static final String DEPRECATED_API =
         "The eve api endpoint is either deprecated or removed";
     private static EveAuthenticator eveAuthenticator;
-    private static HttpServer server;
-    private static WebTarget target;
 
-    @BeforeClass
-    public static void setUp() throws Exception
+    @Before
+    public void setUpEA() throws IOException, InterruptedException
     {
-        eveAuthenticator = new EveAuthenticator();
-        // start the server
-        server = Main.startServer();
-        // create the client
-        Client c = ClientBuilder.newClient();
-
-        // uncomment the following line if you want to enable
-        // support for JSON in the client (you also have to uncomment
-        // dependency on jersey-media-json module in pom.xml and Main.startServer())
-        // --
-        // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
-
-        target = c.target(Main.BASE_URI);
-        eveAuthenticator.validateEveCode(retrieveEveCode(
-            URI.create("http://localhost:9090/myapp/testauth/validate")));
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception
-    {
-        server.shutdownNow();
+        if (eveAuthenticator == null)
+        {
+            eveAuthenticator = new EveAuthenticator();
+            eveAuthenticator.validateEveCode(retrieveEveCode(
+                URI.create("http://localhost:9090/myapp/testauth/validate")));
+        }
     }
 
     @Test
@@ -98,7 +75,7 @@ public class EveAuthenticatorTest
      *
      * @return the eve code to validate.
      */
-    static String retrieveEveCode(final URI returnUrl)
+    String retrieveEveCode(final URI returnUrl)
         throws IOException, InterruptedException
     {
         String outputFormat = "********* %s *********";

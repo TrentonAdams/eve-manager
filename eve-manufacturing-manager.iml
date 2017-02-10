@@ -124,5 +124,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-io:9.2.15.v20160210" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.2.15.v20160210" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.2.15.v20160210" level="project" />
+    <orderEntry type="library" name="angular" level="application" />
   </component>
 </module>
