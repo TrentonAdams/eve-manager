@@ -104,20 +104,20 @@ public abstract class EveCall<T>
                         target.getUri(), response.getStatus(),
                         response.getStatusInfo().getReasonPhrase(),
                         response.readEntity(String.class)));
-                EveType EveType = null;
+                EveType eveType = null;
                 //noinspection NestedTryStatement
                 try
                 {
-                    EveType = response.readEntity(EveType.class);
+                    eveType = response.readEntity(EveType.class);
                 }
                 catch (final Throwable e)
                 {   // really don't care, text version already logged
-                    EveType = new EveType();
-                    EveType.setError("eve-error");
-                    EveType.setErrorDescription("Unable to read Eve entity");
+                    eveType = new EveType();
+                    eveType.setError("eve-error");
+                    eveType.setErrorDescription("Unable to read Eve entity");
                 }
                 final RestException restException = new RestException(
-                    genericError + ' ' + EveType.getErrorDescription());
+                    genericError + ' ' + eveType.getErrorDescription());
                 restException.setStatusInfo(response.getStatusInfo());
                 throw restException;
             }
