@@ -42,7 +42,8 @@ public final class EveAuthenticator
     EveAuthenticator()
     {
         final EveAuthenticator myThis = this;
-        eveConfig = new EveConfig(s ->
+        eveConfig = new EveConfig();
+        eveConfig.addPropertyLookup("ea", s ->
         {
             assert
                 myThis.getOAuthCharacter() != null : "This lookup should " +
@@ -52,7 +53,7 @@ public final class EveAuthenticator
             Object value = null;
             switch (s)
             {
-                case "live.character.id":
+                case "character.id":
                     value = myThis.getOAuthCharacter().getCharacterID();
                     break;
                 default:

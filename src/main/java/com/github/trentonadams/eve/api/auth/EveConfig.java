@@ -29,24 +29,9 @@ public class EveConfig
     private final Configuration config;
 
     /**
-     * If you need to resolve special property values for your class.
-     *
-     * @param propertyLookup a custom property lookup in case you need to handle
-     *                       something special.
-     */
-    public EveConfig(final Lookup propertyLookup)
-    {
-        this();
-
-        assert propertyLookup != null : "The propertyLookup must not be null";
-
-        config.getInterpolator().addDefaultLookup(propertyLookup);
-    }
-
-    /**
-     * If you use this constructor, NONE of the custom properties in
-     * eve.properties will resolve.  If you plan on using them, then use {@link
-     * #EveConfig(Lookup)}
+     * Loads the eve.properties configuration file.  If you need to map values
+     * of custom properties at runtime, use {@link #addPropertyLookup(String,
+     * Lookup)} prior to calling a getter.
      */
     public EveConfig()
     {
@@ -73,6 +58,47 @@ public class EveConfig
         {
             throw new WebApplicationException(e);
         }
+    }
+
+    /**
+     * Adds a custom commons configuration value lookup ({@link Lookup})
+     *
+     * @param prefix         the property prefix to map this lookup to.  All
+     *                       properties starting with this prefix (and a colon)
+     *                       will use this lookup.  e.g. "${prefix:my.property.name}"
+     * @param propertyLookup the property value lookup that you've implemented
+     *                       to resolve the values of properties with "prefix:"
+     *                       in them.
+     *
+     * @throws IllegalArgumentException if the prefix is already registered.
+     *                                  Call {@link #removePropertyLookup(String)}
+     *                                  first if you'd like to re-register this
+     *                                  prefix.
+     */
+    public void addPropertyLookup(final String prefix,
+        final Lookup propertyLookup)
+    {
+        assert propertyLookup != null : "The propertyLookup must not be null";
+
+        if (config.getInterpolator().getLookups().get(prefix) != null)
+        {
+            throw new IllegalArgumentException(
+                "Prefix already in use.  Call removePropertyLookup() first");
+        }
+        else
+        {
+            config.getInterpolator().registerLookup(prefix, propertyLookup);
+        }
+    }
+
+    /**
+     * Removes a previously added lookup.
+     *
+     * @param prefix the prefix it's registered under.
+     */
+    public void removePropertyLookup(final String prefix)
+    {
+        config.getInterpolator().deregisterLookup(prefix);
     }
 
     /**
