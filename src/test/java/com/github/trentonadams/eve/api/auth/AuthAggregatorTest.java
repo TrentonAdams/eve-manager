@@ -13,22 +13,12 @@ import org.junit.Test;
  *
  * @author Trenton D. Adams
  */
-public class AuthAggregatorTest
+public class AuthAggregatorTest extends EveApiTest
 {
     @Test
     public void createAuthenticator() throws Exception
     {
 
-    }
-
-    @Test
-    public void addAuthenticator() throws Exception
-    {
-    }
-
-    @Test
-    public void refreshAuthenticators() throws Exception
-    {
     }
 
 }

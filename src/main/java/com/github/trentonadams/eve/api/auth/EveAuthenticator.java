@@ -5,19 +5,11 @@ import com.github.trentonadams.eve.api.LocationInfo;
 import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.EveCall;
 import com.github.trentonadams.eve.rest.RestException;
-import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.FileBasedConfiguration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
-import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
@@ -25,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Base64;
 
 /**
  * Eve authenticator class.  Does the bulk of eve authentication after
@@ -35,19 +26,7 @@ public final class EveAuthenticator
 {
     private static final Logger logger = LogManager.getLogger(
         EveAuthenticator.class);
-
-    /**
-     * setup your application keys on https://developer.eveonline.com
-     */
-    private final String eveAppClientId;
-    /**
-     * setup your application keys on https://developer.eveonline.com
-     */
-    private final String[] eveAppPermissionScopes;
-    private final String eveAppSecretAndIdBase64;
-    private final String ssoTokenUrl;
-    private final String ssoVerifyUrl;
-    private final String ssoAuthorizeUrl;
+    private final EveConfig eveConfig;
 
     /**
      * package private so that a unit test can manipulate.  Please DO NOT
@@ -56,60 +35,31 @@ public final class EveAuthenticator
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
     private OAuthCharacter OAuthCharacter;
     private boolean newInstance;
-    private Configuration config;
 
     /**
      * Currently all we do is read configurations.
      */
     EveAuthenticator()
     {
-        newInstance = true;
-        final Parameters params = new Parameters();
-        final FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
-            new FileBasedConfigurationBuilder<FileBasedConfiguration>(
-                PropertiesConfiguration.class)
-                .configure(params.properties()
-                    .setFileName("eve.properties").setListDelimiterHandler(
-                        new DefaultListDelimiterHandler(',')));
-        try
+        final EveAuthenticator myThis = this;
+        eveConfig = new EveConfig(s ->
         {
-            config = builder.getConfiguration();
-            eveAppPermissionScopes = config.getStringArray("auth.sso.scopes");
-            final String eveAppSecretKey = config.getString(
-                "auth.sso.secret_key");
-            eveAppClientId = config.getString("auth.sso.client_id");
-            ssoAuthorizeUrl = config.getString("auth.sso.url.authorize");
-            ssoTokenUrl = config.getString("auth.sso.url.token");
-            ssoVerifyUrl = config.getString("auth.sso.url.verify");
-            ;
-            final EveAuthenticator myThis = this;
-            config.getInterpolator().addDefaultLookup(s ->
+            assert
+                myThis.getOAuthCharacter() != null : "This lookup should " +
+                "only occur if we're in a place where the character " +
+                "ID is already known";
+
+            Object value = null;
+            switch (s)
             {
-                assert
-                    myThis.getOAuthCharacter() != null : "This lookup should " +
-                    "only occur if we're in a place where the character " +
-                    "ID is already known";
-
-                Object value = null;
-                switch (s)
-                {
-                    case "live.character.id":
-                        value = myThis.getOAuthCharacter().getCharacterID();
-                        break;
-                    default:
-                }
-                return value;
-            });
-
-            final Base64.Encoder encoder = Base64.getEncoder();
-            eveAppSecretAndIdBase64 = new String(encoder.encode(
-                String.format("%s:%s", eveAppClientId, eveAppSecretKey)
-                    .getBytes()));
-        }
-        catch (final ConfigurationException e)
-        {
-            throw new WebApplicationException(e);
-        }
+                case "live.character.id":
+                    value = myThis.getOAuthCharacter().getCharacterID();
+                    break;
+                default:
+            }
+            return value;
+        });
+        newInstance = true;
     }
 
     /**
@@ -119,6 +69,7 @@ public final class EveAuthenticator
      * @throws RestException if an error occurred.  Currently this even means if
      *                       the access_token is not valid.
      */
+
     private void queryCharacter()
     {
         assert tokens != null : "queryCharacter shouldn't be called unless " +
@@ -139,7 +90,7 @@ public final class EveAuthenticator
         };
         eveCall.setGenericError("Error validating authentication");
         eveCall.setWebServiceUrl(
-            URI.create(ssoVerifyUrl));
+            URI.create(eveConfig.getSsoVerifyUrl()));
         eveCall.setLogPrefix("evesso-queryCharacter: ");
 
         OAuthCharacter = eveCall.invoke();
@@ -173,8 +124,7 @@ public final class EveAuthenticator
         };
 
         eveCall.setGenericError("Error validating authentication");
-        eveCall.setWebServiceUrl(
-            URI.create(config.getString("esi.character.url")));
+        eveCall.setWebServiceUrl(eveConfig.getCharacterUrl());
         eveCall.setLogPrefix("evesso-getEveCharacter: ");
         return eveCall.invoke();
     }
@@ -193,8 +143,7 @@ public final class EveAuthenticator
                     .get();
             }
         };
-        eveCall.setWebServiceUrl(
-            URI.create(config.getString("esi.location.url")));
+        eveCall.setWebServiceUrl(eveConfig.getLocationUri());
         eveCall.setLogPrefix("esi-getLocation: ");
         eveCall.setGenericError("Error getting location information");
         return eveCall.invoke();
@@ -220,14 +169,15 @@ public final class EveAuthenticator
             public Response httpMethodCall(final WebTarget target)
             {
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Basic " + eveAppSecretAndIdBase64)
+                ).header("Authorization", "Basic " +
+                    eveConfig.getEveAppSecretAndIdBase64())
                     .post(Entity.form(
                         new Form().param("grant_type", "authorization_code")
                             .param("code", eveSsoCode)));
             }
         };
 
-        eveCall.setWebServiceUrl(URI.create(ssoTokenUrl));
+        eveCall.setWebServiceUrl(URI.create(eveConfig.getSsoTokenUrl()));
         eveCall.setLogPrefix("evesso-validateEveCode: ");
         eveCall.setGenericError("Error validating authentication");
 
@@ -258,12 +208,13 @@ public final class EveAuthenticator
     {
         try
         {
-            final URIBuilder uriBuilder = new URIBuilder(ssoAuthorizeUrl);
+            final URIBuilder uriBuilder = new URIBuilder(
+                eveConfig.getSsoAuthorizeUrl());
             uriBuilder.addParameter("redirect_uri",
                 ourValidateUri.toASCIIString());
-            uriBuilder.addParameter("client_id", eveAppClientId);
+            uriBuilder.addParameter("client_id", eveConfig.getEveAppClientId());
             uriBuilder.addParameter("scope", String.join(" ",
-                eveAppPermissionScopes));
+                eveConfig.getEveAppPermissionScopes()));
             return uriBuilder.build();
         }
         catch (final URISyntaxException e)
@@ -324,14 +275,15 @@ public final class EveAuthenticator
             public Response httpMethodCall(final WebTarget target)
             {   // use refresh_token to get another access_token
                 return target.request(MediaType.APPLICATION_JSON
-                ).header("Authorization", "Basic " + eveAppSecretAndIdBase64)
+                ).header("Authorization", "Basic " +
+                    eveConfig.getEveAppSecretAndIdBase64())
                     .post(Entity.form(
                         new Form().param("grant_type", "refresh_token")
                             .param("refresh_token", tokens.getRefreshToken())));
             }
         };
 
-        eveCall.setWebServiceUrl(URI.create(ssoTokenUrl));
+        eveCall.setWebServiceUrl(URI.create(eveConfig.getSsoTokenUrl()));
         eveCall.setLogPrefix("evesso-refresh_token: ");
         eveCall.setGenericError("Error validating authentication");
 
