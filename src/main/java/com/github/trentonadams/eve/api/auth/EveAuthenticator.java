@@ -224,6 +224,20 @@ public final class EveAuthenticator
         }
     }
 
+    URI getAuthUrl(final URI ourValidateUri, final String state)
+    {
+        final URI authUrl = getAuthUrl(ourValidateUri);
+        try
+        {
+            return new URIBuilder(authUrl).addParameter("state", state).build();
+            //return new URIBuilder(authUrl).build();
+        }
+        catch (URISyntaxException e)
+        {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     public boolean isNewInstance()
     {
         return newInstance;
