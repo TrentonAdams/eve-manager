@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.api.auth;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -17,8 +18,17 @@ import java.util.Map;
  */
 public class AuthAggregator
 {
-    private Map<Integer, EveAuthenticator> characterAuthenticators =
-        new LinkedHashMap<>();
+    private final Map<Integer, EveAuthenticator> characterAuthenticators;
+
+    public AuthAggregator()
+    {
+        characterAuthenticators = new LinkedHashMap<>();
+    }
+
+    public static AuthAggregator newInstance()
+    {
+        return new AuthAggregator();
+    }
 
     /**
      * Creates a new authenticator if it doesn't exist, or returns the
@@ -26,15 +36,9 @@ public class AuthAggregator
      * the access_token is validated and returns the authenticator for the given
      * character id.
      */
-    public EveAuthenticator createAuthenticator(final Integer characterId)
+    public EveAuthenticator createAuthenticator()
     {
-        EveAuthenticator eveAuthenticator;
-        eveAuthenticator = characterAuthenticators.get(characterId);
-        if (eveAuthenticator == null)
-        {
-            eveAuthenticator = new EveAuthenticator();
-        }
-        return eveAuthenticator;
+        return new EveAuthenticator();
     }
 
     /**
@@ -80,5 +84,10 @@ public class AuthAggregator
             }
         }
         return null;
+    }
+
+    public Map<Integer, EveAuthenticator> getCharacterAuthenticators()
+    {
+        return Collections.unmodifiableMap(characterAuthenticators);
     }
 }

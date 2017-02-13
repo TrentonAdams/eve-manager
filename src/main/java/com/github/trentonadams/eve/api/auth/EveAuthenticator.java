@@ -229,8 +229,15 @@ public final class EveAuthenticator
         final URI authUrl = getAuthUrl(ourValidateUri);
         try
         {
-            return new URIBuilder(authUrl).addParameter("state", state).build();
-            //return new URIBuilder(authUrl).build();
+            if (state != null)
+            {
+                return new URIBuilder(authUrl).addParameter("state", state)
+                    .build();
+            }
+            else
+            {
+                return new URIBuilder(authUrl).build();
+            }
         }
         catch (URISyntaxException e)
         {

@@ -51,6 +51,4 @@ public class EveAuthenticatorTest extends EveApiTest
             oAuthCharacter.getCharacterName());
         Assert.assertNull(DEPRECATED_API, eveCharacter.getApiWarning());
     }
-
-
 }

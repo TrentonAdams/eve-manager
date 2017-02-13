@@ -4,6 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,31 +22,35 @@ import javax.ws.rs.core.Response;
 @Path("/testauth/validate")
 public class TestAuthValidate
 {
-    private static String eveSsoCode;
     static final private String mySemophor = "hello";
+    private static Map<String, String> authCodes = new HashMap<>();
+
+    /**
+     * Retrieves the authorization code associated with the given state.  See
+     * {@link EveAuthenticator#getAuthUrl(URI, String)}
+     *
+     * @param state the state variable you used
+     *
+     * @return the eve sso code stored for that state
+     */
+    public static String getEveSsoCode(final String state)
+    {
+        synchronized (mySemophor)
+        {
+            return authCodes.get(state);
+        }
+    }
 
     @GET
-    public Response validate(@QueryParam("code") final String eveSsoCode)
+    public Response validate(@QueryParam("code") final String eveSsoCode,
+        @QueryParam("state") final String state)
     {
-        setEveSsoCode(eveSsoCode);
+        synchronized (mySemophor)
+        {
+            authCodes.put(state, eveSsoCode);
+        }
         return Response.ok("We've successfully retrieved your eve " +
             "authentication code, go back to your unit test!").build();
-    }
-
-    public void setEveSsoCode(final String eveSsoCode)
-    {
-        synchronized (mySemophor)
-        {
-            TestAuthValidate.eveSsoCode = eveSsoCode;
-        }
-    }
-
-    public static String getEveSsoCode()
-    {
-        synchronized (mySemophor)
-        {
-            return eveSsoCode;
-        }
     }
 
 

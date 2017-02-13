@@ -34,8 +34,14 @@ public class EveApiTest extends JerseyTest
     protected static EveAuthenticator newAuthenticator()
         throws IOException, InterruptedException
     {
+        return newAuthenticator(null);
+    }
+
+    protected static EveAuthenticator newAuthenticator(final String state)
+        throws IOException, InterruptedException
+    {
         final EveAuthenticator eveAuthenticator = new EveAuthenticator();
-        validateEveCode(eveAuthenticator);
+        validateEveCode(eveAuthenticator, state);
         return eveAuthenticator;
     }
 
@@ -44,7 +50,8 @@ public class EveApiTest extends JerseyTest
      *
      * @return the eve code to validate.
      */
-    static void validateEveCode(final EveAuthenticator eveAuthenticator)
+    static void validateEveCode(final EveAuthenticator eveAuthenticator,
+        final String state)
         throws IOException, InterruptedException
     {
         final URI returnUrl = URI.create(
@@ -59,7 +66,7 @@ public class EveApiTest extends JerseyTest
                 "https://developers.eveonline.com site "));
         System.out.println(
             String.format(outputFormat,
-                "Go to : " + eveAuthenticator.getAuthUrl(returnUrl, "blah")));
+                "Go to : " + eveAuthenticator.getAuthUrl(returnUrl, state)));
 
         System.out.println("Waiting for authentication in browser: ");
         do
@@ -67,9 +74,9 @@ public class EveApiTest extends JerseyTest
             System.out.print('.');
             Thread.sleep(1000);
         }
-        while (TestAuthValidate.getEveSsoCode() == null);
+        while (TestAuthValidate.getEveSsoCode(state) == null);
 
-        eveAuthenticator.validateEveCode(TestAuthValidate.getEveSsoCode());
+        eveAuthenticator.validateEveCode(TestAuthValidate.getEveSsoCode(state));
 
     }
 }
