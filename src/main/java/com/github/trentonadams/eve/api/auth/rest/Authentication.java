@@ -1,6 +1,7 @@
-package com.github.trentonadams.eve.api.auth;
+package com.github.trentonadams.eve.api.auth.rest;
 
 import com.github.trentonadams.eve.MainView;
+import com.github.trentonadams.eve.api.auth.EveAuthenticator;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import com.github.trentonadams.eve.app.model.IPageModel;
 import org.apache.logging.log4j.LogManager;

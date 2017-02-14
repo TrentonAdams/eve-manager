@@ -35,12 +35,18 @@ public final class EveAuthenticator
      */
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
     private OAuthCharacter OAuthCharacter;
+
+    /**
+     * Indicates if this is a new instance.  A new instance has not yet had
+     * an eve code validated.  {@link #authValid()} will always return false
+     * for new instances.
+     */
     private boolean newInstance;
 
     /**
      * Currently all we do is read configurations.
      */
-    EveAuthenticator()
+    public EveAuthenticator()
     {
         final EveAuthenticator myThis = this;
         eveConfig = new EveConfig();
@@ -160,7 +166,7 @@ public final class EveAuthenticator
      *
      * @throws RestException if an error communicating with eve sso occurs.
      */
-    boolean validateEveCode(@QueryParam("code") final String eveSsoCode)
+    public boolean validateEveCode(@QueryParam("code") final String eveSsoCode)
     {
         boolean success = true;
         final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
@@ -206,7 +212,7 @@ public final class EveAuthenticator
      *
      * @return the final url to redirect to for eve sso.
      */
-    URI getAuthUrl(final URI ourValidateUri)
+    public URI getAuthUrl(final URI ourValidateUri)
     {
         try
         {
@@ -253,6 +259,9 @@ public final class EveAuthenticator
 
     /**
      * Checks to see if the current authenticated session, if any, is valid.
+     * <p>
+     * A new instance defined by {@link #isNewInstance()} will always return
+     * false.
      *
      * @return true if valid, false otherwise
      */
