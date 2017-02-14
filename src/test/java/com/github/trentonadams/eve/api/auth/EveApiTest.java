@@ -69,14 +69,16 @@ public class EveApiTest extends JerseyTest
                 "Go to : " + eveAuthenticator.getAuthUrl(returnUrl, state)));
 
         System.out.println("Waiting for authentication in browser: ");
+        String eveSsoCode;
         do
         {   // simply wait for the user to go to eve auth and back.
             System.out.print('.');
             Thread.sleep(1000);
+            eveSsoCode = TestAuthValidate.getEveSsoCode(state);
         }
-        while (TestAuthValidate.getEveSsoCode(state) == null);
+        while (eveSsoCode == null);
 
-        eveAuthenticator.validateEveCode(TestAuthValidate.getEveSsoCode(state));
+        eveAuthenticator.validateEveCode(eveSsoCode);
 
     }
 }

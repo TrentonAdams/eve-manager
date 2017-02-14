@@ -24,6 +24,9 @@ public final class LocationInfo extends EveType
     @XmlElement(name = "structure_id")
     private long structureId;
 
+    @XmlElement(name = "station_id")
+    private long stationId;
+
     @XmlTransient
     public long getSolarSystemId()
     {
@@ -53,5 +56,15 @@ public final class LocationInfo extends EveType
             "solarSystemId=" + solarSystemId +
             ", structureId=" + structureId +
             '}';
+    }
+
+    public long getStationId()
+    {
+        return stationId;
+    }
+
+    public void setStationId(final long stationId)
+    {
+        this.stationId = stationId;
     }
 }

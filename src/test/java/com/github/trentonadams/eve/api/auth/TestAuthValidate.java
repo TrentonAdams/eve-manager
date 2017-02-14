@@ -37,7 +37,14 @@ public class TestAuthValidate
     {
         synchronized (mySemophor)
         {
-            return authCodes.get(state);
+            if (state == null)
+            {
+                return authCodes.get(state);
+            }
+            else
+            {
+                return authCodes.remove(state);
+            }
         }
     }
 

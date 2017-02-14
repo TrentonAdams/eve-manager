@@ -90,4 +90,9 @@ public class AuthAggregator
     {
         return Collections.unmodifiableMap(characterAuthenticators);
     }
+
+    public EveAuthenticator getCharacterAuthenticator(final int characterId)
+    {
+        return characterAuthenticators.get(characterId);
+    }
 }

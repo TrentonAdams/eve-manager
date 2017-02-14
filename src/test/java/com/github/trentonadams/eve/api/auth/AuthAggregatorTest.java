@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.api.auth;
 
+import com.github.trentonadams.eve.api.LocationInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,9 +26,35 @@ public class AuthAggregatorTest extends JerseyTest
         Assert.assertEquals("Character authenticators should be empty", 0,
             authAggregator.getCharacterAuthenticators().size());
 
-        final EveAuthenticator eveAuthenticator = EveApiTest.newAuthenticator(
-            "auth-aggregator");
+        EveAuthenticator eveAuthenticator;
+        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator");
+        eveAuthenticator.tokens.setAccessToken("bad-token");
+
         authAggregator.addAuthenticator(eveAuthenticator);
+        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
+        eveAuthenticator.tokens.setAccessToken("bad-token");
+
+        Assert.assertNull(
+            "You should choose a different character than the first",
+            authAggregator.getCharacterAuthenticator(
+                eveAuthenticator.getOAuthCharacter().getCharacterID()));
+        authAggregator.addAuthenticator(eveAuthenticator);
+
+        final long before;
+        final long after;
+
+        before = System.currentTimeMillis();
+        authAggregator.refreshAuthenticators();
+        after = System.currentTimeMillis();
+        System.out.println(" took: " + (after - before) + "ms");
+
+        for (final EveAuthenticator eveAuth : authAggregator
+            .getCharacterAuthenticators().values())
+        {
+            final LocationInfo location = eveAuthenticator.getLocation();
+            Assert.assertNotNull("Location should be available", location);
+        }
+
 //        Assert.assertEquals("", authAggregator.);
     }
 }
