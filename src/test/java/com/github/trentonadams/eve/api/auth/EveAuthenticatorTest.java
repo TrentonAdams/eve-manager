@@ -25,6 +25,19 @@ public class EveAuthenticatorTest extends EveApiTest
         eveAuthenticator.tokens.setAccessToken("blah");
         Assert.assertEquals("Auth should still be valid when access_token " +
             "is not", true, eveAuthenticator.authValid());
+        final long before;
+        final long after;
+        final boolean bAuthValid;
+        final long timeInMs;
+
+        before = System.currentTimeMillis();
+        bAuthValid = eveAuthenticator.authValid();
+        after = System.currentTimeMillis();
+        Assert.assertTrue("Auth should still be valid", bAuthValid);
+        timeInMs = after - before;
+        Assert.assertTrue(
+            "Auth time should be less than 10ms as it was just authed but was: " +
+                timeInMs, timeInMs < 10);
     }
 
     @Test

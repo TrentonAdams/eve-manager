@@ -22,15 +22,23 @@
 
   <!-- Bootstrap core CSS -->
   <!--<link href="$.mobile-1.4.2.css" rel="stylesheet">-->
-  <link href="<c:url value="/public/lib/bootstrap/dist/css/bootstrap.css"/>" rel="stylesheet">
-  <link href="<c:url value="/public/custom/bootstrap-custom/css/custom.css"/>" rel="stylesheet">
-  <link href="<c:url value="/public/custom/bootstrap-custom/css/required-fields.css"/>" rel="stylesheet">
-  <link href="<c:url value="/public/custom/bootstrap-custom/css/offcanvas.css"/>" rel="stylesheet">
-  <link rel="stylesheet" href="<c:url value="/public/custom/jquery-custom/jquery-ui.min.css"/>">
+  <link href="<c:url value="/public/lib/bootstrap/dist/css/bootstrap.css"/>"
+        rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/custom.css"/>"
+        rel="stylesheet">
+  <link
+    href="<c:url value="/public/custom/bootstrap-custom/css/required-fields.css"/>"
+    rel="stylesheet">
+  <link
+    href="<c:url value="/public/custom/bootstrap-custom/css/offcanvas.css"/>"
+    rel="stylesheet">
+  <link rel="stylesheet"
+        href="<c:url value="/public/custom/jquery-custom/jquery-ui.min.css"/>">
 
   <!-- Custom styles for this template -->
   <!--<link href="navbar-fixed-top.css" rel="stylesheet">-->
-  <link href="<c:url value="/public/custom/bootstrap-custom/css/theme.css"/>" rel="stylesheet">
+  <link href="<c:url value="/public/custom/bootstrap-custom/css/theme.css"/>"
+        rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -42,9 +50,12 @@
 </head>
 <body>
 <script src="<c:url value="/public/lib/jquery/dist/jquery.min.js"/>"></script>
-<script src="<c:url value="/public/custom/jquery-custom/jquery-ui.min.js"/>"></script>
-<script src="<c:url value="/public/lib/bootstrap/dist/js/bootstrap.js"/>"></script>
-<script src="<c:url value="/public/custom/bootstrap-custom/js/offcanvas.js"/>"></script>
+<script
+  src="<c:url value="/public/custom/jquery-custom/jquery-ui.min.js"/>"></script>
+<script
+  src="<c:url value="/public/lib/bootstrap/dist/js/bootstrap.js"/>"></script>
+<script
+  src="<c:url value="/public/custom/bootstrap-custom/js/offcanvas.js"/>"></script>
 
 <!-- Fixed navbar -->
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,15 +80,46 @@
             Contact Us
           </a>
         </li>
-<%--        <li>
-          <a class="internal" href="<c:url value="/bootstrap.html"/>">
-            Examples
-          </a>
-        </li>
-        <li>
-          <a class="internal" href="spec.htm">Spec</a>
-        </li>--%>
+        <%--        <li>
+                  <a class="internal" href="<c:url value="/bootstrap.html"/>">
+                    Examples
+                  </a>
+                </li>
+                <li>
+                  <a class="internal" href="spec.htm">Spec</a>
+                </li>--%>
       </ul>
+      <%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.api.auth.EveAuthenticator"--%>
+      <c:if test="${eveAuthenticator.authValid()}">
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-primary dropdown-toggle"
+                  data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+            <c:set var="character" value="${eveAuthenticator.OAuthCharacter}"/>
+            <img title="${character.characterName}"
+                 src="https://imageserver.eveonline.com/Character/${character.characterID}_32.jpg"/>
+            Characters <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="#"><img title="Katherine Monroe"
+                               src="https://imageserver.eveonline.com/Character/95366233_32.jpg"/>Katherine
+                Monroe
+              </a>
+            </li>
+            <li>
+              <a href="#">Add another character</a>
+            </li>
+            <li>
+              <a href="#">Something else here</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li>
+              <a href="#">Separated link</a>
+            </li>
+          </ul>
+        </div>
+      </c:if>
     </div>
     <!--/.nav-collapse -->
   </div>
@@ -94,11 +136,15 @@
 
     <div class="col-xs-12 col-sm-9" id="main-content">
       <c:choose>
-        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp'}">
-          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp"/>
+        <c:when
+          test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp'}">
+          <jsp:include
+            page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp"/>
         </c:when>
-        <c:when test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp'}">
-          <jsp:include page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp"/>
+        <c:when
+          test="${model.page == '/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp'}">
+          <jsp:include
+            page="/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp"/>
         </c:when>
         <c:when test="${model.page == '/WEB-INF/jsp/default-view.jsp'}">
           <jsp:include page="/WEB-INF/jsp/default-view.jsp"/>
@@ -163,7 +209,8 @@
         // auto select the first invalid element
         $('.alert input,.alert select, .alert textarea').first().focus();
 
-        var mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        var mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent);
         if (mobile)
         {
 //                    $("head").append('<link href="$.mobile-1.4.2.css" rel="stylesheet">');

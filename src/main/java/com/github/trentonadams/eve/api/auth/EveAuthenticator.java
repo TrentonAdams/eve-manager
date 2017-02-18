@@ -42,6 +42,7 @@ public final class EveAuthenticator
      * for new instances.
      */
     private boolean newInstance;
+    private long lastAuthCheck;
 
     /**
      * Currently all we do is read configurations.
@@ -268,19 +269,31 @@ public final class EveAuthenticator
     public boolean authValid()
     {
         boolean sessionValid = false;
-        try
-        {
-            if (!newInstance)
-            {   // session previously established, see if it's still valid.
-                queryCharacter();
-                sessionValid = true;
+        final long currentTimeMillis = System.currentTimeMillis();
+        if (lastAuthCheck == 0 ||
+            (currentTimeMillis - lastAuthCheck) / 1000 > eveConfig.getSsoExpiry())
+        {   // either last check never occurred or we're over configured expiry,
+            // let's check for real
+            try
+            {
+                if (!newInstance)
+                {   // session previously established, see if it's still valid.
+                    queryCharacter();
+                    sessionValid = true;
+                }
             }
+            catch (final RestException e)
+            {
+                logger.warn("access_token not valid, attempting refresh");
+                logger.debug("access_token not valid, attempting refresh", e);
+                sessionValid = refreshToken();
+            }
+
+            lastAuthCheck = System.currentTimeMillis();
         }
-        catch (final RestException e)
+        else
         {
-            logger.warn("access_token not valid, attempting refresh");
-            logger.debug("access_token not valid, attempting refresh", e);
-            sessionValid = refreshToken();
+            sessionValid = true;
         }
         return sessionValid;
     }
