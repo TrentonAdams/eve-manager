@@ -36,9 +36,9 @@ public class AuthAggregatorTest extends JerseyTest
             authAggregator.getCharacterAuthenticators().size());
 
         EveAuthenticator eveAuthenticator;
-        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator");
+        eveAuthenticator = authAggregator;
+        EveApiTest.validateEveCode(eveAuthenticator, "auth-aggregator");
         eveAuthenticator.getTokens().setAccessToken("bad-token");
-        authAggregator.addAuthenticator(eveAuthenticator);
         characterIds.add(eveAuthenticator.getOAuthCharacter().getCharacterID());
 
         eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
@@ -64,6 +64,17 @@ public class AuthAggregatorTest extends JerseyTest
             final LocationInfo location = eveAuthenticator.getLocation();
             Assert.assertNotNull("Location should be available", location);
         }
+
+        Assert.assertTrue("Switching characters should work",
+            authAggregator.switchCharacter(characterIds.get(0)));
+        Assert.assertTrue("Current authenticator should be the same",
+            authAggregator.getCurrentCharacterAuthenticator() ==
+                authAggregator.getCharacterAuthenticator(characterIds.get(0)));
+        Assert.assertTrue("Switching characters should work",
+            authAggregator.switchCharacter(characterIds.get(1)));
+        Assert.assertTrue("Current authenticator should be the same",
+            authAggregator.getCurrentCharacterAuthenticator() ==
+                authAggregator.getCharacterAuthenticator(characterIds.get(1)));
 
 //        Assert.assertEquals("", authAggregator.);
     }

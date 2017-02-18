@@ -25,12 +25,13 @@ import java.util.Map;
 public class AuthAggregator implements EveAuthenticator
 {
     private final Map<Integer, EveAuthenticator> characterAuthenticators;
+    private EveAuthenticator currentCharacterAuthenticator;
 
-    private int currentCharacterId = -1;
 
     public AuthAggregator()
     {
         characterAuthenticators = new LinkedHashMap<>();
+        createAuthenticator();
     }
 
     /**
@@ -41,7 +42,14 @@ public class AuthAggregator implements EveAuthenticator
      */
     public EveAuthenticator createAuthenticator()
     {
-        return Factory.createEveAuthenticator();
+        final EveAuthenticator eveAuthenticator =
+            Factory.createEveAuthenticator();
+        if (currentCharacterAuthenticator == null &&
+            characterAuthenticators.size() == 0)
+        {   // this is the first, AuthAggregator will be it's proxy.
+            currentCharacterAuthenticator = eveAuthenticator;
+        }
+        return eveAuthenticator;
     }
 
     /**
@@ -118,7 +126,7 @@ public class AuthAggregator implements EveAuthenticator
         if (eveAuthenticator != null)
         {
             characterSwitchSuccessful = eveAuthenticator.authValid();
-            this.currentCharacterId = characterId;
+            this.currentCharacterAuthenticator = eveAuthenticator;
         }
         else
         {
@@ -129,39 +137,30 @@ public class AuthAggregator implements EveAuthenticator
         return characterSwitchSuccessful;
     }
 
+    /**
+     * Gets the currently selected character authenticator.
+     *
+     * @return the currently selected {@link EveAuthenticator}
+     */
+    public EveAuthenticator getCurrentCharacterAuthenticator()
+    {
+        return currentCharacterAuthenticator;
+    }
+
+
     // **********************EveAuthenticator methods**********************
 
     @Override
     public EveCharacter getEveCharacter(final OAuthCharacter character)
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).getEveCharacter(
+        return currentCharacterAuthenticator.getEveCharacter(
             character);
     }
 
     @Override
     public LocationInfo getLocation()
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).getLocation();
-    }
-
-    /**
-     * Checks if there is a currently selected character.
-     *
-     * @throws IllegalArgumentException when you attempt to use {@link
-     *                                  EveAuthenticator} methods without having
-     *                                  even added and authenticated any
-     *                                  authenticators.
-     */
-    private void isCharacterSelected()
-    {
-        if (currentCharacterId == -1 || characterAuthenticators.get(
-            currentCharacterId) == null)
-        {
-            throw new IllegalArgumentException(
-                "Character not currently selected");
-        }
+        return currentCharacterAuthenticator.getLocation();
     }
 
     /**
@@ -180,9 +179,10 @@ public class AuthAggregator implements EveAuthenticator
         final boolean validated = authenticator.validateEveCode(eveSsoCode);
         if (validated)
         {
-            currentCharacterId =
-                authenticator.getOAuthCharacter().getCharacterID();
             addAuthenticator(authenticator);
+            // most recently authenticated character is always the new
+            // currently selected one.
+            currentCharacterAuthenticator = authenticator;
         }
         return validated;
     }
@@ -190,46 +190,36 @@ public class AuthAggregator implements EveAuthenticator
     @Override
     public URI getAuthUrl(final URI ourValidateUri)
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).getAuthUrl(
-            ourValidateUri);
+        return currentCharacterAuthenticator.getAuthUrl(ourValidateUri);
     }
 
     @Override
     public URI getAuthUrl(final URI ourValidateUri, final String state)
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).getAuthUrl(
-            ourValidateUri, state);
+        return currentCharacterAuthenticator.getAuthUrl(ourValidateUri, state);
     }
 
     @Override
     public boolean authValid()
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).authValid();
+        return currentCharacterAuthenticator.authValid();
     }
 
     @Override
     public AuthTokens getTokens()
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId).getTokens();
+        return currentCharacterAuthenticator.getTokens();
     }
 
     @Override
     public OAuthCharacter getOAuthCharacter()
     {
-        isCharacterSelected();
-        return characterAuthenticators.get(currentCharacterId)
-            .getOAuthCharacter();
+        return currentCharacterAuthenticator.getOAuthCharacter();
     }
 
     @Override
     public void setOAuthCharacter(final OAuthCharacter OAuthCharacter)
     {
-        isCharacterSelected();
-        characterAuthenticators.get(currentCharacterId).setOAuthCharacter(
-            OAuthCharacter);
+        currentCharacterAuthenticator.setOAuthCharacter(OAuthCharacter);
     }
 }
