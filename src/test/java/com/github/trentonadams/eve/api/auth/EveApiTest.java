@@ -20,7 +20,7 @@ public class EveApiTest extends JerseyTest
 {
     protected static final String DEPRECATED_API =
         "The eve api endpoint is either deprecated or removed";
-    protected static EveAuthenticator eveAuthenticator;
+    protected static EveAuthenticatorImpl eveAuthenticator;
 
     @Before
     public void setUpEA() throws IOException, InterruptedException
@@ -31,16 +31,16 @@ public class EveApiTest extends JerseyTest
         }
     }
 
-    protected static EveAuthenticator newAuthenticator()
+    protected static EveAuthenticatorImpl newAuthenticator()
         throws IOException, InterruptedException
     {
         return newAuthenticator(null);
     }
 
-    protected static EveAuthenticator newAuthenticator(final String state)
+    protected static EveAuthenticatorImpl newAuthenticator(final String state)
         throws IOException, InterruptedException
     {
-        final EveAuthenticator eveAuthenticator = new EveAuthenticator();
+        final EveAuthenticatorImpl eveAuthenticator = new EveAuthenticatorImpl();
         validateEveCode(eveAuthenticator, state);
         return eveAuthenticator;
     }
@@ -50,7 +50,7 @@ public class EveApiTest extends JerseyTest
      *
      * @return the eve code to validate.
      */
-    static void validateEveCode(final EveAuthenticator eveAuthenticator,
+    static void validateEveCode(final EveAuthenticatorImpl eveAuthenticator,
         final String state)
         throws IOException, InterruptedException
     {

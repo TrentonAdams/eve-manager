@@ -2,6 +2,7 @@ package com.github.trentonadams.eve.api.auth.rest;
 
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.api.auth.EveAuthenticator;
+import com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import com.github.trentonadams.eve.app.model.IPageModel;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +21,7 @@ import java.net.URI;
 /**
  * JAX-RS implementation that simply handles authentication.  Mostly it handles
  * the path patterns and delegates the eve authentication to {@link
- * EveAuthenticator}
+ * EveAuthenticatorImpl}
  * <p>
  * Created :  25/01/17 1:07 PM MST
  * <p>
@@ -52,7 +53,7 @@ public class Authentication implements IPageModel
     {
         if (eveAuthenticator == null)
         {   // setup new instance, as the session doesn't have it.
-            this.eveAuthenticator = new EveAuthenticator();
+            this.eveAuthenticator = new EveAuthenticatorImpl();
         }
         else
         {

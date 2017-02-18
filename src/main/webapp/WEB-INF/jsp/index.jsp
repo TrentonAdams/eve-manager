@@ -89,7 +89,7 @@
                   <a class="internal" href="spec.htm">Spec</a>
                 </li>--%>
       </ul>
-      <%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.api.auth.EveAuthenticator"--%>
+      <%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl"--%>
       <c:if test="${eveAuthenticator.authValid()}">
         <div class="btn-group pull-right">
           <button type="button" class="btn btn-primary dropdown-toggle"

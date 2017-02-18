@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * An {@link EveAuthenticator} aggregator, which simply manages authentication
+ * An {@link EveAuthenticatorImpl} aggregator, which simply manages authentication
  * with multiple eve characters
  * <p>
  * Created :  09/02/17 7:42 PM MST
@@ -38,7 +38,7 @@ public class AuthAggregator
      */
     public EveAuthenticator createAuthenticator()
     {
-        return new EveAuthenticator();
+        return new EveAuthenticatorImpl();
     }
 
     /**

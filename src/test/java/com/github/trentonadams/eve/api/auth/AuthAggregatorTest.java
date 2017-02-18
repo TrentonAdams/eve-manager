@@ -26,7 +26,7 @@ public class AuthAggregatorTest extends JerseyTest
         Assert.assertEquals("Character authenticators should be empty", 0,
             authAggregator.getCharacterAuthenticators().size());
 
-        EveAuthenticator eveAuthenticator;
+        EveAuthenticatorImpl eveAuthenticator;
         eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator");
         eveAuthenticator.tokens.setAccessToken("bad-token");
 

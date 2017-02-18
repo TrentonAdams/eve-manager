@@ -27,7 +27,7 @@ public class TestAuthValidate
 
     /**
      * Retrieves the authorization code associated with the given state.  See
-     * {@link EveAuthenticator#getAuthUrl(URI, String)}
+     * {@link EveAuthenticatorImpl#getAuthUrl(URI, String)}
      *
      * @param state the state variable you used
      *
