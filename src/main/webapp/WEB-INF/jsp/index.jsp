@@ -103,8 +103,8 @@
           <ul class="dropdown-menu">
             <li>
               <a href="#"><img title="Katherine Monroe"
-                               src="https://imageserver.eveonline.com/Character/95366233_32.jpg"/>Katherine
-                Monroe
+                               src="https://imageserver.eveonline.com/Character/95366233_32.jpg"/>
+                Katherine Monroe
               </a>
             </li>
             <li>
