@@ -40,6 +40,8 @@ public interface EveAuthenticator
      * @param eveSsoCode the code from the query parameter after returning from
      *                   eve sso.
      *
+     * @return true if the authentication was successful
+     *
      * @throws RestException if an error communicating with eve sso occurs.
      */
     boolean validateEveCode(@QueryParam("code") String eveSsoCode);

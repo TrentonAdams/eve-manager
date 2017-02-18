@@ -22,7 +22,7 @@ public class EveAuthenticatorTest extends EveApiTest
     @Test
     public void testRefreshToken() throws Exception
     {
-        eveAuthenticator.tokens.setAccessToken("blah");
+        eveAuthenticator.getTokens().setAccessToken("blah");
         Assert.assertEquals("Auth should still be valid when access_token " +
             "is not", true, eveAuthenticator.authValid());
         final long before;

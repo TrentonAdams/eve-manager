@@ -17,4 +17,9 @@ public class Factory
     {
         return new EveAuthenticatorImpl();
     }
+
+    public static AuthAggregator createAuthAggregator()
+    {
+        return new AuthAggregator();
+    }
 }

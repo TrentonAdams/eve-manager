@@ -1,12 +1,18 @@
 package com.github.trentonadams.eve.api.auth;
 
+import com.github.trentonadams.eve.api.EveCharacter;
+import com.github.trentonadams.eve.api.LocationInfo;
+import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
+
+import java.net.URI;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * An {@link EveAuthenticatorImpl} aggregator, which simply manages authentication
- * with multiple eve characters
+ * An {@link EveAuthenticatorImpl} aggregator, which simply manages
+ * authentication with multiple eve characters.  This class also
+ * implements {@link EveAuthenticator}
  * <p>
  * Created :  09/02/17 7:42 PM MST
  * <p>
@@ -16,18 +22,15 @@ import java.util.Map;
  *
  * @author Trenton D. Adams
  */
-public class AuthAggregator
+public class AuthAggregator implements EveAuthenticator
 {
     private final Map<Integer, EveAuthenticator> characterAuthenticators;
+
+    private int currentCharacterId = -1;
 
     public AuthAggregator()
     {
         characterAuthenticators = new LinkedHashMap<>();
-    }
-
-    public static AuthAggregator newInstance()
-    {
-        return new AuthAggregator();
     }
 
     /**
@@ -94,5 +97,139 @@ public class AuthAggregator
     public EveAuthenticator getCharacterAuthenticator(final int characterId)
     {
         return characterAuthenticators.get(characterId);
+    }
+
+
+    /**
+     * @param characterId the character to switch to.
+     *
+     * @return true if the switch was successful, false if the {@link
+     * EveAuthenticator#authValid()} call failed.
+     *
+     * @throws IllegalArgumentException if the character being switched to does
+     *                                  not already exist in the auth
+     *                                  aggregator
+     */
+    public boolean switchCharacter(final int characterId)
+    {
+        final EveAuthenticator eveAuthenticator = characterAuthenticators.get(
+            characterId);
+        boolean characterSwitchSuccessful = false;
+        if (eveAuthenticator != null)
+        {
+            characterSwitchSuccessful = eveAuthenticator.authValid();
+            this.currentCharacterId = characterId;
+        }
+        else
+        {
+            throw new IllegalArgumentException(
+                "The given character id is invalid");
+        }
+
+        return characterSwitchSuccessful;
+    }
+
+    // **********************EveAuthenticator methods**********************
+
+    @Override
+    public EveCharacter getEveCharacter(final OAuthCharacter character)
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).getEveCharacter(
+            character);
+    }
+
+    @Override
+    public LocationInfo getLocation()
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).getLocation();
+    }
+
+    /**
+     * Checks if there is a currently selected character.
+     *
+     * @throws IllegalArgumentException when you attempt to use {@link
+     *                                  EveAuthenticator} methods without having
+     *                                  even added and authenticated any
+     *                                  authenticators.
+     */
+    private void isCharacterSelected()
+    {
+        if (currentCharacterId == -1 || characterAuthenticators.get(
+            currentCharacterId) == null)
+        {
+            throw new IllegalArgumentException(
+                "Character not currently selected");
+        }
+    }
+
+    /**
+     * Automatically adds a successfully authenticated character to the list
+     * of valid authenticators.
+     * <p>
+     * Sets the validated eve character as the current character.
+     *
+     * @param eveSsoCode the code from the query parameter after returning from
+     *                   eve sso.
+     */
+    @Override
+    public boolean validateEveCode(final String eveSsoCode)
+    {
+        final EveAuthenticator authenticator = createAuthenticator();
+        final boolean validated = authenticator.validateEveCode(eveSsoCode);
+        if (validated)
+        {
+            currentCharacterId =
+                authenticator.getOAuthCharacter().getCharacterID();
+            addAuthenticator(authenticator);
+        }
+        return validated;
+    }
+
+    @Override
+    public URI getAuthUrl(final URI ourValidateUri)
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).getAuthUrl(
+            ourValidateUri);
+    }
+
+    @Override
+    public URI getAuthUrl(final URI ourValidateUri, final String state)
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).getAuthUrl(
+            ourValidateUri, state);
+    }
+
+    @Override
+    public boolean authValid()
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).authValid();
+    }
+
+    @Override
+    public AuthTokens getTokens()
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId).getTokens();
+    }
+
+    @Override
+    public OAuthCharacter getOAuthCharacter()
+    {
+        isCharacterSelected();
+        return characterAuthenticators.get(currentCharacterId)
+            .getOAuthCharacter();
+    }
+
+    @Override
+    public void setOAuthCharacter(final OAuthCharacter OAuthCharacter)
+    {
+        isCharacterSelected();
+        characterAuthenticators.get(currentCharacterId).setOAuthCharacter(
+            OAuthCharacter);
     }
 }

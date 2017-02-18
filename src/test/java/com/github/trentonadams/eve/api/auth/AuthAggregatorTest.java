@@ -4,6 +4,9 @@ import com.github.trentonadams.eve.api.LocationInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Tests the {@link AuthAggregator} class mechanics.
  * <p>
@@ -24,25 +27,28 @@ public class AuthAggregatorTest extends JerseyTest
     @Test
     public void createAuthenticator() throws Exception
     {
-        final AuthAggregator authAggregator = AuthAggregator.newInstance();
+        final List<Integer> characterIds = new ArrayList<>();
+
+        final AuthAggregator authAggregator = Factory.createAuthAggregator();
         Assert.assertNotNull("Character authenticators should be not null",
             authAggregator.getCharacterAuthenticators());
         Assert.assertEquals("Character authenticators should be empty", 0,
             authAggregator.getCharacterAuthenticators().size());
 
-        EveAuthenticatorImpl eveAuthenticator;
+        EveAuthenticator eveAuthenticator;
         eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator");
-        eveAuthenticator.tokens.setAccessToken("bad-token");
-
+        eveAuthenticator.getTokens().setAccessToken("bad-token");
         authAggregator.addAuthenticator(eveAuthenticator);
-        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
-        eveAuthenticator.tokens.setAccessToken("bad-token");
+        characterIds.add(eveAuthenticator.getOAuthCharacter().getCharacterID());
 
+        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
+        eveAuthenticator.getTokens().setAccessToken("bad-token");
         Assert.assertNull(
             "You should choose a different character than the first",
             authAggregator.getCharacterAuthenticator(
                 eveAuthenticator.getOAuthCharacter().getCharacterID()));
         authAggregator.addAuthenticator(eveAuthenticator);
+        characterIds.add(eveAuthenticator.getOAuthCharacter().getCharacterID());
 
         final long before;
         final long after;
