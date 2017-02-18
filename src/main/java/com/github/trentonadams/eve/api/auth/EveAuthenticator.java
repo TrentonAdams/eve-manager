@@ -253,21 +253,17 @@ public final class EveAuthenticator
         }
     }
 
-    public boolean isNewInstance()
-    {
-        return newInstance;
-    }
-
     /**
      * Checks to see if the current authenticated session, if any, is valid.
      * <p>
-     * A new instance defined by {@link #isNewInstance()} will always return
+     * A new instance defined by {@link #newInstance} will always return
      * false.
      *
      * @return true if valid, false otherwise
      */
     public boolean authValid()
     {
+        logger.info("eveAuthenticator is new: " + newInstance);
         boolean sessionValid = false;
         final long currentTimeMillis = System.currentTimeMillis();
         if (lastAuthCheck == 0 ||
@@ -278,7 +274,7 @@ public final class EveAuthenticator
             {
                 if (!newInstance)
                 {   // session previously established, see if it's still valid.
-                    queryCharacter();
+                    queryCharacter();   // throws an error if session not valid
                     sessionValid = true;
                 }
             }

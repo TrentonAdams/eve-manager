@@ -80,8 +80,6 @@ public class Authentication implements IPageModel
     @GET
     public Response validateEveSession()
     {
-        logger.info(
-            "eveAuthenticator is new: " + eveAuthenticator.isNewInstance());
         final URI uri;
         if (!eveAuthenticator.authValid())
         {
@@ -100,7 +98,7 @@ public class Authentication implements IPageModel
 
     /**
      * Validates the authentication code to retrieve access_token and
-     * refresh_token.
+     * refresh_token.  This is called on a return from eve sso.
      *
      * @param eveSsoCode the code for validation received from Eve SSO.
      *
