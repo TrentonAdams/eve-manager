@@ -7,6 +7,10 @@ import org.junit.Test;
 /**
  * Tests the {@link AuthAggregator} class mechanics.
  * <p>
+ * Because there's no way of testing authentication without the user visiting
+ * a url, we only have one single test method, so that the user doesn't have
+ * to keep clicking links to create new EveAuthenticators.
+ * <p>
  * Created :  10/02/17 12:50 AM MST
  * <p>
  * Modified : $Date$ UTC

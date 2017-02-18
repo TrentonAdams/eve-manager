@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
  * Eve authenticator class.  Does the bulk of eve authentication after
  * validating an eve code.
  */
-public final class EveAuthenticatorImpl implements EveAuthenticator
+public final class EveAuthenticatorImpl extends Factory implements EveAuthenticator
 {
     private static final Logger logger = LogManager.getLogger(
         EveAuthenticatorImpl.class);
@@ -47,7 +47,7 @@ public final class EveAuthenticatorImpl implements EveAuthenticator
     /**
      * Currently all we do is read configurations.
      */
-    public EveAuthenticatorImpl()
+    EveAuthenticatorImpl()
     {
         final EveAuthenticator myThis = this;
         eveConfig = new EveConfig();

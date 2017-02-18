@@ -40,7 +40,8 @@ public class EveApiTest extends JerseyTest
     protected static EveAuthenticatorImpl newAuthenticator(final String state)
         throws IOException, InterruptedException
     {
-        final EveAuthenticatorImpl eveAuthenticator = new EveAuthenticatorImpl();
+        final EveAuthenticatorImpl eveAuthenticator =
+            Factory.createEveAuthenticator();
         validateEveCode(eveAuthenticator, state);
         return eveAuthenticator;
     }

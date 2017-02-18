@@ -3,6 +3,7 @@ package com.github.trentonadams.eve.api.auth.rest;
 import com.github.trentonadams.eve.MainView;
 import com.github.trentonadams.eve.api.auth.EveAuthenticator;
 import com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl;
+import com.github.trentonadams.eve.api.auth.Factory;
 import com.github.trentonadams.eve.app.hk2.SessionAttributeInject;
 import com.github.trentonadams.eve.app.model.IPageModel;
 import org.apache.logging.log4j.LogManager;
@@ -53,7 +54,7 @@ public class Authentication implements IPageModel
     {
         if (eveAuthenticator == null)
         {   // setup new instance, as the session doesn't have it.
-            this.eveAuthenticator = new EveAuthenticatorImpl();
+            this.eveAuthenticator = Factory.createEveAuthenticator();
         }
         else
         {

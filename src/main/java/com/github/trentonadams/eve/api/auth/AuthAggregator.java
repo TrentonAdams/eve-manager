@@ -38,7 +38,7 @@ public class AuthAggregator
      */
     public EveAuthenticator createAuthenticator()
     {
-        return new EveAuthenticatorImpl();
+        return Factory.createEveAuthenticator();
     }
 
     /**
