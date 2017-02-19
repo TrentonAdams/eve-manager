@@ -15,7 +15,7 @@
            src="https://imageserver.eveonline.com/Character/${character.characterID}_256.jpg"/>
     </div>
     <div>
-      ${character.}
+      ${authAggregator.eveCharacter.description}
     </div>
   </c:when>
   <c:otherwise>

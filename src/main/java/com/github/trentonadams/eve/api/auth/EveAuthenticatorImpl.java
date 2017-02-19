@@ -108,7 +108,7 @@ public final class EveAuthenticatorImpl extends Factory
 
 
     @Override
-    public EveCharacter getEveCharacter(final OAuthCharacter character)
+    public EveCharacter getEveCharacter()
     {
         assert tokens != null : "getEveCharacter shouldn't be called unless " +
             "you're sure the tokens exist and are valid; this " +

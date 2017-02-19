@@ -24,12 +24,9 @@ public interface EveAuthenticator
     /**
      * Retrieves the eve character object.
      *
-     * @param character {@link OAuthCharacter} that the {@link EveCharacter} is
-     *                  associated with.
-     *
      * @return the {@link EveCharacter}
      */
-    EveCharacter getEveCharacter(OAuthCharacter character);
+    EveCharacter getEveCharacter();
 
     LocationInfo getLocation();
 

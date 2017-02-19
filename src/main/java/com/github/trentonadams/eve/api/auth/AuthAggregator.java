@@ -155,10 +155,10 @@ public class AuthAggregator implements EveAuthenticator
     // **********************EveAuthenticator methods**********************
 
     @Override
-    public EveCharacter getEveCharacter(final OAuthCharacter character)
+    public EveCharacter getEveCharacter()
     {
         return currentCharacterAuthenticator.getEveCharacter(
-            character);
+        );
     }
 
     @Override
