@@ -6,4 +6,4 @@
   notify us by contacting Burn Monroe in game.
 </div>
 
-<p>character: ${eveAuthenticator.character}</p>
+<p>character: ${authAggregator.character}</p>

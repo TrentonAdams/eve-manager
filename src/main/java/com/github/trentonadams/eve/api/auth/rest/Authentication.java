@@ -1,6 +1,7 @@
 package com.github.trentonadams.eve.api.auth.rest;
 
 import com.github.trentonadams.eve.MainView;
+import com.github.trentonadams.eve.api.auth.AuthAggregator;
 import com.github.trentonadams.eve.api.auth.EveAuthenticator;
 import com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl;
 import com.github.trentonadams.eve.api.auth.Factory;
@@ -37,7 +38,7 @@ public class Authentication implements IPageModel
 {
     private static Logger logger = LogManager.getLogger(Authentication.class);
 
-    private EveAuthenticator eveAuthenticator;
+    private AuthAggregator authAggregator;
 
     @Inject
     private HttpSession session;
@@ -49,16 +50,16 @@ public class Authentication implements IPageModel
     private String message;
     private AuthStatus authStatus;
 
-    @SessionAttributeInject(attributeName = "eveAuthenticator")
-    Authentication(final EveAuthenticator eveAuthenticator)
+    @SessionAttributeInject(attributeName = "authAggregator")
+    Authentication(final AuthAggregator authAggregator)
     {
-        if (eveAuthenticator == null)
+        if (authAggregator == null)
         {   // setup new instance, as the session doesn't have it.
-            this.eveAuthenticator = Factory.createEveAuthenticator();
+            this.authAggregator = Factory.createAuthAggregator();
         }
         else
         {
-            this.eveAuthenticator = eveAuthenticator;
+            this.authAggregator = authAggregator;
         }
     }
 
@@ -83,19 +84,59 @@ public class Authentication implements IPageModel
     public Response validateEveSession()
     {
         final URI uri;
-        if (!eveAuthenticator.authValid())
+        if (!authAggregator.authValid())
         {
-            final URI validateUri = serviceUri.getRequestUriBuilder().path(
-                "/validate").build();
-            uri = eveAuthenticator.getAuthUrl(validateUri);
+            final URI validateUri = serviceUri.getBaseUriBuilder().path(
+                "/auth/validate").build();
+            uri = authAggregator.getAuthUrl(validateUri);
         }
         else
         {
             uri = serviceUri.getRequestUriBuilder().path("/complete").build();
         }
 
-        return Response.seeOther(uri)
-            .build();
+        return Response.seeOther(uri).build();
+    }
+
+    /**
+     * Generates a redirect to eve sso to authenticate a new character, but
+     * it's up to the user to ensure they pick a new character.
+     *
+     * @return the JAXRS {@link Response} object
+     */
+    @GET
+    @Path("/new_character")
+    public Response newCharacterSession()
+    {
+        final URI uri;
+        final EveAuthenticator eveAuthenticator =
+            authAggregator.createAuthenticator();
+
+        final URI validateUri = serviceUri.getBaseUriBuilder().path(
+            "/auth/validate").build();
+        uri = eveAuthenticator.getAuthUrl(validateUri);
+
+        return Response.seeOther(uri).build();
+    }
+
+    @GET
+    @Path("/switch_character")
+    public Response newCharacterSession(
+        @QueryParam("character_id") final int characterId)
+    {
+        final URI uri;
+        if (authAggregator.switchCharacter(characterId))
+        {
+            uri = serviceUri.getBaseUriBuilder().path("/auth/complete").build();
+        }
+        else
+        {
+            // CRITICAL this is temporary.  We need a page to tell them the
+            // character needs authentication again.
+            uri = serviceUri.getBaseUriBuilder().path("/auth/failure").build();
+        }
+
+        return Response.seeOther(uri).build();
     }
 
     /**
@@ -103,17 +144,20 @@ public class Authentication implements IPageModel
      * refresh_token.  This is called on a return from eve sso.
      *
      * @param eveSsoCode the code for validation received from Eve SSO.
+     * @param state      specific state information passed through the eve sso
+     *                   if needed
      *
      * @return this object
      */
     @GET
     @Path("/validate")
-    public Response validate(@QueryParam("code") final String eveSsoCode)
+    public Response validate(@QueryParam("code") final String eveSsoCode,
+        @QueryParam("state") final String state)
     {
         final URI uri;
-        if (eveAuthenticator.validateEveCode(eveSsoCode))
+        if (authAggregator.validateEveCode(eveSsoCode))
         {
-            session.setAttribute("eveAuthenticator", eveAuthenticator);
+            session.setAttribute("authAggregator", authAggregator);
             session.setMaxInactiveInterval(-1);
             uri = serviceUri.getBaseUriBuilder().path("/auth/complete").build();
         }
@@ -132,7 +176,7 @@ public class Authentication implements IPageModel
     @Template(name = MainView.INDEX_JSP)
     public Authentication complete()
     {
-        authStatus = eveAuthenticator.authValid() ? AuthStatus.ESTABLISHED :
+        authStatus = authAggregator.authValid() ? AuthStatus.ESTABLISHED :
             AuthStatus.INVALID;
         page = "/WEB-INF/jsp/auth/validated.jsp";
         return this;
@@ -144,15 +188,15 @@ public class Authentication implements IPageModel
     @Template(name = MainView.INDEX_JSP)
     public Authentication failure()
     {
-        session.removeAttribute("eveAuthenticator");
+        session.removeAttribute("authAggregator");
         page = "/WEB-INF/jsp/auth/failure.jsp";
         return this;
     }
 
 
-    public EveAuthenticator getEveAuthenticator()
+    public EveAuthenticator getAuthAggregator()
     {
-        return eveAuthenticator;
+        return authAggregator;
     }
 
     public String getMessage()

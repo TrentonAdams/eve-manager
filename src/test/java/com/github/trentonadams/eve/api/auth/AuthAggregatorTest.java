@@ -59,7 +59,7 @@ public class AuthAggregatorTest extends JerseyTest
         System.out.println(" took: " + (after - before) + "ms");
 
         for (final EveAuthenticator eveAuth : authAggregator
-            .getCharacterAuthenticators().values())
+            .getCharacterAuthenticators())
         {
             final LocationInfo location = eveAuthenticator.getLocation();
             Assert.assertNotNull("Location should be available", location);

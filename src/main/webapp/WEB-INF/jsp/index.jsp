@@ -89,26 +89,39 @@
                   <a class="internal" href="spec.htm">Spec</a>
                 </li>--%>
       </ul>
-      <%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl"--%>
-      <c:if test="${eveAuthenticator.authValid()}">
+      <%--@elvariable id="authAggregator" type="com.github.trentonadams.eve.api.auth.AuthAggregator"--%>
+      <c:if test="${authAggregator.authValid()}">
         <div class="btn-group pull-right">
           <button type="button" class="btn btn-primary dropdown-toggle"
                   data-toggle="dropdown" aria-haspopup="true"
                   aria-expanded="false">
-            <c:set var="character" value="${eveAuthenticator.OAuthCharacter}"/>
+            <c:set var="character" value="${authAggregator.OAuthCharacter}"/>
             <img title="${character.characterName}"
                  src="https://imageserver.eveonline.com/Character/${character.characterID}_32.jpg"/>
             Characters <span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
+            <c:forEach var="currentAuth"
+                       items="${authAggregator.characterAuthenticators}">
+              <c:if
+                test="${currentAuth.OAuthCharacter.characterID != authAggregator.OAuthCharacter.characterID}">
+                <c:set var="cCharacter" value="${currentAuth.OAuthCharacter}"/>
+                <li>
+                  <c:url var="switchCharacter" value="/auth/switch_character">
+                    <c:param name="character_id"
+                             value="${cCharacter.characterID}"/>
+                  </c:url>
+                  <a href="${switchCharacter}"><img title="${cCharacter.characterName}"
+                                  src="https://imageserver.eveonline.com/Character/${cCharacter.characterID}_32.jpg"/>
+                      ${cCharacter.characterName}
+                  </a>
+                </li>
+              </c:if>
+            </c:forEach>
             <li>
-              <a href="#"><img title="Katherine Monroe"
-                               src="https://imageserver.eveonline.com/Character/95366233_32.jpg"/>
-                Katherine Monroe
+              <a href="<c:url value="/auth/new_character"/>">Add another
+                character
               </a>
-            </li>
-            <li>
-              <a href="#">Add another character</a>
             </li>
             <li>
               <a href="#">Something else here</a>

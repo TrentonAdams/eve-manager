@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--@elvariable id="eveAuthenticator" type="com.github.trentonadams.eve.api.auth.EveAuthenticatorImpl"--%>
+<%--@elvariable id="authAggregator" type="com.github.trentonadams.eve.api.auth.AuthAggregator"--%>
 
-<c:set var="character" value="${eveAuthenticator.OAuthCharacter}"/>
+<c:set var="character" value="${authAggregator.OAuthCharacter}"/>
 <p>
 <c:choose>
   <c:when test="${model.authStatus == 'ESTABLISHED'}">
@@ -21,5 +21,5 @@
 </c:choose>
 </p>
 
-<p>character: ${eveAuthenticator.OAuthCharacter}</p>
-<p>tokens: ${eveAuthenticator.tokens}</p>
+<p>character: ${authAggregator.OAuthCharacter}</p>
+<p>tokens: ${authAggregator.tokens}</p>

@@ -23,7 +23,8 @@ import java.net.URISyntaxException;
  * Eve authenticator class.  Does the bulk of eve authentication after
  * validating an eve code.
  */
-public final class EveAuthenticatorImpl extends Factory implements EveAuthenticator
+public final class EveAuthenticatorImpl extends Factory
+    implements EveAuthenticator
 {
     private static final Logger logger = LogManager.getLogger(
         EveAuthenticatorImpl.class);
@@ -104,8 +105,6 @@ public final class EveAuthenticatorImpl extends Factory implements EveAuthentica
 
         OAuthCharacter = eveCall.invoke();
     }
-
-
 
 
     @Override
@@ -242,8 +241,10 @@ public final class EveAuthenticatorImpl extends Factory implements EveAuthentica
         logger.info("eveAuthenticator is new: " + newInstance);
         boolean sessionValid = false;
         final long currentTimeMillis = System.currentTimeMillis();
+        // CRITICAL switch "lastAuthCheck" for the expiry check on the OAuthCharacter
         if (lastAuthCheck == 0 ||
-            (currentTimeMillis - lastAuthCheck) / 1000 > eveConfig.getSsoExpiry())
+            (currentTimeMillis - lastAuthCheck) / 1000 >
+                eveConfig.getSsoExpiry())
         {   // either last check never occurred or we're over configured expiry,
             // let's check for real
             try

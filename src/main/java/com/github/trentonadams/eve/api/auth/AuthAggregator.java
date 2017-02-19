@@ -5,9 +5,7 @@ import com.github.trentonadams.eve.api.LocationInfo;
 import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An {@link EveAuthenticatorImpl} aggregator, which simply manages
@@ -53,7 +51,8 @@ public class AuthAggregator implements EveAuthenticator
     }
 
     /**
-     * Adds another eve authenticator to aggregate.
+     * Adds another eve authenticator to aggregate.  This will overwrite any
+     * other authenticator that has the same character id.
      *
      * @param eveAuthenticator the authenticator to add
      */
@@ -97,9 +96,10 @@ public class AuthAggregator implements EveAuthenticator
         return null;
     }
 
-    public Map<Integer, EveAuthenticator> getCharacterAuthenticators()
+    public List<EveAuthenticator> getCharacterAuthenticators()
     {
-        return Collections.unmodifiableMap(characterAuthenticators);
+        return Collections.unmodifiableList(
+            new ArrayList<>(characterAuthenticators.values()));
     }
 
     public EveAuthenticator getCharacterAuthenticator(final int characterId)
@@ -109,10 +109,14 @@ public class AuthAggregator implements EveAuthenticator
 
 
     /**
+     * Switches characters if the authenticed session for the character is still
+     * valid.
+     *
      * @param characterId the character to switch to.
      *
      * @return true if the switch was successful, false if the {@link
-     * EveAuthenticator#authValid()} call failed.
+     * EveAuthenticator#authValid()} call failed, in which case the user needs
+     * to be notified to re-authenticate.
      *
      * @throws IllegalArgumentException if the character being switched to does
      *                                  not already exist in the auth
