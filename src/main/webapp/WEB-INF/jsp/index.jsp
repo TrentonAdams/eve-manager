@@ -118,6 +118,7 @@
                 </li>
               </c:if>
             </c:forEach>
+            <li role="separator" class="divider"></li>
             <li>
               <a href="<c:url value="/auth/new_character"/>">Add another
                 character

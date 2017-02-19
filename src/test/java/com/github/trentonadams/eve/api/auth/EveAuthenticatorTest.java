@@ -5,6 +5,10 @@ import com.github.trentonadams.eve.api.LocationInfo;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Created by IntelliJ IDEA.
  * <p>
@@ -22,6 +26,10 @@ public class EveAuthenticatorTest extends EveApiTest
     @Test
     public void testRefreshToken() throws Exception
     {
+        // force expiry and validation of token - uses no timezone
+        eveAuthenticator.getOAuthCharacter().setExpiresOn(
+            ZonedDateTime.now().minus(1, ChronoUnit.MINUTES)
+                            .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         eveAuthenticator.getTokens().setAccessToken("blah");
         Assert.assertEquals("Auth should still be valid when access_token " +
             "is not", true, eveAuthenticator.authValid());

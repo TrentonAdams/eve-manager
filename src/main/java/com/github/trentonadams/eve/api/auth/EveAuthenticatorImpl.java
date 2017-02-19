@@ -1,5 +1,6 @@
 package com.github.trentonadams.eve.api.auth;
 
+import com.github.trentonadams.eve.Util;
 import com.github.trentonadams.eve.api.EveCharacter;
 import com.github.trentonadams.eve.api.EveConfig;
 import com.github.trentonadams.eve.api.LocationInfo;
@@ -43,7 +44,6 @@ public final class EveAuthenticatorImpl extends Factory
      * for new instances.
      */
     private boolean newInstance;
-    private long lastAuthCheck;
 
     /**
      * Currently all we do is read configurations.
@@ -240,13 +240,9 @@ public final class EveAuthenticatorImpl extends Factory
     {
         logger.info("eveAuthenticator is new: " + newInstance);
         boolean sessionValid = false;
-        final long currentTimeMillis = System.currentTimeMillis();
-        // CRITICAL switch "lastAuthCheck" for the expiry check on the OAuthCharacter
-        if (lastAuthCheck == 0 ||
-            (currentTimeMillis - lastAuthCheck) / 1000 >
-                eveConfig.getSsoExpiry())
-        {   // either last check never occurred or we're over configured expiry,
-            // let's check for real
+        if (OAuthCharacter == null || Util.isoDateTimeHasExpired(
+            OAuthCharacter.getExpiresOn() + 'Z'))
+        {
             try
             {
                 if (!newInstance)
@@ -262,7 +258,6 @@ public final class EveAuthenticatorImpl extends Factory
                 sessionValid = refreshToken();
             }
 
-            lastAuthCheck = System.currentTimeMillis();
         }
         else
         {

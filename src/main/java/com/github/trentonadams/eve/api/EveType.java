@@ -44,8 +44,8 @@ public class EveType
 
     @XmlTransient
     public String getErrorDescription()
-    {
-        return errorDescription;
+    {   // hack around Eve's bad practise of error sometimes being a description
+        return errorDescription != null? errorDescription : error;
     }
 
     public void setErrorDescription(final String errorDescription)

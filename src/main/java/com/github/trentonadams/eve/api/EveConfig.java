@@ -179,8 +179,4 @@ public class EveConfig
         return URI.create(config.getString("esi.location.url"));
     }
 
-    public long getSsoExpiry()
-    {
-        return config.getInt("auth.sso.expiry_seconds", 600);
-    }
 }
