@@ -14,9 +14,9 @@
       <img title="${character.characterName}"
            src="https://imageserver.eveonline.com/Character/${character.characterID}_256.jpg"/>
     </div>
-    <div>
+<%--    <div>
       ${authAggregator.eveCharacter.description}
-    </div>
+    </div>--%>
   </c:when>
   <c:otherwise>
     You are not authenticated with Eve, you'll need to login.

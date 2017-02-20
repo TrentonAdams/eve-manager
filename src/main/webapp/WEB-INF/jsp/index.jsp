@@ -103,10 +103,11 @@
           <ul class="dropdown-menu">
             <c:forEach var="currentAuth"
                        items="${authAggregator.characterAuthenticators}">
-              <c:if
-                test="${currentAuth.OAuthCharacter.characterID != authAggregator.OAuthCharacter.characterID}">
                 <c:set var="cCharacter" value="${currentAuth.OAuthCharacter}"/>
-                <li>
+                <c:set var="selectedId" value="${character.characterID}"/>
+                <c:set var="currentId" value="${cCharacter.characterID}"/>
+                <c:set var="active" value="${currentId == selectedId}"/>
+                <li ${active?'class="active"':''}>
                   <c:url var="switchCharacter" value="/auth/switch_character">
                     <c:param name="character_id"
                              value="${cCharacter.characterID}"/>
@@ -116,7 +117,6 @@
                       ${cCharacter.characterName}
                   </a>
                 </li>
-              </c:if>
             </c:forEach>
             <li role="separator" class="divider"></li>
             <li>

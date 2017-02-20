@@ -45,17 +45,17 @@ public class AuthAggregatorTest extends JerseyTest
         // force expiry and validation of token - uses no timezone
         eveAuthenticator.getOAuthCharacter().setExpiresOn(
             ZonedDateTime.now().minus(1, ChronoUnit.MINUTES)
-                            .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         Assert.assertTrue("Auth should still be valid",
             eveAuthenticator.authValid());
         characterIds.add(eveAuthenticator.getOAuthCharacter().getCharacterID());
 
         eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
         eveAuthenticator.getTokens().setAccessToken("bad-token");
-        // force expiry and validation of token - uses no timezone
+        // force expiry and validation of token - uses no timezone though it's GMT
         eveAuthenticator.getOAuthCharacter().setExpiresOn(
             ZonedDateTime.now().minus(1, ChronoUnit.MINUTES)
-                            .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                .format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         Assert.assertNull(
             "You should choose a different character than the first",
             authAggregator.getCharacterAuthenticator(
