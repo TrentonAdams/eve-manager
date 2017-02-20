@@ -42,11 +42,10 @@ import static okhttp3.internal.Internal.logger;
 @Path("/api-keys")
 public class ApiKeysServiceView implements IPageModel
 {
-    private static final String SAMPLE_JSP =
-        "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
     public static final String API_KEYS_JSP =
         "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/api-keys.jsp";
-
+    private static final String SAMPLE_JSP =
+        "/WEB-INF/jsp/com/github/trentonadams/eve/features/ApiKeys/sample.jsp";
     @Context private UriInfo serviceUri;
 
     @Context private HttpServletRequest request;
@@ -96,6 +95,13 @@ public class ApiKeysServiceView implements IPageModel
         return this;
     }
 
+    /**
+     * Retrieves all api keys
+     * <p>
+     * e.g. GET /api-keys/
+     *
+     * @return the apiKey that was deleted.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Map<String, ApiKey> getApiKeys()
@@ -119,8 +125,15 @@ public class ApiKeysServiceView implements IPageModel
 
     }
 
+    /**
+     * e.g. DELETE /api-keys/#####
+     *
+     * @param keyId the keyId to delete
+     *
+     * @return the apiKey that was deleted.
+     */
     @DELETE
-    @Path("delete/{keyId}")
+    @Path("{keyId}")
     public ApiKey deleteApiKey(@PathParam("keyId") final String keyId)
     {
         final EntityManagerFactory emf =
@@ -176,7 +189,7 @@ public class ApiKeysServiceView implements IPageModel
         {
             logger.fine(e.toString());
         }
-        em.close();;
+        em.close();
         emf.close();
         return Response.created(null).entity(apiKey).build();
     }
