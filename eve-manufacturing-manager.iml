@@ -25,7 +25,7 @@
     <facet type="jpa" name="JPA">
       <configuration>
         <setting name="validation-enabled" value="true" />
-        <setting name="provider-name" value="" />
+        <setting name="provider-name" value="OpenJPA" />
         <datasource-mapping>
           <factory-entry name="apikey" value="32bbffae-10db-4e05-84da-000ace921098" />
           <factory-entry name="authtokens" value="2f1bf397-b831-4f86-9253-ab38a1bb9383" />

@@ -9,6 +9,9 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
+import static com.github.trentonadams.eve.api.auth.EveApiTest.DEPRECATED_API;
+import static com.github.trentonadams.eve.api.auth.EveApiTest.eveAuthenticator;
+
 /**
  * Created by IntelliJ IDEA.
  * <p>
@@ -20,7 +23,7 @@ import java.time.temporal.ChronoUnit;
  *
  * @author Trenton D. Adams
  */
-public class EveAuthenticatorTest extends EveApiTest
+public class EveAuthenticatorTest extends NullOAuthTest
 {
 
     @Test
@@ -71,4 +74,5 @@ public class EveAuthenticatorTest extends EveApiTest
             eveCharacter.getName(), oAuthCharacter.getCharacterName());
         Assert.assertNull(DEPRECATED_API, eveCharacter.getApiWarning());
     }
+
 }

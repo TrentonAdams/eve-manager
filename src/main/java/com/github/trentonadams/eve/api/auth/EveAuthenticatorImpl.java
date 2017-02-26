@@ -1,6 +1,5 @@
 package com.github.trentonadams.eve.api.auth;
 
-import com.github.trentonadams.eve.Util;
 import com.github.trentonadams.eve.api.EveCharacter;
 import com.github.trentonadams.eve.api.EveConfig;
 import com.github.trentonadams.eve.api.LocationInfo;
@@ -103,7 +102,15 @@ public final class EveAuthenticatorImpl extends Factory
             URI.create(eveConfig.getSsoVerifyUrl()));
         eveCall.setLogPrefix("evesso-queryCharacter: ");
 
-        OAuthCharacter = eveCall.invoke();
+        try
+        {
+            OAuthCharacter = eveCall.invoke();
+            OAuthCharacter = new OAuthCharacter();
+        }
+        catch (Throwable e)
+        {
+            throw e;
+        }
     }
 
 
@@ -240,8 +247,7 @@ public final class EveAuthenticatorImpl extends Factory
     {
         logger.info("eveAuthenticator is new: " + newInstance);
         boolean sessionValid = false;
-        if (OAuthCharacter == null || Util.isoDateTimeHasExpired(
-            OAuthCharacter.getExpiresOn() + 'Z'))
+        if (OAuthCharacter.hasExpired())
         {
             try
             {

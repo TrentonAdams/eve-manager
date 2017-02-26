@@ -1,13 +1,20 @@
 package com.github.trentonadams.eve.api.auth;
 
+import com.github.trentonadams.eve.Util;
 import com.github.trentonadams.eve.api.EveType;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
- * Represents an eve Character obtained from the eve sso verify call.
+ * Represents an eve Character obtained from the eve sso verify call.  We're
+ * not using proper data types because it's a lot of work to do conversions.
+ * We may fix that at a later time.
  */
 @SuppressWarnings("unused")
 @XmlRootElement
@@ -78,6 +85,11 @@ public class OAuthCharacter extends EveType
         return tokenType;
     }
 
+    public void setTokenType(final String tokenType)
+    {
+        this.tokenType = tokenType;
+    }
+
     @Override
     public String toString()
     {
@@ -90,11 +102,6 @@ public class OAuthCharacter extends EveType
             ", characterOwnerHash='" + characterOwnerHash + '\'' +
             ", intellectualProperty='" + intellectualProperty + '\'' +
             '}';
-    }
-
-    public void setTokenType(final String tokenType)
-    {
-        this.tokenType = tokenType;
     }
 
     @XmlTransient
@@ -119,4 +126,19 @@ public class OAuthCharacter extends EveType
         this.intellectualProperty = intellectualProperty;
     }
 
+    /**
+     * Checks if this OAuthCharacter has expired.  If it has empty fields this
+     * will return true.
+     *
+     * @return true
+     */
+    boolean hasExpired()
+    {
+        if (expiresOn == null)
+        {   // force expiry as it's null.
+            expiresOn = DateTimeFormatter.ISO_DATE_TIME.format(
+                LocalDateTime.from(Instant.EPOCH.atZone(ZoneId.of("GMT"))));
+        }
+        return Util.isoDateTimeHasExpired(getExpiresOn() + 'Z');
+    }
 }

@@ -185,7 +185,7 @@ public class ApiKeysServiceView implements IPageModel
             // if the item already exists.
             et.commit();
         }
-        catch (RollbackException e)
+        catch (final RollbackException e)
         {
             logger.fine(e.toString());
         }
