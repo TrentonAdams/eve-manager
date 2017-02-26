@@ -41,20 +41,10 @@ public class OAuthCharacter extends EveType
         return characterID;
     }
 
-    public void setCharacterID(final int characterID)
-    {
-        this.characterID = characterID;
-    }
-
     @XmlTransient
     public String getCharacterName()
     {
         return characterName;
-    }
-
-    public void setCharacterName(final String characterName)
-    {
-        this.characterName = characterName;
     }
 
     @XmlTransient
@@ -63,7 +53,13 @@ public class OAuthCharacter extends EveType
         return expiresOn;
     }
 
-    public void setExpiresOn(final String expiresOn)
+    /**
+     * Package private for testing purposes only.
+     *
+     * @param expiresOn the new expires field in {@link DateTimeFormatter#ISO_DATE_TIME}
+     *                  format.
+     */
+    void setExpiresOn(final String expiresOn)
     {
         this.expiresOn = expiresOn;
     }
@@ -74,20 +70,10 @@ public class OAuthCharacter extends EveType
         return scopes;
     }
 
-    public void setScopes(final String scopes)
-    {
-        this.scopes = scopes;
-    }
-
     @XmlTransient
     public String getTokenType()
     {
         return tokenType;
-    }
-
-    public void setTokenType(final String tokenType)
-    {
-        this.tokenType = tokenType;
     }
 
     @Override
@@ -110,20 +96,10 @@ public class OAuthCharacter extends EveType
         return characterOwnerHash;
     }
 
-    public void setCharacterOwnerHash(final String characterOwnerHash)
-    {
-        this.characterOwnerHash = characterOwnerHash;
-    }
-
     @XmlTransient
     public String getIntellectualProperty()
     {
         return intellectualProperty;
-    }
-
-    public void setIntellectualProperty(final String intellectualProperty)
-    {
-        this.intellectualProperty = intellectualProperty;
     }
 
     /**

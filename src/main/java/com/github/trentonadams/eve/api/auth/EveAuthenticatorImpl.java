@@ -10,7 +10,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
@@ -105,10 +104,10 @@ public final class EveAuthenticatorImpl extends Factory
         try
         {
             OAuthCharacter = eveCall.invoke();
-            OAuthCharacter = new OAuthCharacter();
         }
         catch (Throwable e)
         {
+            OAuthCharacter = new OAuthCharacter();
             throw e;
         }
     }
@@ -162,7 +161,7 @@ public final class EveAuthenticatorImpl extends Factory
     }
 
     @Override
-    public boolean validateEveCode(@QueryParam("code") final String eveSsoCode)
+    public boolean validateEveCode(final String eveSsoCode)
     {
         boolean success = true;
         final EveCall<AuthTokens> eveCall = new EveCall<AuthTokens>(
