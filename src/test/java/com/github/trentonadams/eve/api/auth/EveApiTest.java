@@ -22,21 +22,25 @@ public class EveApiTest extends JerseyTest
         "The eve api endpoint is either deprecated or removed";
     protected static EveAuthenticator eveAuthenticator;
 
-    @Before
-    public void setUpEA() throws IOException, InterruptedException
-    {
-        if (eveAuthenticator == null)
-        {
-            eveAuthenticator = newAuthenticator();
-        }
-    }
-
     protected static EveAuthenticator newAuthenticator()
         throws IOException, InterruptedException
     {
         return newAuthenticator(null);
     }
 
+    /**
+     * Creates a new EveAuthenticator with a particular state (aka key in this
+     * case) for testing purposes.
+     *
+     * {@link #validateEveCode(EveAuthenticator, String)}
+     *
+     * @param state the state parameter that we key on
+     *
+     * @return a new eve authenticator
+     *
+     * @throws IOException
+     * @throws InterruptedException
+     */
     protected static EveAuthenticator newAuthenticator(final String state)
         throws IOException, InterruptedException
     {
@@ -47,7 +51,7 @@ public class EveApiTest extends JerseyTest
     }
 
     /**
-     * Retrieves an eve online code.
+     * Retrieves an eve online code by prompting the user to go to a url.
      *
      * @return the eve code to validate.
      */
@@ -81,5 +85,14 @@ public class EveApiTest extends JerseyTest
 
         eveAuthenticator.validateEveCode(eveSsoCode);
 
+    }
+
+    @Before
+    public void setUpEA() throws IOException, InterruptedException
+    {
+        if (eveAuthenticator == null)
+        {
+            eveAuthenticator = newAuthenticator();
+        }
     }
 }

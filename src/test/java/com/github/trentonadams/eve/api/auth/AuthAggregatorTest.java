@@ -76,7 +76,7 @@ public class AuthAggregatorTest extends JerseyTest
         for (final EveAuthenticator eveAuth : authAggregator
             .getCharacterAuthenticators())
         {
-            final LocationInfo location = eveAuthenticator.getLocation();
+            final LocationInfo location = eveAuth.getLocation();
             Assert.assertNotNull("Location should be available", location);
         }
 

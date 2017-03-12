@@ -22,7 +22,7 @@ import java.util.Map;
 @Path("/testauth/validate")
 public class TestAuthValidate
 {
-    static final private String mySemophor = "hello";
+    private static final String mySemophor = "hello";
     private static Map<String, String> authCodes = new HashMap<>();
 
     /**
