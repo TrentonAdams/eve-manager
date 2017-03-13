@@ -32,12 +32,6 @@ public abstract class EveCall<T>
     private static Logger logger = LogManager.getLogger(EveCall.class);
     private URI webServiceUrl;
 
-    /**
-     * If any response filters are needed, overwrite this to implement them.
-     * e.g. moneris does not return the Content-Type (mime type) header for it's
-     * xml response, so we filter it so that it does.
-     */
-    protected ClientResponseFilter responseFilter;
     private String logPrefix;
 
     private String genericError;
@@ -172,10 +166,6 @@ public abstract class EveCall<T>
         // TODO make this configurable
         //config.property(MessageProperties.XML_SECURITY_DISABLE, Boolean.TRUE);
         newClient = ClientBuilder.newClient(config);
-        if (responseFilter != null)
-        {
-            newClient.register(responseFilter);
-        }
         registerRequestLoggingFilters(newClient);
         return newClient;
     }

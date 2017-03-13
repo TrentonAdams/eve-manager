@@ -22,8 +22,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 public class AuthTokens
 {
+    /**
+     * Field must be set from external code, this is not serialized with API
+     * calls to Eve.
+     */
+    @XmlTransient
     @Id
-    private String characterId;
+    private int characterId;
 
     @NotNull(message = "Access token is required")
     @XmlElement(name = "access_token")
@@ -63,12 +68,12 @@ public class AuthTokens
     }
 
     @XmlTransient
-    public String getCharacterId()
+    public int getCharacterId()
     {
         return characterId;
     }
 
-    public void setCharacterId(final String characterId)
+    public void setCharacterId(final int characterId)
     {
         this.characterId = characterId;
     }

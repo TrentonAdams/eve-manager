@@ -54,7 +54,7 @@ public class AuthTokensPersistenceTest
     {
         et.begin();
         final AuthTokens authTokens = new AuthTokens();
-        authTokens.setCharacterId("5003323");
+        authTokens.setCharacterId(5003323);
         authTokens.setAccessToken(
             "fSx3hRrDrtQSPCC3dNDgHem10HQCLOLE1taD5pC4RdTCwZjYKLTo2LXH2i86L13o");
         authTokens.setRefreshToken(

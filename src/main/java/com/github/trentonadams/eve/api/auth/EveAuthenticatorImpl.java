@@ -55,7 +55,7 @@ public final class EveAuthenticatorImpl extends Factory
             assert
                 myThis.getOAuthCharacter() != null : "This lookup should " +
                 "only occur if we're in a place where the character " +
-                "ID is already known";
+                "ID is already known.  This error is a programming error.";
 
             Object value = null;
             switch (s)
@@ -187,8 +187,10 @@ public final class EveAuthenticatorImpl extends Factory
         try
         {
             tokens = eveCall.invoke();
+            System.out.println("characterId: " + tokens);
             // Go get the associated character and put it in our instance variable.
             queryCharacter();
+            tokens.setCharacterId(OAuthCharacter.getCharacterID());
             newInstance = false;
         }
         catch (final RestException e)
@@ -292,6 +294,7 @@ public final class EveAuthenticatorImpl extends Factory
             @Override
             public Response httpMethodCall(final WebTarget target)
             {   // use refresh_token to get another access_token
+//                target.register()
                 return target.request(MediaType.APPLICATION_JSON
                 ).header("Authorization", "Basic " +
                     eveConfig.getEveAppSecretAndIdBase64())
