@@ -20,7 +20,8 @@ import java.net.URISyntaxException;
 
 /**
  * Eve authenticator class.  Does the bulk of eve authentication after
- * validating an eve code.
+ * validating an eve code.  This is a per character class, intended to be
+ * insantiated for every new character.
  */
 public final class EveAuthenticatorImpl extends Factory
     implements EveAuthenticator
@@ -31,7 +32,7 @@ public final class EveAuthenticatorImpl extends Factory
 
     /**
      * package private so that a unit test can manipulate.  Please DO NOT
-     * use this variable for anything else but testing.
+     * use this variable externally for anything else but testing.
      */
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
     private OAuthCharacter OAuthCharacter;

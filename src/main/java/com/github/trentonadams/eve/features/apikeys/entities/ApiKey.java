@@ -57,5 +57,4 @@ public class ApiKey
     {
         this.verificationCode = verificationCode;
     }
-
 }   // END MyModel

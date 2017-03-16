@@ -28,7 +28,6 @@
         <setting name="provider-name" value="OpenJPA" />
         <datasource-mapping>
           <factory-entry name="apikey" value="32bbffae-10db-4e05-84da-000ace921098" />
-          <factory-entry name="authtokens" value="2f1bf397-b831-4f86-9253-ab38a1bb9383" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
@@ -106,6 +105,7 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-api:2.8" level="project" />
     <orderEntry type="library" name="Maven: org.apache.logging.log4j:log4j-core:2.8" level="project" />
+    <orderEntry type="library" name="Maven: org.postgresql:postgresql:42.0.0.jre7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-java:3.0.1" level="project" />

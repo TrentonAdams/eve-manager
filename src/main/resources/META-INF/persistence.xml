@@ -1,26 +1,38 @@
 <persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
-  <persistence-unit name="apikey">
+  <!--
+  You need to have a postgresql instances running locally, and have a test user
+  setup...
+
+  As postgres user...
+
+  psql
+  create database evemanager_test;
+  CREATE USER test PASSWORD 'test';
+  GRANT ALL ON DATABASE evemanager_test TO test;
+
+  -->
+  <persistence-unit name="evemanager">
     <class>com.github.trentonadams.eve.features.apikeys.entities.ApiKey</class>
-    <properties>
-      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
-      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
-      <property name="openjpa.ConnectionURL"
-        value="jdbc:derby:${project.build.directory}/testdb;create=true" />
-      <property name="openjpa.ConnectionDriverName"
-        value="org.apache.derby.jdbc.EmbeddedDriver" />
-    </properties>
-  </persistence-unit>
-  <persistence-unit name="authtokens">
     <class>com.github.trentonadams.eve.api.auth.entities.AuthTokens</class>
     <properties>
-      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
+<!--      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
       <property name="openjpa.ConnectionURL"
         value="jdbc:derby:${project.build.directory}/testdb;create=true" />
       <property name="openjpa.ConnectionDriverName"
-        value="org.apache.derby.jdbc.EmbeddedDriver" />
+        value="org.apache.derby.jdbc.EmbeddedDriver" />-->
+      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
+      <property name="openjpa.DynamicEnhancementAgent" value="false" />
+      <property name="javax.persistence.schema-generation.create-database-schemas"
+          value="true" />
+      <property name="javax.persistence.jdbc.url"
+        value="jdbc:postgresql://localhost:5432/evemanager_test" />
+      <property name="javax.persistence.jdbc.driver"
+        value="org.postgresql.Driver" />
+      <property name="javax.persistence.jdbc.user" value="test" />
+      <property name="javax.persistence.jdbc.password" value="test" />
     </properties>
   </persistence-unit>
 

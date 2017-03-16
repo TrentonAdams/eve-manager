@@ -1,14 +1,8 @@
 package com.github.trentonadams.eve.features.apikeys.entities;
 
+import com.github.trentonadams.eve.persistence.PersistenceBase;
 import junit.framework.Assert;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 /**
  * Tests {@link ApiKey} functionality.
@@ -21,27 +15,8 @@ import javax.persistence.Persistence;
  *
  * @author Trenton D. Adams
  */
-public class ApiKeyPeristenceTest
+public class ApiKeyPersistenceTest extends PersistenceBase
 {
-    private EntityManagerFactory emf;
-    private EntityManager em;
-    private EntityTransaction et;
-
-    @Before
-    public void setUp() throws Exception
-    {
-        emf = Persistence.createEntityManagerFactory("apikey");
-        em = emf.createEntityManager();
-        et = em.getTransaction();
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-        et.rollback();
-        em.close();
-        emf.close();
-    }
 
     /**
      * Simply tests that we can store api keys in a database.
@@ -51,7 +26,6 @@ public class ApiKeyPeristenceTest
     @Test
     public void testSaveApiKey() throws Exception
     {
-        et.begin();
         final ApiKey a = new ApiKey();
         a.setKeyId("5003323");
         a.setVerificationCode(
