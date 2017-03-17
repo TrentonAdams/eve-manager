@@ -41,8 +41,9 @@ public class PersistenceBase
     public void tearDown()
     {
         try
-        {
+        {   // ensures tests work repeatedly, with needing to delete records.
             et.rollback();
+
             em.close();
             emf.close();
         }

@@ -35,7 +35,7 @@ public final class EveAuthenticatorImpl extends Factory
      * use this variable externally for anything else but testing.
      */
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
-    private OAuthCharacter OAuthCharacter;
+    private OAuthCharacter OAuthCharacter = new OAuthCharacter();
 
     /**
      * Indicates if this is a new instance.  A new instance has not yet had

@@ -1,5 +1,8 @@
 package com.github.trentonadams.eve.api;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -61,5 +64,31 @@ public class EveType
     public void setApiWarning(final String apiWarning)
     {
         this.apiWarning = apiWarning;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final EveType eveType = (EveType) o;
+
+        return new EqualsBuilder()
+            .append(error, eveType.error)
+            .append(errorDescription, eveType.errorDescription)
+            .append(apiWarning, eveType.apiWarning)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder(17, 37)
+            .append(error)
+            .append(errorDescription)
+            .append(apiWarning)
+            .toHashCode();
     }
 }

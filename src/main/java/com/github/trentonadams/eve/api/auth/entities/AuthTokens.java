@@ -51,6 +51,20 @@ public class AuthTokens
         return accessToken;
     }
 
+    public AuthTokens(final int characterId, final String accessToken,
+        final String refreshToken, final String tokenType, final int expiresIn)
+    {
+        this.characterId = characterId;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.tokenType = tokenType;
+        this.expiresIn = expiresIn;
+    }
+
+    public AuthTokens()
+    {
+    }
+
     public void setAccessToken(final String accessToken)
     {
         this.accessToken = accessToken;

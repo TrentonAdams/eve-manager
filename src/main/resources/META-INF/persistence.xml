@@ -16,6 +16,7 @@
   <persistence-unit name="evemanager">
     <class>com.github.trentonadams.eve.features.apikeys.entities.ApiKey</class>
     <class>com.github.trentonadams.eve.api.auth.entities.AuthTokens</class>
+    <class>com.github.trentonadams.eve.api.auth.entities.OauthOwner</class>
     <properties>
 <!--      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />

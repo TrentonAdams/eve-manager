@@ -2,7 +2,12 @@ package com.github.trentonadams.eve.api.auth;
 
 import com.github.trentonadams.eve.Util;
 import com.github.trentonadams.eve.api.EveType;
+import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -18,9 +23,12 @@ import java.time.format.DateTimeFormatter;
  */
 @SuppressWarnings("unused")
 @XmlRootElement
+@Entity
+@IdClass(CharacterPrimaryKey.class)
 public class OAuthCharacter extends EveType
 {
     @XmlElement(name = "CharacterID")
+    @Id
     private int characterID;
     @XmlElement(name = "CharacterName")
     private String characterName;
@@ -31,9 +39,33 @@ public class OAuthCharacter extends EveType
     @XmlElement(name = "TokenType")
     private String tokenType;
     @XmlElement(name = "CharacterOwnerHash")
+    @Id
     private String characterOwnerHash;
     @XmlElement(name = "IntellectualProperty")
     private String intellectualProperty;
+
+    @XmlTransient
+    @OneToOne
+    private AuthTokens tokens;
+
+    public OAuthCharacter()
+    {
+    }
+
+    public OAuthCharacter(final int characterID, final String characterName,
+        final String expiresOn, final String scopes, final String tokenType,
+        final String characterOwnerHash, final String intellectualProperty,
+        final AuthTokens tokens)
+    {
+        this.characterID = characterID;
+        this.characterName = characterName;
+        this.expiresOn = expiresOn;
+        this.scopes = scopes;
+        this.tokenType = tokenType;
+        this.characterOwnerHash = characterOwnerHash;
+        this.intellectualProperty = intellectualProperty;
+        this.tokens = tokens;
+    }
 
     @XmlTransient
     public int getCharacterID()
@@ -116,5 +148,16 @@ public class OAuthCharacter extends EveType
                 LocalDateTime.from(Instant.EPOCH.atZone(ZoneId.of("GMT"))));
         }
         return Util.isoDateTimeHasExpired(getExpiresOn() + 'Z');
+    }
+
+    @XmlTransient
+    public AuthTokens getTokens()
+    {
+        return tokens;
+    }
+
+    public void setTokens(final AuthTokens tokens)
+    {
+        this.tokens = tokens;
     }
 }
