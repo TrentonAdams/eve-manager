@@ -2,6 +2,7 @@ package com.github.trentonadams.eve.api.auth.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,6 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement
 @Entity
+@Table(name = "auth_tokens")
 public class AuthTokens
 {
     /**

@@ -2,10 +2,11 @@ package com.github.trentonadams.eve.api.auth.entities;
 
 import com.github.trentonadams.eve.api.auth.OAuthCharacter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.*;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Constitutes an owner of a set of characters.
@@ -19,6 +20,7 @@ import java.util.*;
  * @author Trenton D. Adams
  */
 @Entity
+@Table(name = "oauth_owner")
 public class OauthOwner
 {
     @Id
@@ -27,7 +29,8 @@ public class OauthOwner
     /**
      * All of the characters associated with this owner.
      */
-    @OneToMany
+    @OneToMany(targetEntity = OAuthCharacter.class)
+    @JoinColumn(name = "characterOwnerHash")
     List<OAuthCharacter> characters;
 
     public String getCharacterOwnerHash()
@@ -69,9 +72,11 @@ public class OauthOwner
     /**
      * Removes the character ID.
      *
-     * @see Map#remove(Object)
      * @param characterId the character ID.
+     *
      * @return the character ID removed, or null if it didn't exist.
+     *
+     * @see Map#remove(Object)
      */
     public OAuthCharacter removeCharacter(final int characterId)
     {

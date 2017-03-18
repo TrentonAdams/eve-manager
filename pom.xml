@@ -254,6 +254,7 @@
         <version>1.1</version>
         <configuration>
           <includes>**/entities/*.class</includes>
+          <includes>**/OAuthCharacter.class</includes>
           <excludes>**/entities/XML*.class</excludes>
           <excludes>**/entities/Character.class</excludes>
           <addDefaultConstructor>true</addDefaultConstructor>

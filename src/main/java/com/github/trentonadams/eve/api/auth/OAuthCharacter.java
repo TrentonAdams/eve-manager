@@ -4,10 +4,7 @@ import com.github.trentonadams.eve.Util;
 import com.github.trentonadams.eve.api.EveType;
 import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -24,12 +21,17 @@ import java.time.format.DateTimeFormatter;
 @SuppressWarnings("unused")
 @XmlRootElement
 @Entity
-@IdClass(CharacterPrimaryKey.class)
+@Table(name = "oauth_character", uniqueConstraints =
+    {@UniqueConstraint(name = "uc_fk_pk", columnNames = {
+    "characterownerhash", "characterid"})})
+
 public class OAuthCharacter extends EveType
 {
     @XmlElement(name = "CharacterID")
     @Id
     private int characterID;
+    @XmlElement(name = "CharacterOwnerHash")
+    private String characterOwnerHash;
     @XmlElement(name = "CharacterName")
     private String characterName;
     @XmlElement(name = "ExpiresOn")
@@ -38,14 +40,12 @@ public class OAuthCharacter extends EveType
     private String scopes;
     @XmlElement(name = "TokenType")
     private String tokenType;
-    @XmlElement(name = "CharacterOwnerHash")
-    @Id
-    private String characterOwnerHash;
     @XmlElement(name = "IntellectualProperty")
     private String intellectualProperty;
 
     @XmlTransient
-    @OneToOne
+    @OneToOne(targetEntity = AuthTokens.class)
+    @JoinColumn(name = "characterId")
     private AuthTokens tokens;
 
     public OAuthCharacter()

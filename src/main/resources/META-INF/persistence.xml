@@ -1,6 +1,7 @@
-<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
   <!--
   You need to have a postgresql instances running locally, and have a test user
   setup...
@@ -17,6 +18,7 @@
     <class>com.github.trentonadams.eve.features.apikeys.entities.ApiKey</class>
     <class>com.github.trentonadams.eve.api.auth.entities.AuthTokens</class>
     <class>com.github.trentonadams.eve.api.auth.entities.OauthOwner</class>
+    <class>com.github.trentonadams.eve.api.auth.OAuthCharacter</class>
     <properties>
 <!--      <property name="openjpa.DynamicEnhancementAgent" value="false"/>
       <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />

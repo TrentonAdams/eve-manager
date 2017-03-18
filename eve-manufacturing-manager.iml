@@ -27,7 +27,8 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="OpenJPA" />
         <datasource-mapping>
-          <factory-entry name="apikey" value="32bbffae-10db-4e05-84da-000ace921098" />
+          <factory-entry name="apikey" />
+          <factory-entry name="evemanager" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
