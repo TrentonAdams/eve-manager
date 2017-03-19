@@ -28,7 +28,7 @@ public class PersistenceBase
     @Before
     public void setUp() throws Exception
     {
-        em = EMF.EVE_MANAGER.createEntityManager();
+        em = PersistenceUnitFactory.EVE_MANAGER.createEntityManager();
         et = em.getTransaction();
         et.begin();
     }

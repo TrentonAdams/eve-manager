@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
  *
  * @author Trenton D. Adams
  */
-public enum EMF
+public enum PersistenceUnitFactory
 {
     EVE_MANAGER("evemanager");
 
@@ -30,12 +30,17 @@ public enum EMF
      *
      * @see #getPersistenceUnitName()
      */
-    EMF(final String persistenceUnitName)
+    PersistenceUnitFactory(final String persistenceUnitName)
     {
         emf = Persistence.createEntityManagerFactory(persistenceUnitName);
         this.persistenceUnitName = persistenceUnitName;
     }
 
+    /**
+     * Creates a new {@link EntityManager}.  NEVER share this across threads.
+     *
+     * @return a new {@link EntityManager}
+     */
     EntityManager createEntityManager()
     {
         return emf.createEntityManager();
