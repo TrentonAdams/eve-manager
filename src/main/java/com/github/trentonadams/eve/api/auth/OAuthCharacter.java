@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
 @XmlRootElement
 @Entity
 @Table(name = "oauth_character", uniqueConstraints =
-    {@UniqueConstraint(name = "uc_fk_pk", columnNames = {
+    {@UniqueConstraint(name = "unique_foreign_and_pk", columnNames = {
     "characterownerhash", "characterid"})})
 
 public class OAuthCharacter extends EveType

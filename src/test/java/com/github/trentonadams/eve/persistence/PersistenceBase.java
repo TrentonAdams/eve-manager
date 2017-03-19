@@ -4,9 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 /**
  * This class simply ensures that the persistence objects are setup, a
@@ -26,13 +24,11 @@ public class PersistenceBase
 {
     protected EntityManager em;
     protected EntityTransaction et;
-    private EntityManagerFactory emf;
 
     @Before
     public void setUp() throws Exception
     {
-        emf = Persistence.createEntityManagerFactory("evemanager");
-        em = emf.createEntityManager();
+        em = EMF.EVE_MANAGER.createEntityManager();
         et = em.getTransaction();
         et.begin();
     }
@@ -43,9 +39,7 @@ public class PersistenceBase
         try
         {   // ensures tests work repeatedly, with needing to delete records.
             et.rollback();
-
             em.close();
-            emf.close();
         }
         catch (Throwable e)
         {

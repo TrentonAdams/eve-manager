@@ -16,7 +16,7 @@ import java.net.URI;
  *
  * @author Trenton D. Adams
  */
-public class EveApiTest extends JerseyTest
+public class EveApiTestBase extends JerseyTest
 {
     protected static final String DEPRECATED_API =
         "The eve api endpoint is either deprecated or removed";

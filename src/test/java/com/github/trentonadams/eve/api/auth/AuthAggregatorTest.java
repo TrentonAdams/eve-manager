@@ -40,7 +40,7 @@ public class AuthAggregatorTest extends JerseyTest
 
         EveAuthenticator eveAuthenticator;
         eveAuthenticator = authAggregator;
-        EveApiTest.validateEveCode(eveAuthenticator, "auth-aggregator");
+        EveApiTestBase.validateEveCode(eveAuthenticator, "auth-aggregator");
         eveAuthenticator.getTokens().setAccessToken("bad-token");
         // force expiry and validation of token - uses no timezone
         eveAuthenticator.getOAuthCharacter().setExpiresOn(
@@ -50,7 +50,7 @@ public class AuthAggregatorTest extends JerseyTest
             eveAuthenticator.authValid());
         characterIds.add(eveAuthenticator.getOAuthCharacter().getCharacterID());
 
-        eveAuthenticator = EveApiTest.newAuthenticator("auth-aggregator2");
+        eveAuthenticator = EveApiTestBase.newAuthenticator("auth-aggregator2");
         eveAuthenticator.getTokens().setAccessToken("bad-token");
         // force expiry and validation of token - uses no timezone though it's GMT
         eveAuthenticator.getOAuthCharacter().setExpiresOn(

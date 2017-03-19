@@ -20,7 +20,7 @@ import java.time.temporal.ChronoUnit;
  *
  * @author Trenton D. Adams
  */
-public class EveAuthenticatorTest extends EveApiTest
+public class EveAuthenticatorTest extends EveApiTestBase
 {
 
     @Test
