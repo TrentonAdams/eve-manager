@@ -32,6 +32,7 @@ public class AuthTokensPersistenceTest extends PersistenceBase
             "fSx3hRrDrtQSPCC3dNDgHem10HQCLOLE1taD5pC4RdTCwZjYKLTo2LXH2i86L13o");
         authTokens.setRefreshToken(
             "fSx3hRrDrtQSPCC3dNDgHeadsfasdflkjsklfjkjRdTCwZjYKLTo2LXH2i86L13o");
+        authTokens.setTokenType("token");
         em.persist(authTokens);
 
         final AuthTokens b = em.find(AuthTokens.class, "5003323");
