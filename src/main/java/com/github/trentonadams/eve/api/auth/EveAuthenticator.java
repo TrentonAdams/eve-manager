@@ -6,6 +6,7 @@ import com.github.trentonadams.eve.api.auth.entities.AuthTokens;
 import com.github.trentonadams.eve.rest.RestException;
 
 import javax.ws.rs.QueryParam;
+import java.io.Serializable;
 import java.net.URI;
 
 /**
@@ -19,7 +20,7 @@ import java.net.URI;
  *
  * @author Trenton D. Adams
  */
-public interface EveAuthenticator
+public interface EveAuthenticator extends Serializable
 {
     /**
      * Retrieves the eve character object.

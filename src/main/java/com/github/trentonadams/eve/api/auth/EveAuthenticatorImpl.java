@@ -31,7 +31,7 @@ public final class EveAuthenticatorImpl extends Factory
     private final EveConfig eveConfig;
 
     /**
-     * package private so that a unit test can manipulate.  Please DO NOT
+     * Package private so that a unit test can manipulate.  Please DO NOT
      * use this variable externally for anything else but testing.
      */
     @SuppressWarnings("PackageVisibleField") AuthTokens tokens;
@@ -51,23 +51,6 @@ public final class EveAuthenticatorImpl extends Factory
     {
         final EveAuthenticator myThis = this;
         eveConfig = new EveConfig();
-        eveConfig.addPropertyLookup("ea", s ->
-        {
-            assert
-                myThis.getOAuthCharacter() != null : "This lookup should " +
-                "only occur if we're in a place where the character " +
-                "ID is already known.  This error is a programming error.";
-
-            Object value = null;
-            switch (s)
-            {
-                case "character.id":
-                    value = myThis.getOAuthCharacter().getCharacterID();
-                    break;
-                default:
-            }
-            return value;
-        });
         newInstance = true;
     }
 
@@ -135,7 +118,24 @@ public final class EveAuthenticatorImpl extends Factory
         };
 
         eveCall.setGenericError("Error validating authentication");
-        eveCall.setWebServiceUrl(eveConfig.getCharacterUrl());
+        final EveAuthenticatorImpl myThis = this;
+        eveCall.setWebServiceUrl(eveConfig.getCharacterUrl(s ->
+        {
+            assert
+                myThis.getOAuthCharacter() != null : "This lookup should " +
+                "only occur if we're in a place where the character " +
+                "ID is already known.  This error is a programming error.";
+
+            Object value = null;
+            switch (s)
+            {
+                case "character.id":
+                    value = myThis.getOAuthCharacter().getCharacterID();
+                    break;
+                default:
+            }
+            return value;
+        }));
         eveCall.setLogPrefix("evesso-getEveCharacter: ");
         return eveCall.invoke();
     }
@@ -155,7 +155,24 @@ public final class EveAuthenticatorImpl extends Factory
                     .get();
             }
         };
-        eveCall.setWebServiceUrl(eveConfig.getLocationUri());
+        final EveAuthenticatorImpl myThis = this;
+        eveCall.setWebServiceUrl(eveConfig.getLocationUri(s ->
+        {
+            assert
+                myThis.getOAuthCharacter() != null : "This lookup should " +
+                "only occur if we're in a place where the character " +
+                "ID is already known.  This error is a programming error.";
+
+            Object value = null;
+            switch (s)
+            {
+                case "character.id":
+                    value = myThis.getOAuthCharacter().getCharacterID();
+                    break;
+                default:
+            }
+            return value;
+        }));
         eveCall.setLogPrefix("esi-getLocation: ");
         eveCall.setGenericError("Error getting location information");
         return eveCall.invoke();

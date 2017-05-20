@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
 /**
  * Creates a generic eve error for error responses from the ESI.  This is the
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Trenton D. Adams
  */
 @XmlRootElement
-public class EveType
+public class EveType implements Serializable
 {
     @XmlElement(name = "error")
     private String error;

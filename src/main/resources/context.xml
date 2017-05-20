@@ -1,1 +1,29 @@
-<Context docBase="${basedir}/target/eve" reloadable="true"/>
+<Context docBase="${basedir}/target/eve" reloadable="true" >
+  <Manager className="org.apache.catalina.session.PersistentManager" debug="0"
+    saveOnRestart="true" maxActiveSessions="-1" minIdleSwap="-1"
+    distributable="true" maxIdleSwap="-1" maxIdleBackup="-1">
+    <Store className="org.apache.catalina.session.JDBCStore"
+      driverName="com.mysql.jdbc.Driver"
+      connectionURL="jdbc:mysql://localhost/tomcat?user=tomcat&amp;password=ahs7yoBeipo4ooda2cipaicohNee0Mu1ooreaPheiqu1moChooSoh5Phoo8ea1th"
+      sessionTable="sessions" sessionIdCol="id" sessionDataCol="data"
+      sessionValidCol="valid" sessionMaxInactiveCol="max_inactive"
+      sessionLastAccessedCol="last_access" checkInterval="60" debug="99" />
+  </Manager>
+<!--
+
+DROP TABLE sessions;
+
+create table sessions (
+  id     varchar(100) not null primary key,
+  valid  char(1) not null,
+  max_inactive   int not null,
+  max_active   int default -1,
+  last_access    bigint not null,
+  app       varchar(255),
+  data   mediumblob,
+  KEY kapp_name(app)
+);
+
+-->
+
+</Context>

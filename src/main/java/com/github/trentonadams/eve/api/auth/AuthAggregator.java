@@ -150,6 +150,7 @@ public class AuthAggregator implements EveAuthenticator
     {
         return currentCharacterAuthenticator;
     }
+    
 
 
     // **********************EveAuthenticator methods**********************

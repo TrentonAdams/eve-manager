@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.WebApplicationException;
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Base64;
 
@@ -19,14 +20,14 @@ import java.util.Base64;
  * An abstract for the eve configuration so that all the different classes that
  * may use it will not have to load it themselves.
  */
-public class EveConfig
+public class EveConfig implements Serializable
 {
     private static final Logger logger = LogManager.getLogger(EveConfig.class);
 
     private final String eveAppClientId;
     private final String eveAppSecretAndIdBase64;
 
-    private final Configuration config;
+    private Configuration config;
 
     /**
      * Loads the eve.properties configuration file.  If you need to map values
@@ -166,17 +167,43 @@ public class EveConfig
      *
      * @return the "esi.character.url" value from eve.properties
      */
-    public URI getCharacterUrl()
+    public URI getCharacterUrl(final Lookup propertyLookup)
     {
-        return URI.create(config.getString("esi.character.url"));
+        addPropertyLookup("ea", propertyLookup);
+        final URI tmp = URI.create(config.getString("esi.character.url"));
+        removePropertyLookup("ea");
+        return tmp;
     }
 
     /**
+     * Adds a custom commons configuration value lookup ({@link Lookup}) for
+     * translating
+     *
+     * @param propertyLookup the property value lookup that you've implemented
+     *                       to resolve the values of properties with "prefix:"
+     *                       in them.
+     *
+     * @throws IllegalArgumentException if the prefix is already registered.
+     *                                  Call {@link #removePropertyLookup(String)}
+     *                                  first if you'd like to re-register this
+     *                                  prefix.
      * @return the "esi.location.url" value from eve.properties
      */
-    public URI getLocationUri()
+    public URI getLocationUri(final Lookup propertyLookup)
     {
-        return URI.create(config.getString("esi.location.url"));
+        addPropertyLookup("ea", propertyLookup);
+        final URI tmp = URI.create(config.getString("esi.location.url"));
+        removePropertyLookup("ea");
+        return tmp;
     }
 
+    public Configuration getConfig()
+    {
+        return config;
+    }
+
+    public void setConfig(final Configuration config)
+    {
+        this.config = config;
+    }
 }

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @Entity
 @Table(name = "auth_tokens")
-public class AuthTokens
+public class AuthTokens implements Serializable
 {
     /**
      * Field must be set from external code, this is not serialized with API

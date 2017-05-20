@@ -5,6 +5,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * Class representing the data model for ApiKeys, including the keyId, and the
@@ -13,7 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="api-key")
 @Entity
-public class ApiKey
+public class ApiKey implements Serializable
 {
 
     public ApiKey()

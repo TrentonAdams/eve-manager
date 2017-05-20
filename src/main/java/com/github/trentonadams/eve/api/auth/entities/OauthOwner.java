@@ -3,6 +3,7 @@ package com.github.trentonadams.eve.api.auth.entities;
 import com.github.trentonadams.eve.api.auth.OAuthCharacter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 @Entity
 @Table(name = "oauth_owner")
-public class OauthOwner
+public class OauthOwner implements Serializable
 {
     @Id
     String characterOwnerHash;
