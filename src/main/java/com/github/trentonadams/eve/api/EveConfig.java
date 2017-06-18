@@ -12,15 +12,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.WebApplicationException;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.Base64;
 
 /**
  * An abstract for the eve configuration so that all the different classes that
  * may use it will not have to load it themselves.
+ * <p>
+ * NOTE: This class cannot be serialized.  As such, do not store it in a
+ * member variable if you intend for the class to be serializable.
  */
-public class EveConfig implements Serializable
+public class EveConfig
 {
     private static final Logger logger = LogManager.getLogger(EveConfig.class);
 
@@ -36,6 +38,10 @@ public class EveConfig implements Serializable
      */
     public EveConfig()
     {
+        long before;
+        long after;
+
+        before = System.currentTimeMillis();
         final Parameters params = new Parameters();
         final FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
             new FileBasedConfigurationBuilder<FileBasedConfiguration>(
@@ -59,6 +65,9 @@ public class EveConfig implements Serializable
         {
             throw new WebApplicationException(e);
         }
+        after = System.currentTimeMillis();
+        logger.info("config initialize took: " + (after - before) + "ms");
+
     }
 
     /**
@@ -183,11 +192,12 @@ public class EveConfig implements Serializable
      *                       to resolve the values of properties with "prefix:"
      *                       in them.
      *
+     * @return the "esi.location.url" value from eve.properties
+     *
      * @throws IllegalArgumentException if the prefix is already registered.
      *                                  Call {@link #removePropertyLookup(String)}
      *                                  first if you'd like to re-register this
      *                                  prefix.
-     * @return the "esi.location.url" value from eve.properties
      */
     public URI getLocationUri(final Lookup propertyLookup)
     {
@@ -195,15 +205,5 @@ public class EveConfig implements Serializable
         final URI tmp = URI.create(config.getString("esi.location.url"));
         removePropertyLookup("ea");
         return tmp;
-    }
-
-    public Configuration getConfig()
-    {
-        return config;
-    }
-
-    public void setConfig(final Configuration config)
-    {
-        this.config = config;
     }
 }

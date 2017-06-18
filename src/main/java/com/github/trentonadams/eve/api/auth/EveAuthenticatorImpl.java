@@ -28,7 +28,6 @@ public final class EveAuthenticatorImpl extends Factory
 {
     private static final Logger logger = LogManager.getLogger(
         EveAuthenticatorImpl.class);
-    private final EveConfig eveConfig;
 
     /**
      * Package private so that a unit test can manipulate.  Please DO NOT
@@ -50,7 +49,6 @@ public final class EveAuthenticatorImpl extends Factory
     EveAuthenticatorImpl()
     {
         final EveAuthenticator myThis = this;
-        eveConfig = new EveConfig();
         newInstance = true;
     }
 
@@ -65,11 +63,10 @@ public final class EveAuthenticatorImpl extends Factory
     private void queryCharacter()
     {
         assert tokens != null : "queryCharacter shouldn't be called unless " +
-            "you're sure the tokens exist (though they may not be valid); this " +
+            "you're sure the tokens exist (even if they are not valid); this " +
             "is a programming error";
 
-        final EveCall<OAuthCharacter> eveCall = new EveCall<OAuthCharacter>(
-        )
+        final EveCall<OAuthCharacter> eveCall = new EveCall<OAuthCharacter>()
         {
             @SuppressWarnings("ChainedMethodCall")
             @Override
@@ -81,8 +78,7 @@ public final class EveAuthenticatorImpl extends Factory
             }
         };
         eveCall.setGenericError("Error validating authentication");
-        eveCall.setWebServiceUrl(
-            URI.create(eveConfig.getSsoVerifyUrl()));
+        eveCall.setWebServiceUrl(URI.create(new EveConfig().getSsoVerifyUrl()));
         eveCall.setLogPrefix("evesso-queryCharacter: ");
 
         try
@@ -119,7 +115,7 @@ public final class EveAuthenticatorImpl extends Factory
 
         eveCall.setGenericError("Error validating authentication");
         final EveAuthenticatorImpl myThis = this;
-        eveCall.setWebServiceUrl(eveConfig.getCharacterUrl(s ->
+        eveCall.setWebServiceUrl(new EveConfig().getCharacterUrl(s ->
         {
             assert
                 myThis.getOAuthCharacter() != null : "This lookup should " +
@@ -156,7 +152,7 @@ public final class EveAuthenticatorImpl extends Factory
             }
         };
         final EveAuthenticatorImpl myThis = this;
-        eveCall.setWebServiceUrl(eveConfig.getLocationUri(s ->
+        eveCall.setWebServiceUrl(new EveConfig().getLocationUri(s ->
         {
             assert
                 myThis.getOAuthCharacter() != null : "This lookup should " +
@@ -191,14 +187,14 @@ public final class EveAuthenticatorImpl extends Factory
             {
                 return target.request(MediaType.APPLICATION_JSON
                 ).header("Authorization", "Basic " +
-                    eveConfig.getEveAppSecretAndIdBase64())
+                    new EveConfig().getEveAppSecretAndIdBase64())
                     .post(Entity.form(
                         new Form().param("grant_type", "authorization_code")
                             .param("code", eveSsoCode)));
             }
         };
 
-        eveCall.setWebServiceUrl(URI.create(eveConfig.getSsoTokenUrl()));
+        eveCall.setWebServiceUrl(URI.create(new EveConfig().getSsoTokenUrl()));
         eveCall.setLogPrefix("evesso-validateEveCode: ");
         eveCall.setGenericError("Error validating authentication");
 
@@ -225,12 +221,13 @@ public final class EveAuthenticatorImpl extends Factory
         try
         {
             final URIBuilder uriBuilder = new URIBuilder(
-                eveConfig.getSsoAuthorizeUrl());
+                new EveConfig().getSsoAuthorizeUrl());
             uriBuilder.addParameter("redirect_uri",
                 ourValidateUri.toASCIIString());
-            uriBuilder.addParameter("client_id", eveConfig.getEveAppClientId());
+            uriBuilder.addParameter("client_id",
+                new EveConfig().getEveAppClientId());
             uriBuilder.addParameter("scope", String.join(" ",
-                eveConfig.getEveAppPermissionScopes()));
+                new EveConfig().getEveAppPermissionScopes()));
             return uriBuilder.build();
         }
         catch (final URISyntaxException e)
@@ -315,14 +312,14 @@ public final class EveAuthenticatorImpl extends Factory
 //                target.register()
                 return target.request(MediaType.APPLICATION_JSON
                 ).header("Authorization", "Basic " +
-                    eveConfig.getEveAppSecretAndIdBase64())
+                    new EveConfig().getEveAppSecretAndIdBase64())
                     .post(Entity.form(
                         new Form().param("grant_type", "refresh_token")
                             .param("refresh_token", tokens.getRefreshToken())));
             }
         };
 
-        eveCall.setWebServiceUrl(URI.create(eveConfig.getSsoTokenUrl()));
+        eveCall.setWebServiceUrl(URI.create(new EveConfig().getSsoTokenUrl()));
         eveCall.setLogPrefix("evesso-refresh_token: ");
         eveCall.setGenericError("Error validating authentication");
 
